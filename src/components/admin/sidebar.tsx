@@ -23,7 +23,7 @@ const items = [
     { title: "مشتریان", href: "/admin/customers", icon: Users },
     { title: "دسته‌بندی‌ها", href: "/admin/categories", icon: FolderTree },
     { title: "آنالیتیکس", href: "/admin/analytics", icon: BarChart3 },
-    { title: "تنظیمات", href: "/admin/settings", icon: Settings },
+    // { title: "تنظیمات", href: "/admin/settings", icon: Settings },
 ];
 
 export default function AdminSidebar() {
@@ -75,7 +75,7 @@ export default function AdminSidebar() {
             </nav>
 
             {/* FOOTER */}
-            {sidebarExpanded && (
+            {/* {sidebarExpanded && (
                 <div className="border-t border-slate-200 p-5">
                     <div className="rounded-3xl bg-slate-50 p-5">
                         <p className="text-xs uppercase tracking-[2px] text-slate-400">
@@ -89,7 +89,7 @@ export default function AdminSidebar() {
                         </p>
                     </div>
                 </div>
-            )}
+            )} */}
         </aside>
     );
 }
