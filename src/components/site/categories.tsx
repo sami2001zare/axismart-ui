@@ -55,14 +55,7 @@ export default function CategoriesSection() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="
-            inline-flex
-            bg-blue-50
-            text-blue-700
-            px-5 py-2
-            text-sm
-            border border-blue-200
-            "
+                        className=" inline-flex bg-blue-50 text-blue-700 px-5 py-2 text-sm border border-blue-200 "
                     >
                         دسته‌بندی محصولات
                     </motion.span>
@@ -71,36 +64,23 @@ export default function CategoriesSection() {
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="
-            mt-8
-            max-w-[900px]
-            text-5xl
-            font-black
-            leading-[1.5]
-            text-slate-900
-            "
+                        className=" mt-8 max-w-[900px] text-5xl font-black leading-[1.5] text-slate-900 "
                     >
-                        تامین تخصصی قطعات صنعتی
-                        برای پروژه‌های حرفه‌ای
+                        تامین تخصصی قطعات صنعتی برای پروژه‌های حرفه‌ای
                     </motion.h2>
-
                 </div>
 
                 {/* Premium Layout */}
 
                 <div className="grid grid-cols-12 gap-6">
-
                     {categories.map((category, index) => (
                         <CategoryCard
                             key={index}
                             {...category}
                         />
                     ))}
-
                 </div>
-
             </div>
-
         </section>
     );
 }
@@ -129,118 +109,46 @@ function CategoryCard({
             whileHover={{
                 y: -10,
             }}
-            className={`
-      relative
-      overflow-hidden
-      border
-      border-slate-200
-      bg-white
-      p-10
-      shadow-[0_30px_60px_rgba(15,23,42,.06)]
-      transition-all
-      duration-500
-      ${layout[size]}
-      `}
+            className={` relative overflow-hidden border border-slate-200 bg-white p-10 shadow-[0_30px_60px_rgba(15,23,42,.06)] transition-all duration-500 ${layout[size]}`}
         >
 
             {/* Gradient Accent */}
-
-            <div
-                className={`
-        absolute
-        top-0
-        right-0
-        h-2
-        w-full
-        bg-gradient-to-r
-        ${color}
-        `}
-            />
+            <div className={` absolute top-0 right-0 h-2 w-full bg-gradient-to-r ${color}`} />
 
             {/* Glow */}
-
-            <div
-                className={`
-        absolute
-        -top-20
-        -left-20
-        h-[220px]
-        w-[220px]
-        rounded-full
-        bg-gradient-to-r
-        ${color}
-        opacity-[0.08]
-        blur-[70px]
-        `}
-            />
-
+            <div className={` absolute -top-20 -left-20 h-[220px] w-[220px] rounded-full bg-gradient-to-r ${color} opacity-[0.08] blur-[70px] `} />
             <div className="relative z-10 flex h-full flex-col justify-between">
-
                 <div>
-
                     <div className="flex items-center justify-between">
-
                         <div>
-
-                            <p className="
-              text-sm
-              uppercase
-              tracking-[4px]
-              text-slate-400
-              ">
+                            <p className=" text-sm uppercase tracking-[4px] text-slate-400 ">
                                 {subtitle}
                             </p>
-
-                            <h3 className="
-              mt-4
-              text-4xl
-              font-black
-              text-slate-900
-              ">
+                            <h3 className=" mt-4 text-4xl font-black text-slate-900 ">
                                 {title}
                             </h3>
-
                         </div>
 
                         <div className="text-6xl">
                             {icon}
                         </div>
-
                     </div>
 
-                    <p className="
-          mt-8
-          max-w-[500px]
-          text-lg
-          leading-[2]
-          text-slate-600
-          ">
+                    <p className=" mt-8 max-w-[500px] text-lg leading-[2] text-slate-600 ">
                         {description}
                     </p>
-
                 </div>
 
                 {/* CTA */}
-
                 <motion.button
                     whileHover={{
                         x: -6,
                     }}
-                    className="
-          mt-12
-          flex
-          items-center
-          gap-3
-          text-blue-600
-          font-bold
-          "
+                    className=" mt-12 flex items-center gap-3 text-blue-600 font-bold "
                 >
                     مشاهده محصولات ←
                 </motion.button>
-
             </div>
-
         </motion.div>
-
     );
 }

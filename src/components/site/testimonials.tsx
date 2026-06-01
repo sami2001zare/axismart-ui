@@ -17,63 +17,29 @@ export default function Testimonials() {
 
             <div className="mx-auto max-w-[1450px] px-8">
 
-                <h2 className="
-        text-center
-        text-5xl
-        font-black
-        text-slate-900
-        ">
+                <h2 className="text-center text-5xl font-black text-slate-900">
                     اعتماد صنعت به AxisMart
                 </h2>
 
-                <div className="
-        mt-20
-        grid gap-8
-        lg:grid-cols-2
-        ">
+                <div className="mt-20 grid gap-8 lg:grid-cols-2">
 
                     {reviews.map((review) => (
-                        <div
-                            key={review.name}
-                            className="
-              border border-slate-200
-              bg-white
-              p-10
-              shadow-[0_20px_60px_rgba(15,23,42,.05)]
-              "
-                        >
-
-                            <div className="
-              text-5xl
-              text-blue-600
-              ">
+                        <div key={review.name} className="border border-slate-200 bg-white p-10 shadow-[0_20px_60px_rgba(15,23,42,.05)]">
+                            <div className="text-5xl text-blue-600">
                                 "
                             </div>
 
-                            <p className="
-              mt-8
-              text-lg
-              leading-[2]
-              text-slate-600
-              ">
+                            <p className="mt-8 text-lg leading-[2] text-slate-600">
                                 {review.text}
                             </p>
 
-                            <h4 className="
-              mt-10
-              font-black
-              text-slate-900
-              ">
+                            <h4 className="mt-10 font-black text-slate-900">
                                 {review.name}
                             </h4>
-
                         </div>
                     ))}
-
                 </div>
-
             </div>
-
         </section>
     );
 }

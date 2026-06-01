@@ -9,61 +9,26 @@ export default function Hero() {
             {/* Background Accent */}
 
             <div className="absolute top-[-200px] left-[-120px] h-[450px] w-[450px] rounded-full bg-blue-100 blur-[140px]" />
-
             <div className="absolute bottom-[-180px] right-[-100px] h-[350px] w-[350px] rounded-full bg-cyan-100 blur-[120px]" />
-
             <div className="mx-auto max-w-[1450px] px-8">
-
                 <div className="grid items-center gap-20 lg:grid-cols-2">
 
                     {/* LEFT CONTENT */}
-
                     <motion.div
                         initial={{ opacity: 0, x: 70 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: .9 }}
                     >
-
                         {/* Badge */}
-
-                        <div
-                            className="
-              mb-8
-              inline-flex
-              items-center
-              gap-3
-              border border-blue-200
-              bg-blue-50
-              px-5 py-3
-              text-sm
-              text-blue-700
-              "
-                        >
+                        <div className=" mb-8 inline-flex items-center gap-3 border border-blue-200 bg-blue-50 px-5 py-3 text-sm text-blue-700 "                        >
                             ⚙️ نسل جدید تامین قطعات صنعتی
                         </div>
 
                         {/* Title */}
 
-                        <h1
-                            className="
-              text-6xl
-              font-black
-              leading-[1.5]
-              text-slate-900
-              "
-                        >
-
+                        <h1 className=" text-6xl font-black leading-[1.5] text-slate-900 " >
                             خرید تخصصی
-
-                            <span
-                                className="
-                bg-gradient-to-r
-                from-blue-600
-                to-cyan-500
-                bg-clip-text
-                text-transparent
-                "
-                            >
+                            <span className=" bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent ">
                                 {" "}بلبرینگ،
                                 تسمه،
                                 پولی
@@ -72,46 +37,24 @@ export default function Hero() {
                             <br />
 
                             و زنجیر صنعتی
-
                         </h1>
 
                         {/* Description */}
-
-                        <p
-                            className="
-              mt-10
-              max-w-[680px]
-              text-xl
-              leading-[2.1]
-              text-slate-600
-              "
-                        >
-
+                        <p className=" mt-10 max-w-[680px] text-xl leading-[2.1] text-slate-600 ">
                             فروش خرده و عمده قطعات صنعتی
                             با تضمین اصالت کالا،
                             قیمت همکاری،
                             ارسال سریع
                             و مشاوره تخصصی.
-
                         </p>
 
                         {/* CTA */}
 
                         <div className="mt-12 flex flex-wrap gap-5">
-
                             <motion.button
                                 whileHover={{ scale: 1.04 }}
                                 whileTap={{ scale: .97 }}
-                                className="
-                bg-blue-600
-                px-8 py-4
-                text-white
-                font-medium
-                shadow-lg
-                shadow-blue-200
-                transition
-                hover:bg-blue-700
-                "
+                                className=" bg-blue-600 px-8 py-4 text-white font-medium shadow-lg shadow-blue-200 transition hover:bg-blue-700 "
                             >
                                 مشاهده محصولات
                             </motion.button>
@@ -119,32 +62,17 @@ export default function Hero() {
                             <motion.button
                                 whileHover={{ scale: 1.04 }}
                                 whileTap={{ scale: .97 }}
-                                className="
-                border border-slate-300
-                bg-white
-                px-8 py-4
-                font-medium
-                text-slate-700
-                transition
-                hover:border-blue-500
-                hover:text-blue-600
-                "
+                                className=" border border-slate-300 bg-white px-8 py-4 font-medium text-slate-700 transition hover:border-blue-500 hover:text-blue-600 "
                             >
                                 خرید عمده
                             </motion.button>
-
                         </div>
-
                     </motion.div>
 
                     {/* RIGHT VISUAL */}
-
                     <HeroVisual />
-
                 </div>
-
             </div>
-
         </section>
     );
 }
@@ -168,20 +96,8 @@ function HeroVisual() {
                     repeat: Infinity,
                     duration: 5,
                 }}
-                className="
-        absolute
-        -left-8
-        top-8
-        z-20
-        border
-        border-blue-200
-        bg-white
-        px-6
-        py-5
-        shadow-xl
-        "
+                className=" absolute -left-8 top-8 z-20 border border-blue-200 bg-white px-6 py-5 shadow-xl "
             >
-
                 <p className="text-sm text-slate-500">
                     فروش عمده فعال
                 </p>

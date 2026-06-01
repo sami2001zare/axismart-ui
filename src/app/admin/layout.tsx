@@ -10,43 +10,17 @@ export default function AdminLayout({
 }) {
 
     return (
-
-        <div className="
-min-h-screen
-bg-slate-50
-">
-
-            <div className="
-flex
-min-h-screen
-">
-
+        <div className="min-h-screen bg-slate-50 ">
+            <div className="flex min-h-screen ">
                 <AdminSidebar />
-
-                <div className="
-flex
-flex-1
-flex-col
-overflow-hidden
-">
-
+                <div className="flex flex-1 flex-col overflow-hidden ">
                     <AdminTopbar />
-
-                    <main className="
-flex-1
-p-8
-">
+                    <main className=" lex-1 p-8 ">
 
                         {children}
-
                     </main>
-
                 </div>
-
             </div>
-
         </div>
-
     );
-
 }
