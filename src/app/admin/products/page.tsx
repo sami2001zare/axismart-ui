@@ -1,685 +1,184 @@
-// src/app/admin/products/page.tsx
+'use client';
 
-"use client";
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
+import { Plus, Edit2, Trash2, Eye } from 'lucide-react';
+import { useProductStore } from '@/store/productStore';
+import { useCategoryStore } from '@/store/categoryStore';
+import { useBrandStore } from '@/store/brandStore';
 
-import Link from "next/link";
-import {
-    Search,
-    Plus,
-    Filter,
-    MoreHorizontal,
-    Package,
-    ChevronDown,
-} from "lucide-react";
+export default function ProductsListPage() {
+    const router = useRouter();
+    const { products, deleteProduct } = useProductStore();
+    const { categories, fetchCategories } = useCategoryStore();
+    const { brands, fetchBrands } = useBrandStore();
 
-const products = [
-    {
-        id: "AX-6205",
-        name: "بلبرینگ SKF 6205",
-        category: "بلبرینگ",
-        stock: 42,
-        price: "۲,۴۵۰,۰۰۰",
-        status: "active",
-        brand: "SKF",
-    },
+    const [searchTerm, setSearchTerm] = useState('');
+    const [deletingId, setDeletingId] = useState<string | null>(null);
 
-    {
-        id: "AX-B52",
-        name: "تسمه BANDO A52",
-        category: "تسمه",
-        stock: 7,
-        price: "۱,۱۵۰,۰۰۰",
-        status: "low",
-        brand: "BANDO",
-    },
+    // Fetch categories & brands if they are empty (they might already have data from persist)
+    useEffect(() => {
+        if (categories.length === 0 && fetchCategories) {
+            fetchCategories(); // but fetchCategories might be API; we only have local store.
+            // Since we're using local stores without API, we don't need to fetch.
+            // Just to be safe, we can check if categories is array. If not, use empty.
+        }
+        if (brands.length === 0 && fetchBrands) {
+            // similarly
+        }
+    }, []);
 
-    {
-        id: "AX-HD25",
-        name: "زنجیر HD25",
-        category: "زنجیر",
-        stock: 0,
-        price: "۳,۲۰۰,۰۰۰",
-        status: "out",
-        brand: "AxisMart",
-    },
+    // Helper to get category name by id
+    const getCategoryName = (categoryId: string) => {
+        const cat = (Array.isArray(categories) ? categories : []).find(c => c.id === categoryId);
+        return cat?.name || 'دسته‌بندی نشده';
+    };
 
-    {
-        id: "AX-HTD8M",
-        name: "پولی HTD 8M",
-        category: "پولی",
-        stock: 18,
-        price: "۸۹۰,۰۰۰",
-        status: "active",
-        brand: "SKF",
-    },
-];
+    // Helper to get brand name by id
+    const getBrandName = (brandId: string) => {
+        const br = (Array.isArray(brands) ? brands : []).find(b => b.id === brandId);
+        return br?.name || 'برند نامشخص';
+    };
 
-export default function AdminProductsPage() {
+    const handleDelete = async (id: string) => {
+        if (confirm('آیا از حذف این محصول مطمئن هستید؟')) {
+            setDeletingId(id);
+            try {
+                deleteProduct(id);
+                toast.success('محصول با موفقیت حذف شد');
+            } catch (error) {
+                toast.error('خطا در حذف محصول');
+            } finally {
+                setDeletingId(null);
+            }
+        }
+    };
+
+    // Filter products based on search (name or slug)
+    const filteredProducts = (Array.isArray(products) ? products : []).filter(product =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.slug.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    // Format price with commas
+    const formatPrice = (price: number) => {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    };
 
     return (
-
-        <div className="space-y-8">
-
-            {/* HEADER */}
-
-            <div className="
-flex
-flex-col
-gap-6
-xl:flex-row
-xl:items-center
-xl:justify-between
-">
-
-                <div>
-
-                    <h1 className="
-text-4xl
-font-black
-text-slate-900
-">
-                        مدیریت محصولات
-                    </h1>
-
-                    <p className="
-mt-3
-text-sm
-leading-7
-text-slate-500
-">
-                        مدیریت موجودی، دسته‌بندی،
-                        قیمت و وضعیت محصولات.
-                    </p>
-
-                </div>
-
+        <div className="p-8" dir="rtl">
+            {/* Header */}
+            <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <h1 className="text-2xl font-bold text-slate-900">مدیریت محصولات</h1>
                 <Link
                     href="/admin/products/create"
-                    className="
-inline-flex
-items-center
-gap-3
-rounded-2xl
-bg-blue-600
-px-6 py-4
-text-sm
-font-medium
-text-white
-transition
-hover:bg-blue-700
-"
+                    className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
                 >
-
                     <Plus size={18} />
-
-                    محصول جدید
-
+                    افزودن محصول جدید
                 </Link>
-
             </div>
 
-            {/* TOOLBAR */}
-
-            <div className="
-rounded-[34px]
-border border-slate-200
-bg-white
-p-6
-">
-
-                <div className="
-flex
-flex-col
-gap-5
-xl:flex-row
-xl:items-center
-xl:justify-between
-">
-
-                    {/* LEFT */}
-
-                    <div className="
-flex
-flex-col
-gap-4
-lg:flex-row
-lg:items-center
-">
-
-                        <div className="
-flex
-items-center
-gap-4
-rounded-2xl
-border border-slate-200
-bg-slate-50
-px-5 py-4
-">
-
-                            <Search
-                                size={18}
-                                className="text-slate-400"
-                            />
-
-                            <input
-                                placeholder="جستجوی محصول..."
-                                className="
-w-[320px]
-bg-transparent
-text-sm
-outline-none
-"
-                            />
-
-                        </div>
-
-                        <button className="
-inline-flex
-items-center
-gap-3
-rounded-2xl
-border border-slate-200
-px-5 py-4
-text-sm
-font-medium
-text-slate-700
-">
-
-                            <Filter size={16} />
-
-                            فیلترها
-
-                        </button>
-
-                    </div>
-
-                    {/* RIGHT */}
-
-                    <div className="
-flex
-flex-wrap
-gap-4
-">
-
-                        <SelectBtn>
-                            همه دسته‌بندی‌ها
-                        </SelectBtn>
-
-                        <SelectBtn>
-                            همه وضعیت‌ها
-                        </SelectBtn>
-
-                        <SelectBtn>
-                            برند
-                        </SelectBtn>
-
-                    </div>
-
-                </div>
-
+            {/* Search bar */}
+            <div className="mb-6">
+                <input
+                    type="text"
+                    placeholder="جستجوی محصول (نام یا slug)..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full max-w-md rounded-xl border border-slate-200 px-4 py-2.5 outline-none focus:border-blue-400"
+                />
             </div>
 
-            {/* STATS */}
-
-            <div className="
-grid
-gap-6
-xl:grid-cols-4
-">
-
-                <MiniStat
-                    title="کل محصولات"
-                    value="248"
-                />
-
-                <MiniStat
-                    title="فعال"
-                    value="198"
-                />
-
-                <MiniStat
-                    title="کم‌موجودی"
-                    value="31"
-                />
-
-                <MiniStat
-                    title="ناموجود"
-                    value="19"
-                />
-
-            </div>
-
-            {/* TABLE */}
-
-            <div className="
-overflow-hidden
-rounded-[34px]
-border border-slate-200
-bg-white
-">
-
-                <div className="
-flex
-items-center
-justify-between
-border-b
-border-slate-100
-px-8 py-6
-">
-
-                    <div className="
-flex
-items-center
-gap-4
-">
-
-                        <input
-                            type="checkbox"
-                            className="h-5 w-5"
-                        />
-
-                        <p className="
-text-sm
-font-medium
-text-slate-500
-">
-                            Bulk Select
-                        </p>
-
+            {/* Products table */}
+            <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                {filteredProducts.length === 0 ? (
+                    <div className="py-12 text-center">
+                        <p className="text-slate-500">هیچ محصولی یافت نشد.</p>
+                        {searchTerm && (
+                            <button
+                                onClick={() => setSearchTerm('')}
+                                className="mt-2 text-sm text-blue-600 hover:underline"
+                            >
+                                پاک کردن فیلتر
+                            </button>
+                        )}
                     </div>
-
-                    <button className="
-rounded-xl
-border border-slate-200
-px-4 py-3
-text-sm
-font-medium
-">
-                        Bulk Actions
-                    </button>
-
-                </div>
-
-                <div className="overflow-x-auto">
-
-                    <table className="w-full">
-
-                        <thead className="
-bg-slate-50
-text-right
-">
-
-                            <tr>
-
-                                <TH>
-                                </TH>
-
-                                <TH>
-                                    محصول
-                                </TH>
-
-                                <TH>
-                                    دسته
-                                </TH>
-
-                                <TH>
-                                    برند
-                                </TH>
-
-                                <TH>
-                                    موجودی
-                                </TH>
-
-                                <TH>
-                                    قیمت
-                                </TH>
-
-                                <TH>
-                                    وضعیت
-                                </TH>
-
-                                <TH>
-                                    عملیات
-                                </TH>
-
-                            </tr>
-
-                        </thead>
-
-                        <tbody>
-
-                            {products.map((item) => (
-
-                                <tr
-                                    key={item.id}
-                                    className="
-border-t
-border-slate-100
-transition
-hover:bg-slate-50
-"
-                                >
-
-                                    <td className="px-8 py-6">
-
-                                        <input
-                                            type="checkbox"
-                                            className="h-5 w-5"
-                                        />
-
-                                    </td>
-
-                                    <td className="px-8 py-6">
-
-                                        <div className="
-flex
-items-center
-gap-5
-">
-
-                                            <div className="
-flex
-h-14
-w-14
-items-center
-justify-center
-rounded-2xl
-bg-blue-50
-text-blue-600
-">
-
-                                                <Package size={22} />
-
-                                            </div>
-
-                                            <div>
-
-                                                <h4 className="
-font-bold
-text-slate-900
-">
-                                                    {item.name}
-                                                </h4>
-
-                                                <p className="
-mt-2
-text-xs
-text-slate-500
-">
-                                                    {item.id}
-                                                </p>
-
-                                            </div>
-
-                                        </div>
-
-                                    </td>
-
-                                    <td className="
-px-8
-py-6
-text-sm
-text-slate-600
-">
-
-                                        {item.category}
-
-                                    </td>
-
-                                    <td className="
-px-8
-py-6
-font-medium
-">
-
-                                        {item.brand}
-
-                                    </td>
-
-                                    <td className="px-8 py-6">
-
-                                        <InventoryBadge
-                                            stock={item.stock}
-                                        />
-
-                                    </td>
-
-                                    <td className="
-px-8
-py-6
-font-bold
-">
-
-                                        {item.price}
-
-                                    </td>
-
-                                    <td className="px-8 py-6">
-
-                                        <StatusBadge
-                                            status={item.status}
-                                        />
-
-                                    </td>
-
-                                    <td className="px-8 py-6">
-
-                                        <div className="
-flex
-items-center
-gap-3
-">
-
-                                            <Link
-                                                href={`/admin/products/${item.id}/edit`}
-                                                className="
-rounded-xl
-border border-slate-200
-px-4 py-2
-text-sm
-font-medium
-"
-                                            >
-
-                                                ویرایش
-
-                                            </Link>
-
-                                            <button className="
-flex
-h-10
-w-10
-items-center
-justify-center
-rounded-xl
-border border-slate-200
-">
-
-                                                <MoreHorizontal size={16} />
-
-                                            </button>
-
-                                        </div>
-
-                                    </td>
-
+                ) : (
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-right">
+                            <thead className="border-b border-slate-200 bg-slate-50">
+                                <tr>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">تصویر</th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">نام محصول</th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">دسته‌بندی</th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">برند</th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">قیمت (تومان)</th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">موجودی</th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">عملیات</th>
                                 </tr>
-
-                            ))}
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
+                            </thead>
+                            <tbody>
+                                {filteredProducts.map((product) => (
+                                    <tr key={product.id} className="border-b border-slate-100 transition hover:bg-slate-50">
+                                        <td className="px-6 py-4">
+                                            {product.imageUrl ? (
+                                                <img
+                                                    src={product.imageUrl}
+                                                    alt={product.name}
+                                                    className="h-12 w-12 rounded-lg object-cover"
+                                                />
+                                            ) : (
+                                                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-slate-100 text-slate-400">
+                                                    <Eye size={20} />
+                                                </div>
+                                            )}
+                                        </td>
+                                        <td className="px-6 py-4 font-medium text-slate-900">{product.name}</td>
+                                        <td className="px-6 py-4 text-slate-600">{getCategoryName(product.categoryId)}</td>
+                                        <td className="px-6 py-4 text-slate-600">{getBrandName(product.brandId)}</td>
+                                        <td className="px-6 py-4 font-mono text-slate-900">{formatPrice(product.price)}</td>
+                                        <td className="px-6 py-4">
+                                            <span
+                                                className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${product.stock > 0
+                                                        ? 'bg-green-100 text-green-700'
+                                                        : 'bg-red-100 text-red-700'
+                                                    }`}
+                                            >
+                                                {product.stock > 0 ? `${product.stock} عدد` : 'ناموجود'}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="flex gap-2">
+                                                <Link
+                                                    href={`/admin/products/${product.id}/edit`}
+                                                    className="rounded-lg p-2 text-blue-600 transition hover:bg-blue-50"
+                                                >
+                                                    <Edit2 size={16} />
+                                                </Link>
+                                                <button
+                                                    onClick={() => handleDelete(product.id)}
+                                                    disabled={deletingId === product.id}
+                                                    className="rounded-lg p-2 text-red-600 transition hover:bg-red-50 disabled:opacity-50"
+                                                >
+                                                    <Trash2 size={16} />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
             </div>
 
+            {/* Optional: summary */}
+            <div className="mt-4 text-sm text-slate-500">
+                نمایش {filteredProducts.length} از {(Array.isArray(products) ? products : []).length} محصول
+            </div>
         </div>
-
     );
-
-}
-
-function SelectBtn({
-    children,
-}: any) {
-
-    return (
-
-        <button className="
-inline-flex
-items-center
-gap-3
-rounded-2xl
-border border-slate-200
-bg-white
-px-5 py-4
-text-sm
-font-medium
-text-slate-700
-">
-
-            {children}
-
-            <ChevronDown size={16} />
-
-        </button>
-
-    );
-
-}
-
-function MiniStat({
-    title,
-    value,
-}: any) {
-
-    return (
-
-        <div className="
-rounded-[28px]
-border border-slate-200
-bg-white
-p-6
-">
-
-            <p className="
-text-sm
-text-slate-500
-">
-                {title}
-            </p>
-
-            <h3 className="
-mt-4
-text-3xl
-font-black
-text-slate-900
-">
-                {value}
-            </h3>
-
-        </div>
-
-    );
-
-}
-
-function TH({
-    children,
-}: any) {
-
-    return (
-
-        <th className="
-px-8
-py-5
-text-sm
-font-bold
-text-slate-700
-">
-            {children}
-        </th>
-
-    );
-
-}
-
-function StatusBadge({
-    status,
-}: any) {
-
-    const styles = {
-
-        active:
-            "bg-emerald-50 text-emerald-700",
-
-        low:
-            "bg-amber-50 text-amber-700",
-
-        out:
-            "bg-red-50 text-red-700",
-
-    };
-
-    const labels = {
-
-        active: "فعال",
-
-        low: "کم‌موجودی",
-
-        out: "ناموجود",
-
-    };
-
-    return (
-
-        <div className={`
-inline-flex
-rounded-full
-px-4 py-2
-text-xs
-font-medium
-${styles[status as keyof typeof styles]}
-`}>
-
-            {labels[status as keyof typeof labels]}
-
-        </div>
-
-    );
-
-}
-
-function InventoryBadge({
-    stock,
-}: any) {
-
-    return (
-
-        <div className={`
-inline-flex
-rounded-full
-px-4 py-2
-text-xs
-font-medium
-${stock === 0
-                ?
-                "bg-red-50 text-red-700"
-                :
-                stock < 10
-                    ?
-                    "bg-amber-50 text-amber-700"
-                    :
-                    "bg-blue-50 text-blue-700"
-            }
-`}>
-
-            {stock} Qty
-
-        </div>
-
-    );
-
 }

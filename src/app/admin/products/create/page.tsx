@@ -1,563 +1,356 @@
-// src/app/admin/products/create/page.tsx
+'use client';
 
-"use client";
-
-import {
-    Save,
-    Upload,
-    X,
-    Plus,
-    ChevronDown,
-} from "lucide-react";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
+import { ArrowRight, Upload, X } from 'lucide-react';
+import { useCategoryStore } from '@/store/categoryStore';
+import { useBrandStore } from '@/store/brandStore';
+import { useProductStore } from '@/store/productStore';
 
 export default function CreateProductPage() {
+    const router = useRouter();
+    const { categories } = useCategoryStore();
+    const { brands } = useBrandStore();
+    const { addProduct, getProductBySlug } = useProductStore();
+
+    const [formData, setFormData] = useState({
+        name: '',
+        slug: '',
+        categoryId: '',
+        brandId: '',
+        price: '',
+        stock: '',
+        description: '',
+        imageUrl: '',
+    });
+
+    const [errors, setErrors] = useState<Record<string, string>>({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Image preview state
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+    // Auto‑generate slug from name (optional)
+    const generateSlug = (name: string) => {
+        return name
+            .trim()
+            .toLowerCase()
+            .replace(/[^\u0600-\u06FF\u0750-\u077F\u08A0-\u08FFa-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+    };
+
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const name = e.target.value;
+        setFormData((prev) => ({
+            ...prev,
+            name,
+            slug: prev.slug || generateSlug(name), // only auto‑fill if slug is empty
+        }));
+        if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
+    };
+
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    ) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+        if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }));
+    };
+
+    const handleImageUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const url = e.target.value;
+        setFormData((prev) => ({ ...prev, imageUrl: url }));
+        setImagePreview(url || null);
+        if (errors.imageUrl) setErrors((prev) => ({ ...prev, imageUrl: '' }));
+    };
+
+    const validateForm = () => {
+        const newErrors: Record<string, string> = {};
+
+        if (!formData.name.trim()) newErrors.name = 'نام محصول الزامی است';
+        if (!formData.slug.trim()) {
+            newErrors.slug = 'شناسه یکتا (slug) الزامی است';
+        } else {
+            const existing = getProductBySlug(formData.slug);
+            if (existing) newErrors.slug = 'این slug قبلاً استفاده شده است';
+        }
+        if (!formData.categoryId) newErrors.categoryId = 'دسته‌بندی را انتخاب کنید';
+        if (!formData.brandId) newErrors.brandId = 'برند را انتخاب کنید';
+        if (!formData.price) {
+            newErrors.price = 'قیمت الزامی است';
+        } else if (isNaN(Number(formData.price)) || Number(formData.price) <= 0) {
+            newErrors.price = 'قیمت باید عددی مثبت باشد';
+        }
+        if (!formData.stock) {
+            newErrors.stock = 'موجودی الزامی است';
+        } else if (isNaN(Number(formData.stock)) || Number(formData.stock) < 0) {
+            newErrors.stock = 'موجودی باید عددی نامنفی باشد';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!validateForm()) {
+            toast.error('لطفاً خطاهای فرم را اصلاح کنید');
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            addProduct({
+                name: formData.name,
+                slug: formData.slug,
+                categoryId: formData.categoryId,
+                brandId: formData.brandId,
+                price: Number(formData.price),
+                stock: Number(formData.stock),
+                description: formData.description,
+                imageUrl: formData.imageUrl || undefined,
+            });
+            toast.success('محصول با موفقیت ایجاد شد');
+            router.push('/admin/products');
+        } catch (error) {
+            toast.error('خطایی رخ داد. لطفاً دوباره تلاش کنید.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    // Safe lists
+    const categoryList = Array.isArray(categories) ? categories : [];
+    const brandList = Array.isArray(brands) ? brands : [];
 
     return (
-
-        <div className="space-y-8">
-
-            {/* HEADER */}
-
-            <div className="
-flex
-flex-col
-gap-6
-xl:flex-row
-xl:items-center
-xl:justify-between
-">
-
-                <div>
-
-                    <h1 className="
-text-4xl
-font-black
-text-slate-900
-">
-                        ایجاد محصول
-                    </h1>
-
-                    <p className="
-mt-3
-text-sm
-leading-7
-text-slate-500
-">
-                        افزودن محصول جدید به کاتالوگ AxisMart
-                    </p>
-
-                </div>
-
-                <div className="
-flex
-gap-4
-">
-
-                    <button className="
-rounded-2xl
-border border-slate-200
-px-6 py-4
-text-sm
-font-medium
-">
-                        پیش‌نویس
-                    </button>
-
-                    <button className="
-inline-flex
-items-center
-gap-3
-rounded-2xl
-bg-blue-600
-px-6 py-4
-text-sm
-font-medium
-text-white
-">
-
-                        <Save size={16} />
-
-                        ذخیره محصول
-
-                    </button>
-
-                </div>
-
+        <div className="p-8" dir="rtl">
+            {/* Header */}
+            <div className="mb-8 flex items-center gap-4">
+                <button
+                    onClick={() => router.back()}
+                    className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 transition hover:bg-slate-50"
+                >
+                    <ArrowRight size={18} />
+                </button>
+                <h1 className="text-2xl font-bold text-slate-900">ایجاد محصول جدید</h1>
             </div>
 
-            <div className="
-grid
-gap-8
-xl:grid-cols-[1fr_420px]
-">
-
-                {/* LEFT */}
-
-                <div className="space-y-8">
-
-                    {/* BASIC */}
-
-                    <Card title="اطلاعات پایه">
-
-                        <div className="grid gap-6">
-
-                            <Field label="نام محصول">
-
-                                <input
-                                    placeholder="بلبرینگ SKF 6205"
-                                    className={input}
-                                />
-
-                            </Field>
-
-                            <Field label="Slug">
-
-                                <input
-                                    placeholder="skf-6205-bearing"
-                                    className={input}
-                                />
-
-                            </Field>
-
-                            <Field label="توضیحات">
-
-                                <textarea
-                                    rows={8}
-                                    className={textarea}
-                                />
-
-                            </Field>
-
-                        </div>
-
-                    </Card>
-
-                    {/* MEDIA */}
-
-                    <Card title="تصاویر محصول">
-
-                        <div className="
-rounded-[30px]
-border-2
-border-dashed
-border-slate-300
-bg-slate-50
-p-10
-text-center
-">
-
-                            <div className="
-mx-auto
-flex
-h-20
-w-20
-items-center
-justify-center
-rounded-3xl
-bg-blue-50
-text-blue-600
-">
-
-                                <Upload size={28} />
-
-                            </div>
-
-                            <h3 className="
-mt-8
-text-lg
-font-bold
-text-slate-900
-">
-                                آپلود تصاویر
-                            </h3>
-
-                            <p className="
-mt-3
-text-sm
-text-slate-500
-">
-                                Drag & Drop یا انتخاب فایل
-                            </p>
-
-                            <button className="
-mt-8
-rounded-2xl
-bg-slate-900
-px-6 py-4
-text-sm
-font-medium
-text-white
-">
-                                انتخاب فایل
-                            </button>
-
-                        </div>
-
-                    </Card>
-
-                    {/* SPECS */}
-
-                    <Card title="مشخصات فنی">
-
-                        <div className="space-y-5">
-
-                            <SpecRow />
-
-                            <SpecRow />
-
-                            <button className="
-inline-flex
-items-center
-gap-3
-rounded-2xl
-border border-slate-200
-px-5 py-4
-text-sm
-font-medium
-">
-
-                                <Plus size={16} />
-
-                                افزودن مشخصه
-
-                            </button>
-
-                        </div>
-
-                    </Card>
-
-                </div>
-
-                {/* RIGHT */}
-
-                <div className="space-y-8">
-
-                    {/* PRICING */}
-
-                    <Card title="قیمت‌گذاری">
-
-                        <div className="space-y-5">
-
-                            <Field label="قیمت خرده">
-
-                                <input
-                                    className={input}
-                                />
-
-                            </Field>
-
-                            <Field label="قیمت عمده">
-
-                                <input
-                                    className={input}
-                                />
-
-                            </Field>
-
-                            <Field label="MOQ">
-
-                                <input
-                                    placeholder="10"
-                                    className={input}
-                                />
-
-                            </Field>
-
-                        </div>
-
-                    </Card>
-
-                    {/* INVENTORY */}
-
-                    <Card title="موجودی">
-
-                        <div className="space-y-5">
-
-                            <Field label="SKU">
-
-                                <input
-                                    placeholder="AX-6205"
-                                    className={input}
-                                />
-
-                            </Field>
-
-                            <Field label="موجودی">
-
-                                <input
-                                    placeholder="42"
-                                    className={input}
-                                />
-
-                            </Field>
-
-                            <Field label="وضعیت">
-
-                                <Select />
-
-                            </Field>
-
-                        </div>
-
-                    </Card>
-
-                    {/* CATEGORY */}
-
-                    <Card title="دسته‌بندی">
-
-                        <div className="space-y-5">
-
-                            <Field label="دسته‌بندی">
-
-                                <Select />
-
-                            </Field>
-
-                            <Field label="برند">
-
-                                <Select />
-
-                            </Field>
-
-                            <Field label="برچسب‌ها">
-
-                                <div className="
-flex
-flex-wrap
-gap-3
-rounded-2xl
-border border-slate-200
-p-4
-">
-
-                                    <Tag>
-                                        SKF
-                                    </Tag>
-
-                                    <Tag>
-                                        بلبرینگ
-                                    </Tag>
-
-                                    <button className="
-inline-flex
-items-center
-gap-2
-rounded-xl
-border border-dashed border-slate-300
-px-4 py-2
-text-sm
-text-slate-500
-">
-
-                                        <Plus size={14} />
-
-                                        برچسب
-
-                                    </button>
-
+            <form onSubmit={handleSubmit} className="space-y-8">
+                <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+                    {/* Main fields - 2 columns */}
+                    <div className="lg:col-span-2 space-y-6">
+                        {/* Card for basic info */}
+                        <div className="rounded-2xl border border-slate-200 bg-white p-6">
+                            <h2 className="mb-4 text-lg font-semibold text-slate-900">اطلاعات پایه</h2>
+                            <div className="space-y-5">
+                                {/* Name */}
+                                <div>
+                                    <label className="mb-1 block text-sm font-medium text-slate-700">
+                                        نام محصول <span className="text-red-500">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={formData.name}
+                                        onChange={handleNameChange}
+                                        className={`w-full rounded-xl border px-4 py-2.5 outline-none transition focus:ring-2 ${errors.name
+                                                ? 'border-red-500 focus:ring-red-200'
+                                                : 'border-slate-200 focus:border-blue-400 focus:ring-blue-100'
+                                            }`}
+                                        placeholder="مثال: بلبرینگ صنعتی SKF 6204"
+                                    />
+                                    {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
                                 </div>
 
-                            </Field>
+                                {/* Slug */}
+                                <div>
+                                    <label className="mb-1 block text-sm font-medium text-slate-700">
+                                        شناسه یکتا (slug) <span className="text-red-500">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="slug"
+                                        value={formData.slug}
+                                        onChange={handleChange}
+                                        className={`w-full rounded-xl border px-4 py-2.5 outline-none transition focus:ring-2 ${errors.slug
+                                                ? 'border-red-500 focus:ring-red-200'
+                                                : 'border-slate-200 focus:border-blue-400 focus:ring-blue-100'
+                                            }`}
+                                        placeholder="مثال: skf-6204-bearing"
+                                    />
+                                    {errors.slug && <p className="mt-1 text-sm text-red-500">{errors.slug}</p>}
+                                    <p className="mt-1 text-xs text-slate-400">فقط حروف انگلیسی، اعداد و خط تیره مجاز است</p>
+                                </div>
 
+                                {/* Category & Brand row */}
+                                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                                    <div>
+                                        <label className="mb-1 block text-sm font-medium text-slate-700">
+                                            دسته‌بندی <span className="text-red-500">*</span>
+                                        </label>
+                                        <select
+                                            name="categoryId"
+                                            value={formData.categoryId}
+                                            onChange={handleChange}
+                                            className={`w-full rounded-xl border px-4 py-2.5 outline-none ${errors.categoryId
+                                                    ? 'border-red-500'
+                                                    : 'border-slate-200 focus:border-blue-400'
+                                                }`}
+                                        >
+                                            <option value="">انتخاب کنید</option>
+                                            {categoryList.map((cat) => (
+                                                <option key={cat.id} value={cat.id}>
+                                                    {cat.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        {errors.categoryId && <p className="mt-1 text-sm text-red-500">{errors.categoryId}</p>}
+                                    </div>
+                                    <div>
+                                        <label className="mb-1 block text-sm font-medium text-slate-700">
+                                            برند <span className="text-red-500">*</span>
+                                        </label>
+                                        <select
+                                            name="brandId"
+                                            value={formData.brandId}
+                                            onChange={handleChange}
+                                            className={`w-full rounded-xl border px-4 py-2.5 outline-none ${errors.brandId ? 'border-red-500' : 'border-slate-200 focus:border-blue-400'
+                                                }`}
+                                        >
+                                            <option value="">انتخاب کنید</option>
+                                            {brandList.map((brand) => (
+                                                <option key={brand.id} value={brand.id}>
+                                                    {brand.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        {errors.brandId && <p className="mt-1 text-sm text-red-500">{errors.brandId}</p>}
+                                    </div>
+                                </div>
+
+                                {/* Price & Stock row */}
+                                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                                    <div>
+                                        <label className="mb-1 block text-sm font-medium text-slate-700">
+                                            قیمت (تومان) <span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            type="number"
+                                            name="price"
+                                            value={formData.price}
+                                            onChange={handleChange}
+                                            className={`w-full rounded-xl border px-4 py-2.5 outline-none ${errors.price ? 'border-red-500' : 'border-slate-200 focus:border-blue-400'
+                                                }`}
+                                            placeholder="0"
+                                        />
+                                        {errors.price && <p className="mt-1 text-sm text-red-500">{errors.price}</p>}
+                                    </div>
+                                    <div>
+                                        <label className="mb-1 block text-sm font-medium text-slate-700">
+                                            موجودی (عدد) <span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            type="number"
+                                            name="stock"
+                                            value={formData.stock}
+                                            onChange={handleChange}
+                                            className={`w-full rounded-xl border px-4 py-2.5 outline-none ${errors.stock ? 'border-red-500' : 'border-slate-200 focus:border-blue-400'
+                                                }`}
+                                            placeholder="0"
+                                        />
+                                        {errors.stock && <p className="mt-1 text-sm text-red-500">{errors.stock}</p>}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                    </Card>
+                        {/* Description Card */}
+                        <div className="rounded-2xl border border-slate-200 bg-white p-6">
+                            <h2 className="mb-4 text-lg font-semibold text-slate-900">توضیحات محصول</h2>
+                            <textarea
+                                name="description"
+                                value={formData.description}
+                                onChange={handleChange}
+                                rows={6}
+                                className="w-full rounded-xl border border-slate-200 px-4 py-2.5 outline-none focus:border-blue-400"
+                                placeholder="توضیحات کامل محصول را وارد کنید..."
+                            />
+                        </div>
+                    </div>
 
+                    {/* Sidebar - Image upload */}
+                    <div className="space-y-6">
+                        <div className="rounded-2xl border border-slate-200 bg-white p-6">
+                            <h2 className="mb-4 text-lg font-semibold text-slate-900">تصویر محصول</h2>
+                            <div className="space-y-4">
+                                <div className="flex items-center justify-center rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 p-6">
+                                    {imagePreview ? (
+                                        <div className="relative">
+                                            <img
+                                                src={imagePreview}
+                                                alt="Product preview"
+                                                className="max-h-48 w-auto rounded-lg object-contain"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setFormData((prev) => ({ ...prev, imageUrl: '' }));
+                                                    setImagePreview(null);
+                                                }}
+                                                className="absolute -right-2 -top-2 rounded-full bg-red-500 p-1 text-white hover:bg-red-600"
+                                            >
+                                                <X size={14} />
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className="text-center">
+                                            <Upload className="mx-auto h-12 w-12 text-slate-400" />
+                                            <p className="mt-2 text-sm text-slate-500">آدرس تصویر را وارد کنید</p>
+                                        </div>
+                                    )}
+                                </div>
+                                <input
+                                    type="url"
+                                    name="imageUrl"
+                                    value={formData.imageUrl}
+                                    onChange={handleImageUrlChange}
+                                    className="w-full rounded-xl border border-slate-200 px-4 py-2.5 outline-none focus:border-blue-400"
+                                    placeholder="https://example.com/image.jpg"
+                                />
+                                <p className="text-xs text-slate-400">لینک مستقیم تصویر (اختیاری)</p>
+                            </div>
+                        </div>
+
+                        {/* Info card */}
+                        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+                            <h3 className="font-semibold text-slate-900">نکته</h3>
+                            <p className="mt-2 text-sm text-slate-600">
+                                پس از ایجاد محصول، می‌توانید آن را در لیست محصولات ویرایش یا حذف کنید.
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
-            </div>
-
+                {/* Action buttons */}
+                <div className="flex justify-end gap-4 border-t border-slate-200 pt-6">
+                    <button
+                        type="button"
+                        onClick={() => router.back()}
+                        className="rounded-xl border border-slate-200 px-6 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                    >
+                        انصراف
+                    </button>
+                    <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-medium text-white transition hover:bg-blue-700 disabled:opacity-50"
+                    >
+                        {isSubmitting ? 'در حال ایجاد...' : 'ایجاد محصول'}
+                    </button>
+                </div>
+            </form>
         </div>
-
     );
-
-}
-
-const input = `
-w-full
-rounded-2xl
-border
-border-slate-200
-bg-slate-50
-px-5
-py-4
-text-sm
-outline-none
-focus:border-blue-500
-focus:bg-white
-`;
-
-const textarea = `
-w-full
-rounded-2xl
-border
-border-slate-200
-bg-slate-50
-p-5
-text-sm
-outline-none
-resize-none
-`;
-
-function Card({
-    title,
-    children,
-}: any) {
-
-    return (
-
-        <div className="
-rounded-[34px]
-border border-slate-200
-bg-white
-overflow-hidden
-">
-
-            <div className="
-border-b
-border-slate-100
-px-8 py-6
-">
-
-                <h3 className="
-text-lg
-font-bold
-text-slate-900
-">
-                    {title}
-                </h3>
-
-            </div>
-
-            <div className="p-8">
-
-                {children}
-
-            </div>
-
-        </div>
-
-    );
-
-}
-
-function Field({
-    label,
-    children,
-}: any) {
-
-    return (
-
-        <div>
-
-            <label className="
-mb-4
-block
-text-sm
-font-bold
-text-slate-700
-">
-
-                {label}
-
-            </label>
-
-            {children}
-
-        </div>
-
-    );
-
-}
-
-function Select() {
-
-    return (
-
-        <button className="
-flex
-w-full
-items-center
-justify-between
-rounded-2xl
-border border-slate-200
-bg-slate-50
-px-5 py-4
-text-sm
-text-slate-700
-">
-
-            انتخاب
-
-            <ChevronDown size={16} />
-
-        </button>
-
-    );
-
-}
-
-function SpecRow() {
-
-    return (
-
-        <div className="
-grid
-gap-4
-md:grid-cols-[1fr_1fr_auto]
-">
-
-            <input
-                placeholder="نام"
-                className={input}
-            />
-
-            <input
-                placeholder="مقدار"
-                className={input}
-            />
-
-            <button className="
-flex
-h-[56px]
-w-[56px]
-items-center
-justify-center
-rounded-2xl
-border border-red-200
-text-red-600
-">
-
-                <X size={18} />
-
-            </button>
-
-        </div>
-
-    );
-
-}
-
-function Tag({
-    children,
-}: any) {
-
-    return (
-
-        <div className="
-inline-flex
-rounded-full
-bg-blue-50
-px-4 py-2
-text-xs
-font-medium
-text-blue-700
-">
-
-            {children}
-
-        </div>
-
-    );
-
 }
