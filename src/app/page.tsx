@@ -1,3 +1,5 @@
+'use client'
+
 import Navbar from "@/components/site/navbar";
 import Hero from "@/components/site/hero";
 import CategoriesSection from "@/components/site/categories";
@@ -8,20 +10,71 @@ import BrandsSection from "@/components/site/brands";
 import Testimonials from "@/components/site/testimonials";
 import CtaBanner from "@/components/site/cta-banner";
 import Footer from "@/components/site/footer";
+import { useCategoryStore } from "@/store/categoryStore";
+import { useProductStore } from "@/store/productStore";
+import { useMemo } from "react";
+import ProductCarousel from "@/components/ProductCarousel";
 
 export default function HomePage() {
-  return (
-    <>
-      <Navbar />
-      <Hero />
-      <CategoriesSection />
-      <FeaturedProducts />
-      <WholesaleSection />
-      <WhyAxisMart />
-      <BrandsSection />
-      <Testimonials />
-      <CtaBanner />
-      <Footer />
-    </>
-  );
+
+    const { categories } = useCategoryStore();
+    const { products } = useProductStore();
+
+    const categoryList = Array.isArray(categories) ? categories : [];
+    const productList = Array.isArray(products) ? products : [];
+
+    // Group products by category
+    const productsByCategory = useMemo(() => {
+        const map: Record<string, typeof productList> = {};
+        productList.forEach(product => {
+            if (!map[product.categoryId]) map[product.categoryId] = [];
+            map[product.categoryId].push(product);
+        });
+        return map;
+    }, [productList]);
+
+    // Get first 3 categories that have at least one product
+    const activeCategories = categoryList
+        .filter(cat => productsByCategory[cat.id]?.length > 0)
+        .slice(0, 3);
+
+    if (activeCategories.length === 0) {
+        return (
+            <div className="container mx-auto px-4 py-12 text-center">
+                <p className="text-slate-500">هیچ محصولی برای نمایش وجود ندارد.</p>
+            </div>
+        );
+    }
+
+    return (
+        <>
+            <Navbar />
+            <Hero />
+            <CategoriesSection />
+            {/* Carousels for each category */}
+            <section className="relative">
+
+                <div className="mx-auto max-w-[1450px] px-8">
+
+                    {activeCategories.map(category => {
+                        const categoryProducts = productsByCategory[category.id] || [];
+                        return (
+                            <ProductCarousel
+                                key={category.id}
+                                title={category.name}
+                                products={categoryProducts}
+                            />
+                        );
+                    })}
+                </div>
+            </section>
+            <FeaturedProducts />
+            <WholesaleSection />
+            <WhyAxisMart />
+            <BrandsSection />
+            <Testimonials />
+            <CtaBanner />
+            <Footer />
+        </>
+    );
 }

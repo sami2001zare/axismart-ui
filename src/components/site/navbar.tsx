@@ -1,65 +1,69 @@
-"use client";
+// components/Navbar.tsx
+'use client';
 
-import Link from "next/link";
-import { motion } from "framer-motion";
-import { ShoppingCart, User } from "lucide-react";
+import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import { ChevronDown } from 'lucide-react';
+import { useCategoryStore } from '@/store/categoryStore';
 
 export default function Navbar() {
+    const { categories, fetchCategories } = useCategoryStore();
+    const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
 
-    const items = [
-        "خانه",
-        "محصولات",
-        "خرید عمده",
-        "درباره ما",
-    ];
+    useEffect(() => {
+        // If categories not already loaded, load them
+        if (categories.length === 0 && fetchCategories) {
+            // Our categoryStore has no fetchCategories because it's local; it's already populated.
+            // So we can just use categories as is.
+        }
+    }, []);
+
+    const categoryList = Array.isArray(categories) ? categories : [];
 
     return (
-        <motion.header
-            initial={{ y: -40 }}
-            animate={{ y: 0 }}
-            className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-b border-slate-200 " >
+        <nav className="bg-white border-b border-slate-200 sticky top-0 z-50">
+            <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+                <Link href="/" className="text-xl font-bold text-blue-600">
+                    بلبرینگ پارسا
+                </Link>
 
-            <div className="mx-auto max-w-[1450px]">
-                <div className=" flex h-[82px] items-center justify-between px-8 ">
-                    <Link href="/" className="flex items-center gap-4" >
-                        <div className=" flex h-11 w-11 items-center justify-center bg-blue-600 text-white font-bold ">
-                            ⚙
-                        </div>
-                        <div>
-                            <h1 className="font-black text-slate-900">
-                                بلبرینگ پارسا
-                            </h1>
+                <ul className="flex items-center gap-6 text-slate-700">
+                    <li><Link href="/" className="hover:text-blue-600">خانه</Link></li>
+                    <li><Link href="/products" className="hover:text-blue-600">محصولات</Link></li>
 
-                            {/* <p className="text-xs text-slate-500">
-                                Industrial Marketplace
-                            </p> */}
-                        </div>
-                    </Link>
-
-                    <nav className="hidden lg:flex gap-12">
-                        {items.map((item) => (
-                            <Link
-                                key={item}
-                                href="/"
-                                className=" text-slate-600 transition hover:text-blue-600 "
-                            >
-                                {item}
-                            </Link>
-                        ))}
-                    </nav>
-
-                    <div className="flex items-center gap-3">
-                        <button className=" flex h-11 w-11 items-center justify-center border border-slate-200 bg-white hover:bg-slate-50 ">
-                            <ShoppingCart size={18} />
+                    {/* Categories Dropdown */}
+                    <li className="relative">
+                        <button
+                            onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
+                            className="flex items-center gap-1 hover:text-blue-600"
+                        >
+                            دسته‌بندی‌ها
+                            <ChevronDown size={16} className={`transition ${isCategoriesOpen ? 'rotate-180' : ''}`} />
                         </button>
+                        {isCategoriesOpen && categoryList.length > 0 && (
+                            <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-10">
+                                {categoryList.map((cat) => (
+                                    <Link
+                                        key={cat.id}
+                                        href={`/categories/${cat.slug}`}
+                                        className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+                                        onClick={() => setIsCategoriesOpen(false)}
+                                    >
+                                        {cat.name}
+                                    </Link>
+                                ))}
+                            </div>
+                        )}
+                    </li>
 
-                        <button className=" flex items-center gap-2 bg-blue-600 px-5 py-3 text-sm text-white font-medium hover:bg-blue-700 transition ">
-                            <User size={16} />
-                            ورود
-                        </button>
-                    </div>
+                    <li><Link href="/contact" className="hover:text-blue-600">تماس با ما</Link></li>
+                </ul>
+
+                <div className="flex items-center gap-4">
+                    <Link href="/cart" className="text-slate-700 hover:text-blue-600">سبد خرید</Link>
+                    <Link href="/login" className="bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700">ورود</Link>
                 </div>
             </div>
-        </motion.header>
+        </nav>
     );
 }

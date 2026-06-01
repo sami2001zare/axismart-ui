@@ -7,7 +7,7 @@ export default function Footer() {
                 <div className="grid gap-14 lg:grid-cols-4">
                     <div>
                         <h2 className="text-3xl font-black text-slate-900 ">
-                            AxisMart
+                            بلبرینگ پارسا
                         </h2>
 
                         <p className=" mt-6 leading-[2] text-slate-600 ">

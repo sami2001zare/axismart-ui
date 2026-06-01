@@ -1,350 +1,377 @@
-"use client";
+'use client';
 
-import Navbar from "@/components/site/navbar";
-import Footer from "@/components/site/footer";
-import Image from "next/image";
+import { useState, useMemo } from 'react';
+import ProductCard from '@/components/ProductCard';
 import {
     Search,
+    Filter,
+    X,
     ChevronDown,
-    LayoutGrid,
-    Command,
+    ArrowUpDown,
+    Tag,
+    Package,
+    DollarSign,
+    Grid3X3,
     List,
-} from "lucide-react";
-import ProductFilters from "@/components/catalog/product-filters";
+} from 'lucide-react';
+import { useProductStore } from '@/store/productStore';
+import { useCategoryStore } from '@/store/categoryStore';
 
-const products = [
-    {
-        id: 1,
-        title: "بلبرینگ SKF 6205",
-        category: "بلبرینگ",
-        price: "۲,۴۵۰,۰۰۰",
-        image: "/products/bearing.jpg",
-        stock: "موجود",
-        wholesale: true,
-        brand: "SKF",
-    },
-    {
-        id: 2,
-        title: "تسمه صنعتی BANDO",
-        category: "تسمه",
-        price: "۸۹۰,۰۰۰",
-        image: "/products/belt.jpg",
-        stock: "موجود",
-        wholesale: false,
-        brand: "BANDO",
-    },
-    {
-        id: 3,
-        title: "پولی آلومینیومی",
-        category: "پولی",
-        price: "۱,۷۵۰,۰۰۰",
-        image: "/products/pulley.jpg",
-        stock: "محدود",
-        wholesale: true,
-        brand: "OPTIBELT",
-    },
-    {
-        id: 4,
-        title: "زنجیر صنعتی Heavy Duty",
-        category: "زنجیر",
-        price: "۳,۳۰۰,۰۰۰",
-        image: "/products/chain.jpg",
-        stock: "موجود",
-        wholesale: true,
-        brand: "NSK",
-    },
-];
+type SortOption = 'name_asc' | 'name_desc' | 'price_asc' | 'price_desc' | 'newest';
+type StockFilter = 'all' | 'in_stock' | 'out_of_stock';
 
 export default function ProductsPage() {
+    const { products } = useProductStore();
+    const { categories } = useCategoryStore();
+
+    const [searchTerm, setSearchTerm] = useState('');
+    const [selectedCategoryId, setSelectedCategoryId] = useState<string>('all');
+    const [minPrice, setMinPrice] = useState('');
+    const [maxPrice, setMaxPrice] = useState('');
+    const [stockFilter, setStockFilter] = useState<StockFilter>('all');
+    const [sortBy, setSortBy] = useState<SortOption>('newest');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(12);
+    const [showFilters, setShowFilters] = useState(false);
+    const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+
+    const productList = Array.isArray(products) ? products : [];
+    const categoryList = Array.isArray(categories) ? categories : [];
+
+    // Filtering logic (same)
+    const filteredProducts = useMemo(() => {
+        let filtered = [...productList];
+        if (searchTerm.trim()) {
+            filtered = filtered.filter(p =>
+                p.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        }
+        if (selectedCategoryId !== 'all') {
+            filtered = filtered.filter(p => p.categoryId === selectedCategoryId);
+        }
+        if (minPrice) {
+            filtered = filtered.filter(p => p.price >= Number(minPrice));
+        }
+        if (maxPrice) {
+            filtered = filtered.filter(p => p.price <= Number(maxPrice));
+        }
+        if (stockFilter === 'in_stock') {
+            filtered = filtered.filter(p => p.stock > 0);
+        } else if (stockFilter === 'out_of_stock') {
+            filtered = filtered.filter(p => p.stock === 0);
+        }
+        return filtered;
+    }, [productList, searchTerm, selectedCategoryId, minPrice, maxPrice, stockFilter]);
+
+    // Sorting logic (same)
+    const sortedProducts = useMemo(() => {
+        const sorted = [...filteredProducts];
+        switch (sortBy) {
+            case 'name_asc':
+                sorted.sort((a, b) => a.name.localeCompare(b.name));
+                break;
+            case 'name_desc':
+                sorted.sort((a, b) => b.name.localeCompare(a.name));
+                break;
+            case 'price_asc':
+                sorted.sort((a, b) => a.price - b.price);
+                break;
+            case 'price_desc':
+                sorted.sort((a, b) => b.price - a.price);
+                break;
+            case 'newest':
+                sorted.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+                break;
+        }
+        return sorted;
+    }, [filteredProducts, sortBy]);
+
+    const totalItems = sortedProducts.length;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const paginatedProducts = sortedProducts.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
+
+    const handleFilterChange = () => setCurrentPage(1);
+
+    const clearFilters = () => {
+        setSearchTerm('');
+        setSelectedCategoryId('all');
+        setMinPrice('');
+        setMaxPrice('');
+        setStockFilter('all');
+        setSortBy('newest');
+        setCurrentPage(1);
+    };
+
+    const hasActiveFilters = searchTerm || selectedCategoryId !== 'all' || minPrice || maxPrice || stockFilter !== 'all';
+
+    // Helper to get category name
+    const getCategoryName = (id: string) => {
+        const cat = categoryList.find(c => c.id === id);
+        return cat?.name || id;
+    };
 
     return (
-        <>
-            <Navbar />
+        <div className="bg-gradient-to-b from-slate-50 to-white min-h-screen py-8" dir="rtl">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                {/* Hero / Title */}
+                <div className="mb-10 text-center">
+                    <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">محصولات</h1>
+                    <p className="mt-2 text-slate-500">بهترین بلبرینگ‌های صنعتی و خودرو با بالاترین کیفیت</p>
+                </div>
 
-            <main className="pt-32 pb-24 bg-slate-50">
+                {/* Filter Bar (desktop always, mobile toggle) */}
+                <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+                    <button
+                        onClick={() => setShowFilters(!showFilters)}
+                        className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm lg:hidden"
+                    >
+                        <Filter size={16} />
+                        {showFilters ? 'بستن فیلترها' : 'فیلترها'}
+                        <ChevronDown size={14} className={`transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+                    </button>
 
-                <section>
-                    <div className="mx-auto max-w-[1450px] px-8">
+                    <div className="flex gap-2">
+                        <button
+                            onClick={() => setViewMode('grid')}
+                            className={`rounded-xl p-2 transition ${viewMode === 'grid' ? 'bg-blue-100 text-blue-600' : 'bg-white text-slate-400 hover:text-slate-600'
+                                }`}
+                        >
+                            <Grid3X3 size={18} />
+                        </button>
+                        <button
+                            onClick={() => setViewMode('list')}
+                            className={`rounded-xl p-2 transition ${viewMode === 'list' ? 'bg-blue-100 text-blue-600' : 'bg-white text-slate-400 hover:text-slate-600'
+                                }`}
+                        >
+                            <List size={18} />
+                        </button>
+                    </div>
+                </div>
 
-                        {/* HERO */}
-
-                        <div className="mb-14">
-                            <span className="inline-flex rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-medium text-blue-700">
-                                کاتالوگ محصولات
-                            </span>
-
-                            <h1 className="mt-7 text-5xl font-black leading-tight text-slate-900">
-                                محصولات صنعتی
-                            </h1>
-
-                            <p className="mt-5 max-w-[720px] text-[15px] leading-8 text-slate-600">
-                                جستجو، فیلتر و خرید تخصصی
-                                بلبرینگ، تسمه، پولی و زنجیر صنعتی.
-                            </p>
-                        </div>
-
-                        <div className="grid gap-8 lg:grid-cols-[290px_1fr]">
-
-                            {/* FILTERS */}
-                            <ProductFilters />
-
-                            {/* PRODUCTS */}
-                            <div>
-                                {/* TOOLBAR */}
-                                {/* PREMIUM TOOLBAR */}
-                                <div className="overflow-hidden rounded-[30px] border border-slate-200 bg-white">
-                                    {/* TOP */}
-                                    <div className="flex flex-col gap-5 border-b border-slate-100 p-6 xl:flex-row xl:items-center xl:justify-between">
-                                        {/* SEARCH */}
-                                        <div className="relative flex-1">
-                                            <div className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 transition focus-within:border-blue-500 focus-within:bg-white">
-                                                <Search size={18} className="text-slate-400" />
-                                                <input placeholder="جستجوی محصول، برند، کد فنی..." className="w-full bg-transparent text-sm outline-none " />
-                                                <div className="hidden items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-500 lg:flex">
-                                                    <Command size={13} />
-                                                    K
-                                                </div>
-                                            </div>
-
-                                            {/* SEARCH DROPDOWN */}
-                                            <div className="absolute right-0 left-0 top-full z-30 mt-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-xl">
-                                                <p className="mb-4 text-xs font-medium uppercase tracking-[2px] text-slate-400">
-                                                    جستجوهای پیشنهادی
-                                                </p>
-                                                <div className="flex flex-wrap gap-3">
-                                                    <SearchChip>
-                                                        بلبرینگ SKF
-                                                    </SearchChip>
-                                                    <SearchChip>
-                                                        تسمه BANDO
-                                                    </SearchChip>
-                                                    <SearchChip>
-                                                        6205 Bearing
-                                                    </SearchChip>
-                                                    <SearchChip>
-                                                        زنجیر صنعتی
-                                                    </SearchChip>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* ACTIONS */}
-                                        <div className="flex flex-wrap items-center gap-4">
-
-                                            {/* SORT */}
-                                            <div className="flex items-center gap-3 rounded-2xl border border-slate-200 px-5 py-4">
-
-                                                <span className="text-sm text-slate-500">
-                                                    مرتب سازی
-                                                </span>
-
-                                                <select className="bg-transparent text-sm font-medium outline-none">
-                                                    <option>
-                                                        جدیدترین
-                                                    </option>
-                                                    <option>
-                                                        ارزان‌ترین
-                                                    </option>
-                                                    <option>
-                                                        گران‌ترین
-                                                    </option>
-                                                    <option>
-                                                        پرفروش‌ترین
-                                                    </option>
-                                                </select>
-                                            </div>
-
-                                            {/* VIEW SWITCH */}
-
-                                            <div className="flex overflow-hidden rounded-2xl border border-slate-200">
-                                                <button className="flex h-[54px] w-[54px] items-center justify-center bg-blue-50 text-blue-700">
-                                                    <LayoutGrid size={18} />
-                                                </button>
-
-                                                <button className="flex h-[54px] w-[54px] items-center justify-center text-slate-500">
-                                                    <List size={18} />
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* BOTTOM */}
-
-                                    <div className="flex flex-col gap-5 p-6 lg:flex-row lg:items-center lg:justify-between">
-
-                                        <div className="flex flex-wrap gap-3">
-                                            <CategoryChip>
-                                                بلبرینگ
-                                            </CategoryChip>
-
-                                            <CategoryChip>
-                                                تسمه
-                                            </CategoryChip>
-
-                                            <CategoryChip>
-                                                پولی
-                                            </CategoryChip>
-
-                                            <CategoryChip>
-                                                زنجیر
-                                            </CategoryChip>
-
-                                            <CategoryChip>
-                                                SKF
-                                            </CategoryChip>
-
-                                            <CategoryChip>
-                                                عمده
-                                            </CategoryChip>
-                                        </div>
-
-                                        {/* RESULTS */}
-
-                                        <div className="flex items-center gap-4">
-                                            <p className="text-sm text-slate-500">
-                                                نمایش
-                                                <span className="mx-2 font-bold text-slate-900">
-                                                    ۲۴
-                                                </span>
-                                                محصول
-                                            </p>
-
-                                            <button className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-600 transition hover:border-blue-300 hover:text-blue-700">
-                                                فیلتر فعال: ۳
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* GRID */}
-                                <div className="mt-8 grid gap-7 md:grid-cols-2 xl:grid-cols-3">
-                                    {products.map((product) => (
-                                        <ProductCard
-                                            key={product.id}
-                                            {...product}
-                                        />
-                                    ))}
-                                </div>
+                {/* Filters Panel */}
+                <div className={`mb-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all ${showFilters ? 'block' : 'hidden lg:block'}`}>
+                    <div className="flex flex-wrap items-end gap-4">
+                        {/* Search */}
+                        <div className="flex-1 min-w-[180px]">
+                            <label className="mb-1 block text-sm font-medium text-slate-700">جستجو</label>
+                            <div className="relative">
+                                <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                                <input
+                                    type="text"
+                                    value={searchTerm}
+                                    onChange={(e) => { setSearchTerm(e.target.value); handleFilterChange(); }}
+                                    className="w-full rounded-xl border border-slate-200 py-2.5 pr-10 pl-3 outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-200"
+                                    placeholder="نام محصول..."
+                                />
                             </div>
                         </div>
-                    </div>
-                </section>
-            </main>
 
-            <Footer />
-        </>
-    );
-}
-
-function FilterBlock({
-    title,
-    items,
-}: any) {
-
-    return (
-        <div className="mt-10">
-            <button className="flex w-full items-center justify-between">
-                <h4 className="text-sm font-bold text-slate-900">
-                    {title}
-                </h4>
-                <ChevronDown size={16} className="text-slate-400" />
-            </button>
-
-            <div className="mt-5 space-y-4">
-                {items.map((item: string) => (
-                    <label
-                        key={item}
-                        className="flex items-center justify-between text-sm text-slate-600 "
-                    >
-                        <div className="flex items-center gap-3">
-                            <input type="checkbox" className="h-4 w-4 rounded border-slate-300 " />
-                            {item}
+                        {/* Category */}
+                        <div className="min-w-[160px]">
+                            <label className="mb-1 block text-sm font-medium text-slate-700">دسته‌بندی</label>
+                            <select
+                                value={selectedCategoryId}
+                                onChange={(e) => { setSelectedCategoryId(e.target.value); handleFilterChange(); }}
+                                className="w-full rounded-xl border border-slate-200 px-3 py-2.5 outline-none focus:border-blue-400"
+                            >
+                                <option value="all">همه</option>
+                                {categoryList.map(cat => (
+                                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                ))}
+                            </select>
                         </div>
 
-                        <span className="text-xs text-slate-400">
-                            120
-                        </span>
-                    </label>
-                ))}
+                        {/* Min Price */}
+                        <div className="min-w-[140px]">
+                            <label className="mb-1 block text-sm font-medium text-slate-700">حداقل قیمت</label>
+                            <input
+                                type="number"
+                                value={minPrice}
+                                onChange={(e) => { setMinPrice(e.target.value); handleFilterChange(); }}
+                                className="w-full rounded-xl border border-slate-200 px-3 py-2.5 outline-none focus:border-blue-400"
+                                placeholder="۰ تومان"
+                            />
+                        </div>
+
+                        {/* Max Price */}
+                        <div className="min-w-[140px]">
+                            <label className="mb-1 block text-sm font-medium text-slate-700">حداکثر قیمت</label>
+                            <input
+                                type="number"
+                                value={maxPrice}
+                                onChange={(e) => { setMaxPrice(e.target.value); handleFilterChange(); }}
+                                className="w-full rounded-xl border border-slate-200 px-3 py-2.5 outline-none focus:border-blue-400"
+                                placeholder="نامحدود"
+                            />
+                        </div>
+
+                        {/* Stock */}
+                        <div className="min-w-[130px]">
+                            <label className="mb-1 block text-sm font-medium text-slate-700">موجودی</label>
+                            <select
+                                value={stockFilter}
+                                onChange={(e) => { setStockFilter(e.target.value as StockFilter); handleFilterChange(); }}
+                                className="w-full rounded-xl border border-slate-200 px-3 py-2.5 outline-none focus:border-blue-400"
+                            >
+                                <option value="all">همه</option>
+                                <option value="in_stock">موجود</option>
+                                <option value="out_of_stock">ناموجود</option>
+                            </select>
+                        </div>
+
+                        {/* Sort */}
+                        <div className="min-w-[170px]">
+                            <label className="mb-1 block text-sm font-medium text-slate-700">مرتب‌سازی</label>
+                            <div className="relative">
+                                <ArrowUpDown className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                                <select
+                                    value={sortBy}
+                                    onChange={(e) => setSortBy(e.target.value as SortOption)}
+                                    className="w-full appearance-none rounded-xl border border-slate-200 px-3 py-2.5 pl-8 outline-none focus:border-blue-400"
+                                >
+                                    <option value="newest">جدیدترین</option>
+                                    <option value="name_asc">نام (الف تا ی)</option>
+                                    <option value="name_desc">نام (ی تا الف)</option>
+                                    <option value="price_asc">قیمت (کم به زیاد)</option>
+                                    <option value="price_desc">قیمت (زیاد به کم)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        {/* Clear filters */}
+                        {hasActiveFilters && (
+                            <button
+                                onClick={clearFilters}
+                                className="flex items-center gap-1 rounded-xl bg-red-50 px-3 py-2.5 text-sm font-medium text-red-600 transition hover:bg-red-100"
+                            >
+                                <X size={14} /> حذف
+                            </button>
+                        )}
+                    </div>
+                </div>
+
+                {/* Results info & per-page */}
+                <div className="mb-6 flex flex-col gap-3 rounded-xl bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex items-center gap-2 text-sm text-slate-500">
+                        <Package size={16} />
+                        <span>{totalItems} محصول</span>
+                        {hasActiveFilters && (
+                            <button onClick={clearFilters} className="text-blue-600 hover:underline">(حذف فیلترها)</button>
+                        )}
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <span className="text-sm text-slate-500">نمایش:</span>
+                        <select
+                            value={itemsPerPage}
+                            onChange={(e) => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}
+                            className="rounded-xl border border-slate-200 px-3 py-1.5 text-sm outline-none focus:border-blue-400"
+                        >
+                            <option value={12}>۱۲</option>
+                            <option value={24}>۲۴</option>
+                            <option value={48}>۴۸</option>
+                        </select>
+                        <span className="text-sm text-slate-500">عدد در صفحه</span>
+                    </div>
+                </div>
+
+                {/* Products Grid/List */}
+                {paginatedProducts.length === 0 ? (
+                    <div className="rounded-2xl border border-slate-200 bg-white py-16 text-center shadow-sm">
+                        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100">
+                            <Package size={32} className="text-slate-400" />
+                        </div>
+                        <p className="text-slate-500">محصولی با این مشخصات یافت نشد.</p>
+                        {hasActiveFilters && (
+                            <button onClick={clearFilters} className="mt-3 text-blue-600 hover:underline">
+                                حذف فیلترها
+                            </button>
+                        )}
+                    </div>
+                ) : (
+                    <>
+                        {viewMode === 'grid' ? (
+                            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                                {paginatedProducts.map(product => (
+                                    <ProductCard key={product.id} product={product} />
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="space-y-4">
+                                {paginatedProducts.map(product => (
+                                    <div key={product.id} className="flex flex-wrap gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:shadow-md">
+                                        <div className="w-24 h-24 flex-shrink-0 overflow-hidden rounded-xl bg-slate-100">
+                                            {product.imageUrl ? (
+                                                <img src={product.imageUrl} alt={product.name} className="h-full w-full object-cover" />
+                                            ) : (
+                                                <div className="flex h-full items-center justify-center text-slate-300">
+                                                    <Package size={24} />
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="flex-1">
+                                            <h3 className="font-semibold text-slate-800">{product.name}</h3>
+                                            <p className="mt-1 text-sm text-slate-500 line-clamp-1">{product.description}</p>
+                                            <div className="mt-2 flex flex-wrap items-center gap-3">
+                                                <span className="text-lg font-bold text-blue-600">{product.price.toLocaleString()} تومان</span>
+                                                <span className="text-xs text-slate-400">موجودی: {product.stock}</span>
+                                                <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${product.stock > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                                    {product.stock > 0 ? 'موجود' : 'ناموجود'}
+                                                </span>
+                                                <span className="text-xs text-slate-400">دسته: {getCategoryName(product.categoryId)}</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <button className="rounded-xl bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700">افزودن به سبد</button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* Pagination */}
+                        {totalPages > 1 && (
+                            <div className="mt-10 flex flex-wrap justify-center gap-2">
+                                <button
+                                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                    disabled={currentPage === 1}
+                                    className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium disabled:opacity-50 hover:bg-slate-50"
+                                >
+                                    قبلی
+                                </button>
+                                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                                    let pageNum;
+                                    if (totalPages <= 5) pageNum = i + 1;
+                                    else if (currentPage <= 3) pageNum = i + 1;
+                                    else if (currentPage >= totalPages - 2) pageNum = totalPages - 4 + i;
+                                    else pageNum = currentPage - 2 + i;
+                                    return (
+                                        <button
+                                            key={pageNum}
+                                            onClick={() => setCurrentPage(pageNum)}
+                                            className={`min-w-[40px] rounded-xl px-3 py-2 text-sm font-medium transition ${currentPage === pageNum
+                                                    ? 'bg-blue-600 text-white shadow-md'
+                                                    : 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                                                }`}
+                                        >
+                                            {pageNum}
+                                        </button>
+                                    );
+                                })}
+                                <button
+                                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                    disabled={currentPage === totalPages}
+                                    className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium disabled:opacity-50 hover:bg-slate-50"
+                                >
+                                    بعدی
+                                </button>
+                            </div>
+                        )}
+                    </>
+                )}
             </div>
         </div>
     );
-}
-
-function CategoryChip({
-    children,
-}: any) {
-    return (
-        <button className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-600 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700">
-            {children}
-        </button>
-    );
-}
-
-function ProductCard({
-    title,
-    category,
-    price,
-    image,
-    stock,
-    wholesale,
-    brand,
-}: any) {
-
-    return (
-        <article className="overflow-hidden rounded-3xl border border-slate-200 bg-white transition duration-300 hover:-translate-y-1 hover:shadow-xl">
-            <div className="relative h-[240px] overflow-hidden bg-slate-100">
-                <Image src={image} alt={title} fill className="object-cover transition duration-500 hover:scale-105 " />
-                <div className="absolute right-4 top-4 flex gap-2">
-                    <span className="rounded-full bg-white/90 px-3 py-1.5 text-xs font-medium text-slate-700 backdrop-blur">
-                        {category}
-                    </span>
-                    {wholesale && (
-                        <span className="rounded-full bg-blue-600 px-3 py-1.5 text-xs font-medium text-white">
-                            عمده
-                        </span>
-                    )}
-                </div>
-
-            </div>
-
-            <div className="p-6">
-                <p className="text-xs uppercase tracking-[2px] text-slate-400">
-                    {brand}
-                </p>
-                <h3 className="mt-3 text-lg font-bold leading-8 text-slate-900">
-                    {title}
-                </h3>
-                <div className="mt-6 flex items-center justify-between">
-                    <div>
-                        <p className="text-xs text-slate-400">
-                            قیمت
-                        </p>
-                        <h4 className="mt-2 text-xl font-black text-slate-900">
-                            {price}
-                        </h4>
-                    </div>
-
-                    <span className="rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-700">
-                        {stock}
-                    </span>
-                </div>
-
-                <button className="mt-7 w-full rounded-2xl border border-slate-200 bg-slate-900 py-4 text-sm font-medium text-white transition hover:bg-blue-600">
-                    مشاهده محصول
-                </button>
-            </div>
-        </article>
-    );
-}
-
-function SearchChip({
-    children,
-}: any) {
-    return (
-        <button className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-600 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700">
-            {children}
-        </button>
-    );
-
 }

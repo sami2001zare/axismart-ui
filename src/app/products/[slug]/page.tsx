@@ -1,847 +1,362 @@
-// src/app/products/[slug]/page.tsx
+'use client';
 
-"use client";
-
-import { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import Navbar from "@/components/site/navbar";
-import Footer from "@/components/site/footer";
+import { useState, useRef, useEffect } from 'react';
+import { useParams, notFound } from 'next/navigation';
+import Link from 'next/link';
 import {
-    ChevronLeft,
+    ShoppingCart,
     Heart,
-    Share2,
-    Download,
-    ShieldCheck,
     Truck,
-    Plus,
-    Minus,
-    CheckCircle2,
-} from "lucide-react";
+    ShieldCheck,
+    RefreshCw,
+    ChevronLeft,
+    ChevronRight,
+    Star,
+    Package,
+} from 'lucide-react';
+import { useProductStore } from '@/store/productStore';
+import { useCategoryStore } from '@/store/categoryStore';
+import { useBrandStore } from '@/store/brandStore';
+import { toast, ToastContainer } from 'react-toastify';
+import { useCartStore } from '@/store/cartStore';
 
-const gallery = [
-    "/products/bearing.jpg",
-    "/products/bearing-2.jpg",
-    "/products/bearing-3.jpg",
-    "/products/bearing-4.jpg",
-];
+export default function ProductDetailPage() {
+    const { slug } = useParams();
+    const { products } = useProductStore();
+    const { categories } = useCategoryStore();
+    const { brands } = useBrandStore();
 
-const related = [
-    {
-        title: "بلبرینگ SKF 6305",
-        price: "۳,۱۰۰,۰۰۰",
-        image: "/products/bearing.jpg",
-    },
-    {
-        title: "بلبرینگ NSK 6205",
-        price: "۲,۹۰۰,۰۰۰",
-        image: "/products/bearing.jpg",
-    },
-    {
-        title: "بلبرینگ FAG 6205",
-        price: "۲,۷۰۰,۰۰۰",
-        image: "/products/bearing.jpg",
-    },
-];
+    const [quantity, setQuantity] = useState(1);
+    const [isWishlisted, setIsWishlisted] = useState(false);
+    const [isSticky, setIsSticky] = useState(false);
+    const cartButtonRef = useRef<HTMLDivElement>(null);
 
-export default function ProductPage() {
+    const productList = Array.isArray(products) ? products : [];
+    const categoryList = Array.isArray(categories) ? categories : [];
+    const brandList = Array.isArray(brands) ? brands : [];
 
-    const [active, setActive] = useState(gallery[0]);
-    const [qty, setQty] = useState(1);
-    const [tab, setTab] = useState("specs");
+    const product = productList.find(p => p.slug === slug);
+    if (!product) notFound();
+
+    const category = categoryList.find(c => c.id === product.categoryId);
+    const brand = brandList.find(b => b.id === product.brandId);
+
+    // Related products (same category, exclude current, limit 8 for carousel)
+    const relatedProducts = productList
+        .filter(p => p.categoryId === product.categoryId && p.id !== product.id)
+        .slice(0, 8);
+
+    const formatPrice = (price: number) => price.toLocaleString() + ' تومان';
+
+    const stockStatus = product.stock > 0
+        ? { label: 'موجود در انبار', color: 'text-green-700', bg: 'bg-green-100' }
+        : { label: 'ناموجود', color: 'text-red-700', bg: 'bg-red-100' };
+
+    // Sticky add-to-bar on scroll
+    useEffect(() => {
+        const handleScroll = () => {
+            if (cartButtonRef.current) {
+                const offset = cartButtonRef.current.getBoundingClientRect().top;
+                setIsSticky(offset < 0);
+            }
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    // Carousel ref and scroll logic
+    const carouselRef = useRef<HTMLDivElement>(null);
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(true);
+
+    const updateCarouselButtons = () => {
+        if (!carouselRef.current) return;
+        const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
+        setCanScrollLeft(scrollLeft > 0);
+        setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 10);
+    };
+
+    const scrollCarousel = (direction: 'left' | 'right') => {
+        if (!carouselRef.current) return;
+        const scrollAmount = 280;
+        const newScrollLeft = carouselRef.current.scrollLeft + (direction === 'left' ? -scrollAmount : scrollAmount);
+        carouselRef.current.scrollTo({ left: newScrollLeft, behavior: 'smooth' });
+        setTimeout(updateCarouselButtons, 300);
+    };
+
+    // Inside component
+    const { addItem } = useCartStore();
+
+    // Then handle add to cart function
+    const handleAddToCart = () => {
+        if (product.stock > 0) {
+            addItem(product, quantity);
+            toast.success(`${product.name} به سبد خرید اضافه شد`);
+        } else {
+            toast.error('این محصول موجود نیست');
+        }
+    };
 
     return (
-
-        <>
-
-            <Navbar />
-
-            <main className="bg-slate-50 pt-28 pb-24">
-
-                <div className="mx-auto max-w-[1450px] px-8">
-
-                    {/* BREADCRUMBS */}
-
-                    <div className="
-mb-10
-flex
-items-center
-gap-3
-text-sm
-text-slate-500
-">
-
-                        <Link href="/">خانه</Link>
-
-                        <ChevronLeft size={15} />
-
-                        <Link href="/products">
-                            محصولات
-                        </Link>
-
-                        <ChevronLeft size={15} />
-
-                        <span className="text-slate-900">
-                            بلبرینگ SKF 6205
-                        </span>
-
-                    </div>
-
-                    <div className="
-grid
-gap-8
-xl:grid-cols-[1.1fr_430px]
-">
-
-                        {/* LEFT */}
-
-                        <div className="space-y-8">
-
-                            {/* HERO */}
-
-                            <div className="
-rounded-[34px]
-border border-slate-200
-bg-white
-p-8
-">
-
-                                <div className="
-grid
-gap-8
-xl:grid-cols-[120px_1fr]
-">
-
-                                    {/* THUMBS */}
-
-                                    <div className="
-flex
-gap-4
-xl:flex-col
-">
-
-                                        {gallery.map((img) => (
-
-                                            <button
-                                                key={img}
-                                                onClick={() => setActive(img)}
-                                                className={`
-relative
-h-[95px]
-w-[95px]
-overflow-hidden
-rounded-2xl
-border
-transition
-${active === img
-                                                        ?
-                                                        "border-blue-600"
-                                                        :
-                                                        "border-slate-200"
-                                                    }
-`}
-                                            >
-
-                                                <Image
-                                                    src={img}
-                                                    alt=""
-                                                    fill
-                                                    className="object-cover"
-                                                />
-
-                                            </button>
-
-                                        ))}
-
-                                    </div>
-
-                                    {/* IMAGE */}
-
-                                    <div className="
-relative
-h-[640px]
-overflow-hidden
-rounded-[28px]
-bg-slate-100
-">
-
-                                        <Image
-                                            src={active}
-                                            alt="product"
-                                            fill
-                                            priority
-                                            className="
-object-cover
-transition
-duration-500
-hover:scale-105
-"
-                                        />
-
-                                        <div className="
-absolute
-left-5
-top-5
-flex
-gap-3
-">
-
-                                            <CircleBtn>
-                                                <Heart size={17} />
-                                            </CircleBtn>
-
-                                            <CircleBtn>
-                                                <Share2 size={17} />
-                                            </CircleBtn>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                            {/* TABS */}
-
-                            <div className="
-overflow-hidden
-rounded-[34px]
-border border-slate-200
-bg-white
-">
-
-                                <div className="
-flex
-overflow-x-auto
-border-b
-border-slate-100
-">
-
-                                    <Tab
-                                        active={tab === "specs"}
-                                        onClick={() => setTab("specs")}
-                                    >
-                                        مشخصات
-                                    </Tab>
-
-                                    <Tab
-                                        active={tab === "description"}
-                                        onClick={() => setTab("description")}
-                                    >
-                                        توضیحات
-                                    </Tab>
-
-                                    <Tab
-                                        active={tab === "shipping"}
-                                        onClick={() => setTab("shipping")}
-                                    >
-                                        ارسال
-                                    </Tab>
-
-                                </div>
-
-                                <div className="p-8">
-
-                                    {tab === "specs" && (
-
-                                        <div className="space-y-2">
-
-                                            <SpecRow label="برند" value="SKF" />
-                                            <SpecRow label="مدل" value="6205" />
-                                            <SpecRow label="قطر داخلی" value="25mm" />
-                                            <SpecRow label="قطر خارجی" value="52mm" />
-                                            <SpecRow label="کشور سازنده" value="Sweden" />
-                                            <SpecRow label="استاندارد" value="ISO 9001" />
-
-                                        </div>
-
-                                    )}
-
-                                    {tab === "description" && (
-
-                                        <p className="
-text-[15px]
-leading-9
-text-slate-600
-">
-
-                                            بلبرینگ SKF 6205 مناسب
-                                            خطوط تولید، ماشین‌آلات صنعتی،
-                                            سیستم‌های انتقال قدرت و کاربردهای
-                                            مهندسی سنگین.
-
-                                        </p>
-
-                                    )}
-
-                                    {tab === "shipping" && (
-
-                                        <div className="
-grid
-gap-5
-md:grid-cols-2
-">
-
-                                            <InfoCard
-                                                title="ارسال سریع"
-                                                text="ارسال ۲۴ تا ۷۲ ساعت."
-                                            />
-
-                                            <InfoCard
-                                                title="تحویل سازمانی"
-                                                text="پشتیبانی خرید پروژه‌ای."
-                                            />
-
-                                        </div>
-
-                                    )}
-
-                                </div>
-
-                            </div>
-
-                            {/* RELATED */}
-
-                            <div className="
-rounded-[34px]
-border border-slate-200
-bg-white
-p-8
-">
-
-                                <h2 className="
-text-2xl
-font-black
-text-slate-900
-">
-                                    محصولات مرتبط
-                                </h2>
-
-                                <div className="
-mt-8
-grid
-gap-6
-md:grid-cols-3
-">
-
-                                    {related.map((item) => (
-
-                                        <div
-                                            key={item.title}
-                                            className="
-overflow-hidden
-rounded-3xl
-border border-slate-200
-"
-                                        >
-
-                                            <div className="
-relative
-h-[220px]
-bg-slate-100
-">
-
-                                                <Image
-                                                    src={item.image}
-                                                    alt=""
-                                                    fill
-                                                    className="object-cover"
-                                                />
-
-                                            </div>
-
-                                            <div className="p-5">
-
-                                                <h4 className="
-text-sm
-font-bold
-text-slate-900
-">
-                                                    {item.title}
-                                                </h4>
-
-                                                <p className="
-mt-4
-font-black
-text-blue-600
-">
-                                                    {item.price}
-                                                </p>
-
-                                            </div>
-
-                                        </div>
-
-                                    ))}
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        {/* RIGHT */}
-
-                        <aside className="
-sticky
-top-28
-h-fit
-space-y-6
-">
-
-                            <div className="
-rounded-[34px]
-border border-slate-200
-bg-white
-p-8
-">
-
-                                <div className="
-flex
-flex-wrap
-gap-3
-">
-
-                                    <Badge>SKF</Badge>
-                                    <Badge>بلبرینگ</Badge>
-                                    <Badge>فروش عمده</Badge>
-
-                                </div>
-
-                                <h1 className="
-mt-7
-text-[32px]
-font-black
-leading-[1.45]
-text-slate-900
-">
-                                    بلبرینگ SKF 6205
-                                </h1>
-
-                                <div className="
-mt-8
-flex
-items-center
-gap-3
-">
-
-                                    <CheckCircle2
-                                        size={18}
-                                        className="text-emerald-600"
-                                    />
-
-                                    <span className="
-text-sm
-text-emerald-700
-">
-                                        موجود در انبار
-                                    </span>
-
-                                </div>
-
-                                {/* PRICE */}
-
-                                <div className="
-mt-10
-rounded-3xl
-bg-slate-50
-p-6
-">
-
-                                    <p className="
-text-sm
-text-slate-500
-">
-                                        قیمت خرده
-                                    </p>
-
-                                    <h3 className="
-mt-3
-text-3xl
-font-black
-text-slate-900
-">
-                                        ۲,۴۵۰,۰۰۰ تومان
-                                    </h3>
-
-                                    <div className="
-mt-6
-space-y-4
-border-t
-border-slate-200
-pt-6
-">
-
-                                        <Tier
-                                            qty="۱-۱۰ عدد"
-                                            price="۲,۴۵۰,۰۰۰"
-                                        />
-
-                                        <Tier
-                                            qty="۱۰-۵۰ عدد"
-                                            price="۲,۲۵۰,۰۰۰"
-                                        />
-
-                                        <Tier
-                                            qty="۵۰+ عدد"
-                                            price="تماس بگیرید"
-                                        />
-
-                                    </div>
-
-                                </div>
-
-                                {/* QTY */}
-
-                                <div className="
-mt-10
-flex
-items-center
-justify-between
-">
-
-                                    <p className="
-text-sm
-font-medium
-text-slate-700
-">
-                                        تعداد
-                                    </p>
-
-                                    <div className="
-flex
-items-center
-gap-4
-">
-
-                                        <QtyBtn
-                                            onClick={() => setQty(Math.max(1, qty - 1))}
-                                        >
-                                            <Minus size={15} />
-                                        </QtyBtn>
-
-                                        <div className="
-w-[30px]
-text-center
-font-bold
-">
-                                            {qty}
-                                        </div>
-
-                                        <QtyBtn
-                                            onClick={() => setQty(qty + 1)}
-                                        >
-                                            <Plus size={15} />
-                                        </QtyBtn>
-
-                                    </div>
-
-                                </div>
-
-                                <div className="
-mt-10
-space-y-4
-">
-
-                                    <button className="
-w-full
-rounded-2xl
-bg-blue-600
-py-4
-font-medium
-text-white
-">
-                                        افزودن به سبد خرید
-                                    </button>
-
-                                    <button className="
-w-full
-rounded-2xl
-border border-slate-200
-py-4
-font-medium
-">
-                                        درخواست قیمت عمده
-                                    </button>
-
-                                </div>
-
-                                <div className="
-mt-8
-grid
-gap-4
-">
-
-                                    <Benefit
-                                        icon={<ShieldCheck size={18} />}
-                                        title="ضمانت اصالت"
-                                    />
-
-                                    <Benefit
-                                        icon={<Truck size={18} />}
-                                        title="ارسال سریع"
-                                    />
-
-                                    <Benefit
-                                        icon={<Download size={18} />}
-                                        title="دانلود دیتاشیت"
-                                    />
-
-                                </div>
-
-                            </div>
-
-                        </aside>
-
-                    </div>
-
-                </div>
-
-            </main>
-
-            <Footer />
-
-        </>
-
-    );
-
-}
-
-function Tab({
-    children,
-    active,
-    onClick,
-}: any) {
-
-    return (
-
-        <button
-            onClick={onClick}
-            className={`
-px-8
-py-5
-text-sm
-font-medium
-transition
-${active
-                    ?
-                    "border-b-2 border-blue-600 text-blue-700"
-                    :
-                    "text-slate-500"
-                }
-`}
-        >
-            {children}
-        </button>
-
-    );
-
-}
-
-function SpecRow({
-    label,
-    value,
-}: any) {
-
-    return (
-
-        <div className="
-flex
-justify-between
-rounded-2xl
-bg-slate-50
-px-6 py-5
-">
-
-            <span className="
-text-sm
-text-slate-500
-">
-                {label}
-            </span>
-
-            <span className="
-font-semibold
-text-slate-900
-">
-                {value}
-            </span>
-
-        </div>
-
-    );
-
-}
-
-function Tier({
-    qty,
-    price,
-}: any) {
-
-    return (
-
-        <div className="
-flex
-items-center
-justify-between
-text-sm
-">
-
-            <span className="text-slate-500">
-                {qty}
-            </span>
-
-            <span className="
-font-bold
-text-slate-900
-">
-                {price}
-            </span>
-
-        </div>
-
-    );
-
-}
-
-function Benefit({
-    icon,
-    title,
-}: any) {
-
-    return (
-
-        <div className="
-flex
-items-center
-gap-4
-rounded-2xl
-bg-slate-50
-p-5
-">
-
-            <div className="
-text-blue-600
-">
-                {icon}
+        <div className="bg-gradient-to-br from-slate-50 via-white to-slate-100 min-h-screen" dir="rtl">
+            {/* Breadcrumb */}
+            <div className="container mx-auto px-4 pt-6">
+                <nav className="mb-4 flex items-center gap-2 text-sm">
+                    <Link href="/" className="text-slate-500 hover:text-blue-600 transition">خانه</Link>
+                    <span className="text-slate-300">/</span>
+                    <Link href="/products" className="text-slate-500 hover:text-blue-600 transition">محصولات</Link>
+                    <span className="text-slate-300">/</span>
+                    <span className="text-slate-800 font-medium">{product.name}</span>
+                </nav>
             </div>
 
-            <span className="
-text-sm
-font-medium
-text-slate-800
-">
-                {title}
-            </span>
+            {/* Main Product Section */}
+            <div className="container mx-auto px-4 py-4 pb-12">
+                <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
+                    {/* Left: Image Gallery with zoom */}
+                    <div className="group relative">
+                        <div className="overflow-hidden rounded-3xl bg-white shadow-xl border border-slate-100">
+                            <div className="aspect-square overflow-hidden">
+                                {product.imageUrl ? (
+                                    <img
+                                        src={product.imageUrl}
+                                        alt={product.name}
+                                        className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
+                                    />
+                                ) : (
+                                    <div className="flex h-full items-center justify-center bg-slate-100">
+                                        <Package size={80} className="text-slate-300" />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        {/* Wishlist button over image */}
+                        <button
+                            onClick={() => setIsWishlisted(!isWishlisted)}
+                            className="absolute top-4 right-4 rounded-full bg-white/80 p-2 backdrop-blur-sm shadow-md transition hover:scale-110"
+                        >
+                            <Heart
+                                size={20}
+                                className={isWishlisted ? 'fill-red-500 text-red-500' : 'text-slate-600'}
+                            />
+                        </button>
+                    </div>
 
+                    {/* Right: Product Info */}
+                    <div className="space-y-6">
+                        <div>
+                            <div className="flex flex-wrap items-center gap-3 mb-2">
+                                {category && (
+                                    <Link
+                                        href={`/categories/${category.slug}`}
+                                        className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700"
+                                    >
+                                        {category.name}
+                                    </Link>
+                                )}
+                                {brand && (
+                                    <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
+                                        {brand.name}
+                                    </span>
+                                )}
+                            </div>
+                            <h1 className="text-3xl lg:text-4xl font-extrabold text-slate-900 leading-tight">
+                                {product.name}
+                            </h1>
+                        </div>
+
+                        {/* Rating placeholder */}
+                        <div className="flex items-center gap-2">
+                            <div className="flex text-amber-400">
+                                {[...Array(5)].map((_, i) => (
+                                    <Star key={i} size={16} fill="currentColor" stroke="none" />
+                                ))}
+                            </div>
+                            <span className="text-sm text-slate-500">(۱۲ نظر)</span>
+                        </div>
+
+                        {/* Price */}
+                        <div className="rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 p-5 border border-blue-100 shadow-sm">
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-3xl lg:text-4xl font-black text-blue-700">
+                                    {formatPrice(product.price)}
+                                </span>
+                                <span className="text-sm text-slate-500">(قیمت نهایی)</span>
+                            </div>
+                            {/* Fake installment */}
+                            <p className="mt-1 text-xs text-slate-500">امکان پرداخت اقساطی</p>
+                        </div>
+
+                        {/* Stock status */}
+                        <div className={`flex items-center gap-2 rounded-xl ${stockStatus.bg} p-3 border`}>
+                            <Package size={18} className={stockStatus.color} />
+                            <span className={`font-medium ${stockStatus.color}`}>{stockStatus.label}</span>
+                            {product.stock > 0 && (
+                                <span className="text-sm opacity-75">(تعداد موجود: {product.stock})</span>
+                            )}
+                        </div>
+
+                        {/* Description */}
+                        {product.description && (
+                            <div className="rounded-xl bg-white p-4 shadow-sm border border-slate-100">
+                                <h3 className="font-semibold text-slate-900 mb-2">توضیحات محصول</h3>
+                                <p className="text-slate-600 leading-relaxed">{product.description}</p>
+                            </div>
+                        )}
+
+                        {/* Quantity selector + Add to cart */}
+                        <div className="flex flex-wrap gap-4 items-center">
+                            <div className="flex items-center rounded-xl border border-slate-200 bg-white">
+                                <button
+                                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                                    className="px-3 py-2 text-slate-600 hover:bg-slate-50 rounded-r-xl"
+                                >
+                                    -
+                                </button>
+                                <span className="w-12 text-center font-medium">{quantity}</span>
+                                <button
+                                    onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+                                    className="px-3 py-2 text-slate-600 hover:bg-slate-50 rounded-l-xl"
+                                >
+                                    +
+                                </button>
+                            </div>
+                            <button
+                                disabled={product.stock === 0}
+                                className={`flex-1 rounded-xl py-3 font-bold text-white transition-all shadow-md ${product.stock > 0
+                                    ? 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 hover:shadow-lg transform hover:-translate-y-0.5'
+                                    : 'bg-slate-300 cursor-not-allowed'
+                                    }`}
+                            >
+                                <div className="flex items-center justify-center gap-2">
+                                    <ShoppingCart size={18} />
+                                    {product.stock > 0 ? 'افزودن به سبد خرید' : 'ناموجود'}
+                                </div>
+                            </button>
+                        </div>
+
+                        {/* Trust badges */}
+                        <div className="grid grid-cols-3 gap-3 pt-4">
+                            <div className="flex flex-col items-center gap-2 rounded-xl bg-white p-3 shadow-sm border border-slate-100">
+                                <Truck size={22} className="text-blue-600" />
+                                <span className="text-xs text-slate-600">ارسال سریع</span>
+                            </div>
+                            <div className="flex flex-col items-center gap-2 rounded-xl bg-white p-3 shadow-sm border border-slate-100">
+                                <ShieldCheck size={22} className="text-green-600" />
+                                <span className="text-xs text-slate-600">ضمانت اصالت</span>
+                            </div>
+                            <div className="flex flex-col items-center gap-2 rounded-xl bg-white p-3 shadow-sm border border-slate-100">
+                                <RefreshCw size={22} className="text-amber-600" />
+                                <span className="text-xs text-slate-600">۷ روز گارانتی</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Related Products Carousel */}
+                {relatedProducts.length > 0 && (
+                    <div className="mt-16">
+                        <div className="flex items-center justify-between mb-6">
+                            <h2 className="text-2xl font-bold text-slate-900">محصولات مشابه</h2>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => scrollCarousel('left')}
+                                    disabled={!canScrollLeft}
+                                    className="rounded-full border border-slate-200 p-2 disabled:opacity-50 hover:bg-slate-100 transition"
+                                >
+                                    <ChevronRight size={18} />
+                                </button>
+                                <button
+                                    onClick={() => scrollCarousel('right')}
+                                    disabled={!canScrollRight}
+                                    className="rounded-full border border-slate-200 p-2 disabled:opacity-50 hover:bg-slate-100 transition"
+                                >
+                                    <ChevronLeft size={18} />
+                                </button>
+                            </div>
+                        </div>
+                        <div
+                            ref={carouselRef}
+                            onScroll={updateCarouselButtons}
+                            className="flex gap-5 overflow-x-auto scroll-smooth pb-4"
+                            style={{ scrollbarWidth: 'thin' }}
+                        >
+                            {relatedProducts.map(related => {
+                                // Using a simple card inside carousel (you can import ProductCard but we'll replicate style for consistency)
+                                return (
+                                    <Link
+                                        key={related.id}
+                                        href={`/products/${related.slug}`}
+                                        className="min-w-[220px] w-[220px] flex-shrink-0 group"
+                                    >
+                                        <div className="rounded-2xl bg-white overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100">
+                                            <div className="aspect-square overflow-hidden bg-slate-100">
+                                                {related.imageUrl ? (
+                                                    <img
+                                                        src={related.imageUrl}
+                                                        alt={related.name}
+                                                        className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
+                                                    />
+                                                ) : (
+                                                    <div className="flex h-full items-center justify-center text-slate-300">
+                                                        <Package size={32} />
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="p-3">
+                                                <h3 className="font-semibold text-slate-800 line-clamp-1">{related.name}</h3>
+                                                <p className="mt-1 text-lg font-bold text-blue-600">
+                                                    {related.price.toLocaleString()} تومان
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                );
+                            })}
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            {/* Sticky Add-to-Cart Bar (on scroll) */}
+            {isSticky && product.stock > 0 && (
+                <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg py-3 animate-slide-up">
+                    <div className="container mx-auto px-4 flex items-center justify-between gap-4">
+                        <div className="hidden md:block">
+                            <p className="font-bold text-slate-900">{product.name}</p>
+                            <p className="text-lg font-bold text-blue-600">{formatPrice(product.price)}</p>
+                        </div>
+                        <div className="flex items-center gap-3 flex-1 md:flex-none justify-end">
+                            <div className="flex items-center rounded-xl border border-slate-200 bg-white">
+                                <button
+                                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                                    className="px-3 py-2 text-slate-600"
+                                >
+                                    -
+                                </button>
+                                <span className="w-12 text-center">{quantity}</span>
+                                <button
+                                    onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+                                    className="px-3 py-2 text-slate-600"
+                                >
+                                    +
+                                </button>
+                            </div>
+                            <button
+                                onClick={handleAddToCart}
+                                disabled={product.stock === 0}
+                                className="rounded-xl bg-blue-600 px-6 py-2 font-bold text-white shadow-md">
+                                افزودن به سبد
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Invisible anchor for sticky detection */}
+            <div ref={cartButtonRef} className="h-1" />
+
+            <ToastContainer />
         </div>
-
     );
-
-}
-
-function Badge({
-    children,
-}: any) {
-
-    return (
-
-        <div className="
-rounded-full
-bg-slate-100
-px-4 py-2
-text-xs
-font-medium
-text-slate-700
-">
-            {children}
-        </div>
-
-    );
-
-}
-
-function CircleBtn({
-    children,
-}: any) {
-
-    return (
-
-        <button className="
-flex
-h-11
-w-11
-items-center
-justify-center
-rounded-full
-bg-white/90
-backdrop-blur
-">
-            {children}
-        </button>
-
-    );
-
-}
-
-function QtyBtn({
-    children,
-    onClick,
-}: any) {
-
-    return (
-
-        <button
-            onClick={onClick}
-            className="
-flex
-h-11
-w-11
-items-center
-justify-center
-rounded-xl
-border border-slate-200
-"
-        >
-            {children}
-        </button>
-
-    );
-
-}
-
-function InfoCard({
-    title,
-    text,
-}: any) {
-
-    return (
-
-        <div className="
-rounded-3xl
-bg-slate-50
-p-6
-">
-
-            <h4 className="
-font-bold
-text-slate-900
-">
-                {title}
-            </h4>
-
-            <p className="
-mt-3
-text-sm
-leading-7
-text-slate-600
-">
-                {text}
-            </p>
-
-        </div>
-
-    );
-
 }
