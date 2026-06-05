@@ -12,6 +12,7 @@ import {
     Clock3,
     CheckCircle2,
 } from "lucide-react";
+import { ReactNode } from "react";
 
 const orders = [
     {
@@ -298,7 +299,7 @@ border border-slate-200
 
 function Select({
     children,
-}: any) {
+}: { children: ReactNode }) {
 
     return (
 

@@ -158,7 +158,14 @@ function ProductCard({
     wholesale,
     stock,
     icon,
-}: any) {
+}: {
+    title: string,
+    category: string,
+    price: string,
+    wholesale: string,
+    stock: string,
+    icon: string,
+}) {
 
     return (
         <motion.div

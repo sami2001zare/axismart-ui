@@ -92,7 +92,14 @@ function CategoryCard({
     icon,
     size,
     color,
-}: any) {
+}: {
+    title: string,
+    subtitle: string,
+    description: string,
+    icon: string,
+    size: string,
+    color: string,
+}) {
 
     const layout = {
         large: "col-span-12 lg:col-span-7 min-h-[420px]",

@@ -30,7 +30,12 @@ export const customerAuthService = {
         return response.data;
     },
 
-    register: async (data: any) => {
+    register: async (data: {
+        firstName: string,
+        lastName: string,
+        phone: string
+        password: string
+    }) => {
 
         const response =
             await customerAxios.post(

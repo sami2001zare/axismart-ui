@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Phone, Lock, User2, CheckCircle2, Loader2, KeyRound, ArrowLeft, } from "lucide-react";
+import { ReactNode, useEffect, useState } from "react";
+import { Phone, Lock, User2, CheckCircle2, Loader2, ArrowLeft, } from "lucide-react";
 
 import { token } from "@/lib/auth/token";
 import { useAuthStore } from "@/lib/axios/auth-store";
@@ -22,7 +22,7 @@ export default function CustomerRegisterPage() {
         confirmPassword: "",
     });
 
-    const [verifyOTP, setVerifyOTP] = useState({
+    const [verifyOTP] = useState({
         phone: "",
         otp: "",
     });
@@ -44,7 +44,7 @@ export default function CustomerRegisterPage() {
 
     function update(
         key: string,
-        value: any
+        value: string
     ) {
         setForm((prev) => ({
             ...prev,
@@ -52,15 +52,15 @@ export default function CustomerRegisterPage() {
         }));
     }
 
-    function updateVerificationForm(
-        key: string,
-        value: any
-    ) {
-        setVerifyOTP((prev) => ({
-            ...prev,
-            [key]: value,
-        }));
-    }
+    // function updateVerificationForm(
+    //     key: string,
+    //     value: any
+    // ) {
+    //     setVerifyOTP((prev) => ({
+    //         ...prev,
+    //         [key]: value,
+    //     }));
+    // }
 
     async function verifytRegistration() {
         setError("");
@@ -80,7 +80,7 @@ export default function CustomerRegisterPage() {
                     otp: verifyOTP.otp
                 });
 
-          
+
             token.set(
                 data.value
             );
@@ -216,6 +216,7 @@ export default function CustomerRegisterPage() {
 
                             <div className="flex flex-col md:flex-row gap-4">
                                 <Field
+                                    type="text"
                                     icon={<User2 size={18} />}
                                     placeholder="نام"
                                     value={form.firstname}
@@ -227,6 +228,7 @@ export default function CustomerRegisterPage() {
                                     }
                                 />
                                 <Field
+                                    type="text"
                                     icon={<User2 size={18} />}
                                     placeholder="نام خانوادگی"
                                     value={form.lastname}
@@ -240,6 +242,7 @@ export default function CustomerRegisterPage() {
                             </div>
 
                             <Field
+                                type="text"
                                 icon={<Phone size={18} />}
                                 placeholder="شماره موبایل"
                                 value={form.phone}
@@ -249,8 +252,6 @@ export default function CustomerRegisterPage() {
                                         "phone",
                                         v
                                     )
-
-                                    updateVerificationForm("phone", v)
                                 }}
                             />
 
@@ -344,7 +345,7 @@ export default function CustomerRegisterPage() {
                                 </div>
                             </div>
 
-                            <Field
+                            {/* <Field
                                 icon={<KeyRound size={18} />}
                                 placeholder="کد تایید پیامکی"
                                 value={verifyOTP.otp}
@@ -354,7 +355,7 @@ export default function CustomerRegisterPage() {
                                         v
                                     )
                                 }
-                            />
+                            /> */}
 
                             <div className="grid gap-4 md:grid-cols-2 ">
 
@@ -389,7 +390,9 @@ export default function CustomerRegisterPage() {
     );
 }
 
-function Field({ icon, placeholder, type, value, onChange }: any) {
+function Field({ icon, placeholder, type, value, onChange }:
+    { icon: ReactNode, placeholder: string, type: string, value: string, onChange: (v: string) => void }
+) {
     return (
         <div className=" group flex items-center gap-4 rounded-xl border border-slate-200 bg-slate-50 px-6 transition focus-within:border-blue-500 focus-within:bg-white ">
             <div className=" text-slate-400 group-focus-within:text-blue-600 ">
@@ -401,7 +404,7 @@ function Field({ icon, placeholder, type, value, onChange }: any) {
     );
 }
 
-function Stat({ value, label }: any) {
+function Stat({ value, label }: { value: string, label: string }) {
     return (
         <div className="rounded-3xl bg-white/10 p-6 ">
             <h3 className=" text-3xl font-black ">

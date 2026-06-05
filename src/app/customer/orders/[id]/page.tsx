@@ -7,10 +7,9 @@ import {
     Printer,
     Download,
     Truck,
-    Package,
-    CheckCircle2,
     MapPin,
 } from "lucide-react";
+import { ReactNode } from "react";
 
 export default function CustomerOrderDetailsPage() {
 
@@ -309,16 +308,19 @@ space-y-5
                             <Money
                                 label="Subtotal"
                                 value="۱۴,۵۵۰,۰۰۰"
+                                bold
                             />
 
                             <Money
                                 label="Shipping"
                                 value="۳۰۰,۰۰۰"
+                                bold
                             />
 
                             <Money
                                 label="Tax"
                                 value="۹۰۰,۰۰۰"
+                                bold
                             />
 
                             <div className="
@@ -349,7 +351,7 @@ pt-5
 
 }
 
-function Card({ children }: any) {
+function Card({ children }: { children: ReactNode }) {
 
     return (
 
@@ -457,7 +459,11 @@ function Money({
     label,
     value,
     bold,
-}: any) {
+}: {
+    label: string,
+    value: string,
+    bold: boolean,
+}) {
 
     return (
 

@@ -48,7 +48,7 @@ export default function ProductsListPage() {
             try {
                 deleteProduct(id);
                 toast.success('محصول با موفقیت حذف شد');
-            } catch (error) {
+            } catch () {
                 toast.error('خطا در حذف محصول');
             } finally {
                 setDeletingId(null);

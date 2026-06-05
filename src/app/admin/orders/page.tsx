@@ -121,7 +121,6 @@ export default function AdminOrdersPage() {
                             </thead>
                             <tbody>
                                 {paginatedOrders.map((order) => {
-                                    const StatusIcon = statusConfig[order.status].icon;
                                     return (
                                         <tr key={order.id} className="border-b border-slate-100 hover:bg-slate-50">
                                             <td className="px-6 py-4 font-mono text-sm font-medium text-slate-900">

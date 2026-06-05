@@ -5,8 +5,6 @@ import Link from 'next/link';
 import {
     LineChart,
     Line,
-    BarChart,
-    Bar,
     PieChart,
     Pie,
     Cell,
@@ -111,10 +109,6 @@ export default function AdminDashboard() {
 
     const formatPrice = (price: number) => {
         return price.toLocaleString() + ' تومان';
-    };
-
-    const formatDate = (dateStr: string) => {
-        return new Date(dateStr).toLocaleDateString('fa-IR');
     };
 
     const statusConfig: Record<string, { label: string; color: string }> = {
@@ -226,7 +220,7 @@ export default function AdminDashboard() {
                                 cx="50%"
                                 cy="50%"
                                 labelLine={false}
-                                label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
+                                label={({ name, percent }) => `${name} (${(percent! * 100).toFixed(0)}%)`}
                                 outerRadius={100}
                                 dataKey="value"
                             >

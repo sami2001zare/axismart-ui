@@ -175,7 +175,12 @@ function Section({
     open,
     toggle,
     children,
-}: any) {
+}: {
+    title: string,
+    open: boolean,
+    toggle: () => void,
+    children: React.ReactNode,
+}) {
 
     return (
         <div className=" border-t border-slate-100 px-7 py-6 ">
@@ -197,7 +202,7 @@ function Section({
     );
 }
 
-function Checkbox({ label, count, }: any) {
+function Checkbox({ label, count }: { label: string, count: string }) {
     return (
         <label className=" flex items-center justify-between rounded-2xl px-2 py-2 transition hover:bg-slate-50 ">
             <div className=" flex items-center gap-3 ">
@@ -216,7 +221,7 @@ function Checkbox({ label, count, }: any) {
     );
 }
 
-function ActiveFilter({ children }: any) {
+function ActiveFilter({ children }: { children: React.ReactNode }) {
     return (
         <div className=" flex items-center gap-2 rounded-full bg-blue-50 px-4 py-2 text-xs font-medium text-blue-700 ">
             {children}
@@ -225,7 +230,7 @@ function ActiveFilter({ children }: any) {
     );
 }
 
-function ToggleRow({ children }: any) {
+function ToggleRow({ children }: { children: React.ReactNode }) {
     return (
         <label className=" flex items-center justify-between ">
             <span className=" text-sm text-slate-700 ">
@@ -236,7 +241,7 @@ function ToggleRow({ children }: any) {
     );
 }
 
-function SaleCard({ title, active }: any) {
+function SaleCard({ title, active }: { title: string, active: boolean }) {
     return (
         <button className={` rounded-2xl border px-5 py-4 text-sm font-medium transition ${active ? "border-blue-600 bg-blue-50 text-blue-700" : "border-slate-200 bg-white text-slate-600"} `}>
             {title}

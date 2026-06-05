@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import React from "react";
 
 export default function WholesaleSection() {
     return (
@@ -293,8 +294,12 @@ function Benefit({
 function EnterpriseRow({
     title,
     value,
-    accent,
-}: any) {
+    accent
+}: {
+    title: string,
+    value: string,
+    accent: string
+}) {
     return (
         <div className="
     flex

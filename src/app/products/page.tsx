@@ -8,9 +8,7 @@ import {
     X,
     ChevronDown,
     ArrowUpDown,
-    Tag,
     Package,
-    DollarSign,
     Grid3X3,
     List,
 } from 'lucide-react';

@@ -105,7 +105,7 @@ export default function AboutPage() {
     );
 }
 
-function Stat({ number, label }: any) {
+function Stat({ number, label }: { number: string, label: string }) {
     return (
         <div className="
     border border-slate-200
@@ -127,7 +127,7 @@ function Stat({ number, label }: any) {
     );
 }
 
-function InfoCard({ title, text }: any) {
+function InfoCard({ title, text }: { title: string, text: string }) {
     return (
         <div className="
     border border-slate-200

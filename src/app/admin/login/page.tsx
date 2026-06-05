@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { User2, Lock } from "lucide-react";
 import { token } from "@/lib/auth/token";
 import { useAuthStore } from "@/lib/axios/auth-store";
@@ -88,7 +88,8 @@ export default function AdminLoginPage() {
     );
 }
 
-function Field({ icon, placeholder, type, value, onChange }: any) {
+function Field({ icon, placeholder, type, value, onChange }:
+    { icon: ReactNode, placeholder: string, type: string, value: string, onChange: (v: string) => void }) {
     return (
         <div className="flex items-center gap-4 rounded-2xl border border-slate-700 bg-slate-800 px-5 ">
             {icon}

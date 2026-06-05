@@ -5,7 +5,6 @@
 import {
     Search,
     Download,
-    Receipt,
     BadgeCheck,
     Clock3,
     Filter,

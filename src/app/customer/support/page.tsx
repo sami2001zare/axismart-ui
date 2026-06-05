@@ -11,6 +11,7 @@ import {
     AlertCircle,
     ChevronRight,
 } from "lucide-react";
+import { ReactNode } from "react";
 
 export default function SupportPage() {
 
@@ -159,7 +160,10 @@ space-y-5
 function MiniCard({
     title,
     value,
-}: any) {
+}: {
+    title: string,
+    value: string,
+}) {
 
     return (
 
@@ -196,10 +200,15 @@ function TicketCard({
     title,
     id,
     status,
-    date,
-}: any) {
+    date
+}: {
+    title: string,
+    id: string,
+    status: string,
+    date: string
+}) {
 
-    const styles: any = {
+    const styles: { open: string, closed: string, pending: string } = {
 
         open: "bg-blue-50 text-blue-700",
 
@@ -209,24 +218,21 @@ function TicketCard({
 
     };
 
-    const labels: any = {
-
+    const labels: { open: string, closed: string, pending: string } = {
         open: "باز",
-
         closed: "بسته",
-
         pending: "در انتظار",
-
     };
 
-    const icons: any = {
+    const icons: {
+        open: ReactNode,
+        closed: ReactNode,
+        pending: ReactNode,
+    } = {
 
         open: <AlertCircle size={13} />,
-
         closed: <CheckCircle2 size={13} />,
-
         pending: <Clock3 size={13} />,
-
     };
 
     return (
@@ -292,12 +298,12 @@ rounded-full
 px-4 py-2
 text-xs
 font-medium
-${styles[status]}
+${styles[status as keyof typeof styles]}
 `}>
 
-                                {icons[status]}
+                                {icons[status as keyof typeof icons]}
 
-                                {labels[status]}
+                                {labels[status as keyof typeof labels]}
 
                             </div>
 

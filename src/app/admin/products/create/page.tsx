@@ -114,6 +114,7 @@ export default function CreateProductPage() {
             toast.success('محصول با موفقیت ایجاد شد');
             router.push('/admin/products');
         } catch (error) {
+            console.log(error)
             toast.error('خطایی رخ داد. لطفاً دوباره تلاش کنید.');
         } finally {
             setIsSubmitting(false);

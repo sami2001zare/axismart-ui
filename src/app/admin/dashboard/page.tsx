@@ -2,7 +2,8 @@
 
 "use client";
 
-import { DollarSign, ShoppingBag, Users, Package, ArrowUpRight, ArrowDownRight, TrendingUp, Clock3, AlertTriangle, } from "lucide-react";
+import { DollarSign, ShoppingBag, Users, Package, ArrowUpRight, ArrowDownRight, TrendingUp, Clock3 } from "lucide-react";
+import { ReactNode } from "react";
 
 export default function AdminDashboardPage() {
 
@@ -300,7 +301,10 @@ space-y-6
 function HeroStat({
     label,
     value,
-}: any) {
+}: {
+    label: string,
+    value: string,
+}) {
 
     return (
 
@@ -339,7 +343,13 @@ function KPI({
     change,
     icon,
     positive,
-}: any) {
+}: {
+    title: string,
+    value: string,
+    change: string,
+    icon: ReactNode,
+    positive: boolean,
+}) {
 
     return (
 
@@ -421,7 +431,7 @@ text-slate-900
 
 }
 
-function TH({ children }: any) {
+function TH({ children }: { children: ReactNode }) {
 
     return (
         <th className="
@@ -442,7 +452,12 @@ function OrderRow({
     customer,
     amount,
     status,
-}: any) {
+}: {
+    id: string,
+    customer: string,
+    amount: string,
+    status: string,
+}) {
 
     return (
 
@@ -487,7 +502,7 @@ text-blue-700
 
 function ActionBtn({
     children,
-}: any) {
+}: { children: ReactNode }) {
 
     return (
 
@@ -516,9 +531,16 @@ hover:text-white
 function AlertItem({
     title,
     color,
-}: any) {
+}: {
+    title: string,
+    color: string,
+}) {
 
-    const colors: any = {
+    const colors: {
+        amber: string,
+        blue: string,
+        red: string,
+    } = {
         amber: "bg-amber-500",
         blue: "bg-blue-600",
         red: "bg-red-500",
@@ -536,7 +558,7 @@ gap-4
 h-3
 w-3
 rounded-full
-${colors[color]}
+${colors[color as keyof typeof color]}
 `} />
 
             <p className="
@@ -555,7 +577,10 @@ text-slate-700
 function Activity({
     icon,
     title,
-}: any) {
+}: {
+    icon: ReactNode,
+    title: string,
+}) {
 
     return (
 

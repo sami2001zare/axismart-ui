@@ -171,7 +171,7 @@ export default function AdminCustomersPage() {
                     <select
                         value={statusFilter}
                         onChange={(e) => {
-                            setStatusFilter(e.target.value as any);
+                            setStatusFilter(e.target.value as 'all' | 'active' | 'inactive');
                             setCurrentPage(1);
                         }}
                         className="rounded-xl border border-slate-200 px-4 py-2.5 outline-none focus:border-blue-400"

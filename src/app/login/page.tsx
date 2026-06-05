@@ -1,22 +1,18 @@
-// src/app/customer/login/page.tsx
-
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, ReactNode } from "react";
 import {
     Phone,
     Lock,
-    KeyRound,
     AlertCircle,
     Loader2,
     ShieldCheck,
-    ChevronLeft,
+    ChevronLeft
 } from "lucide-react";
 
 import { token } from "@/lib/auth/token";
 import { useAuthStore } from "@/lib/axios/auth-store";
 import { customerAuthService } from "@/lib/axios/customer-auth.service";
-import axios from "axios";
 import customerAxios from "@/lib/axios/customer";
 import { toast, ToastContainer } from "react-toastify";
 
@@ -24,7 +20,7 @@ export default function CustomerLoginPage() {
 
     const [phone, setPhone] = useState("");
     const [password, setPassword] = useState("");
-    const [otp, setOtp] = useState("");
+    const [otp] = useState("");
     const [mode, setMode] = useState<"password" | "otp">("password");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -49,10 +45,10 @@ export default function CustomerLoginPage() {
             customerAxios.post('/login_otp', {
                 phone: phone
             })
-                .then(r => {
+                .then(() => {
                     toast.success("کد یکبار مصرف ارسال شد");
                 })
-                .catch(r => {
+                .catch(() => {
                     toast.error("در این لحطه امکان ارسال کد نیست. لطفا دوباره سعی کنید");
                 })
         }
@@ -74,7 +70,6 @@ export default function CustomerLoginPage() {
             setUser(data.user);
 
             window.location.href = "/customer/dashboard";
-
         } catch {
 
             const attempts = failedAttempts + 1;
@@ -200,6 +195,7 @@ export default function CustomerLoginPage() {
                         <div className="mt-10 space-y-6">
 
                             <Field
+                                type="text"
                                 icon={<Phone size={18} />}
                                 placeholder="شماره موبایل"
                                 value={phone}
@@ -216,14 +212,15 @@ export default function CustomerLoginPage() {
                                 />
                             )}
 
-                            {mode === "otp" && (
+                            {/* {mode === "otp" && (
                                 <Field
+                                    type=""
                                     icon={<KeyRound size={18} />}
                                     placeholder="کد تایید پیامکی"
                                     value={otp}
                                     onChange={setOtp}
                                 />
-                            )}
+                            )} */}
                         </div>
 
                         {mode === "password" && (
@@ -353,7 +350,9 @@ export default function CustomerLoginPage() {
 
 }
 
-function Field({ icon, placeholder, type, value, onChange }: any) {
+function Field({ icon, placeholder, type, value, onChange }:
+    { icon: ReactNode, placeholder: string, type: string, value: string, onChange: (v: string) => void }
+) {
     return (
         <div className=" group flex items-center gap-4 rounded-3xl border border-slate-200 bg-slate-50 px-6 transition duration-300 focus-within:border-blue-500 focus-within:bg-white ">
             <div className=" text-slate-400 transition group-focus-within:text-blue-600 ">
@@ -364,7 +363,7 @@ function Field({ icon, placeholder, type, value, onChange }: any) {
     );
 }
 
-function Stat({ value, label }: any) {
+function Stat({ value, label }: { value: string, label: string }) {
     return (
         <div className=" rounded-3xl bg-white/10 p-6 backdrop-blur ">
             <h3 className=" text-3xl font-black ">

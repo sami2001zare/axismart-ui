@@ -2,7 +2,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ShoppingCart, Heart } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useCartStore } from '@/store/cartStore';
 import { Product } from '@/store/productStore';

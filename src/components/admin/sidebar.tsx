@@ -9,7 +9,6 @@ import {
     Users,
     FolderTree,
     BarChart3,
-    Settings,
     ChevronLeft,
     Tag,
 } from "lucide-react";

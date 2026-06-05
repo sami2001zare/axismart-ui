@@ -37,8 +37,11 @@ export default function Footer() {
 
 function FooterCol({
     title,
-    links,
-}: any) {
+    links
+}: {
+    title: string,
+    links: string[]
+}) {
     return (
         <div>
             <h3 className=" font-black text-slate-900 ">
