@@ -1,0 +1,93 @@
+# Build output directories
+**/bin/
+**/obj/
+**/out/
+**/publish/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.usertasks
+*.lock.json
+
+# IDE and editor files
+.idea/
+.vs/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs and databases
+*.log
+*.ldf
+*.mdf
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Package management
+**/packages/
+*.nupkg
+**/node_modules/
+
+# Testing
+**/TestResults/
+**/coverage/
+**/coverage.json
+
+# Source control
+.git/
+.gitignore
+.gitattributes
+.gitmodules
+
+# Docker-related
+Dockerfile
+.dockerignore
+docker-compose*
+*.dockerignore
+
+# Publish profiles
+**/Properties/PublishProfiles/
+**/publish.ps1
+
+# Health checks and temp
+**/healthchecksdb
+**/wwwroot/lib/
+**/wwwroot/node_modules/
+
+# Local configuration (sensitive)
+appsettings.Local.json
+appsettings.Development.json
+**/appsettings.*.Local.json
+**/appsettings.*.Development.json
+**/secrets.json
+
+# User secrets (development)
+**/secrets.json
+**/userSecretsId
+
+# Entity Framework migration backups
+**/Migrations/*.snapshot.cs
+**/Migrations/*.Designer.cs
+
+# Azure Functions
+**/local.settings.json
+
+# npm / frontend
+**/package-lock.json
+**/yarn.lock
+**/node_modules/
+
+# Misc
+*.tmp
+*.temp
+*.cache
