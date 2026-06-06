@@ -44,7 +44,7 @@ export default function CustomerLoginPage() {
                     toast.error('در این لحطه امکان ارسال کد نیست. لطفا دوباره سعی کنید');
                 });
         }
-    }, [mode]);
+    }, [mode, phone]);
 
     async function loginPassword() {
         setError('');

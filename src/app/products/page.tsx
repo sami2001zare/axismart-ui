@@ -5,6 +5,7 @@ import ProductCard from '@/components/ProductCard';
 import { Search, Filter, X, ChevronDown, ArrowUpDown, Package, Grid3X3, List } from 'lucide-react';
 import { useProductStore } from '@/store/productStore';
 import { useCategoryStore } from '@/store/categoryStore';
+import Image from 'next/image';
 
 type SortOption = 'name_asc' | 'name_desc' | 'price_asc' | 'price_desc' | 'newest';
 type StockFilter = 'all' | 'in_stock' | 'out_of_stock';
@@ -24,8 +25,8 @@ export default function ProductsPage() {
     const [showFilters, setShowFilters] = useState(false);
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-    const productList = Array.isArray(products) ? products : [];
-    const categoryList = Array.isArray(categories) ? categories : [];
+    const productList = useMemo(() => (Array.isArray(products) ? products : []), [products]);
+    const categoryList = useMemo(() => (Array.isArray(categories) ? categories : []), [categories]);
 
     // Filtering logic (same)
     const filteredProducts = useMemo(() => {
@@ -352,10 +353,12 @@ export default function ProductsPage() {
                                     >
                                         <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-xl bg-slate-100">
                                             {product.imageUrl ? (
-                                                <img
+                                                <Image
                                                     src={product.imageUrl}
                                                     alt={product.name}
                                                     className="h-full w-full object-cover"
+                                                    width={500} // Required: specify width
+                                                    height={500} // Required: specify height
                                                 />
                                             ) : (
                                                 <div className="flex h-full items-center justify-center text-slate-300">

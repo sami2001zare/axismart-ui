@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { ArrowRight, Upload, X } from 'lucide-react';
 import { useCategoryStore } from '@/store/categoryStore';
 import { useBrandStore } from '@/store/brandStore';
 import { useProductStore } from '@/store/productStore';
+import Image from 'next/image';
 
 export default function EditProductPage() {
     const router = useRouter();
@@ -33,27 +34,35 @@ export default function EditProductPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-    // Load product data
+    const currentProduct = useMemo(() => {
+        const list = Array.isArray(products) ? products : [];
+        return list.find((p) => p.id === productId);
+    }, [products, productId]);
+
     useEffect(() => {
-        const product = (Array.isArray(products) ? products : []).find((p) => p.id === productId);
-        if (product) {
-            setFormData({
-                name: product.name,
-                slug: product.slug,
-                categoryId: product.categoryId,
-                brandId: product.brandId,
-                price: product.price.toString(),
-                stock: product.stock.toString(),
-                description: product.description || '',
-                imageUrl: product.imageUrl || '',
-            });
-            setImagePreview(product.imageUrl || null);
-        } else {
-            toast.error('محصول یافت نشد');
-            router.push('/admin/products');
+        if (!currentProduct) {
+            if (products.length > 0) {
+                toast.error('محصول یافت نشد');
+                router.push('/admin/products');
+            }
+            return;
         }
+
+        // Only set form data once when the product is first loaded
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setFormData({
+            name: currentProduct.name,
+            slug: currentProduct.slug,
+            categoryId: currentProduct.categoryId,
+            brandId: currentProduct.brandId,
+            price: currentProduct.price.toString(),
+            stock: currentProduct.stock.toString(),
+            description: currentProduct.description || '',
+            imageUrl: currentProduct.imageUrl || '',
+        });
+        setImagePreview(currentProduct.imageUrl || null);
         setIsLoading(false);
-    }, [productId, products, router]);
+    }, [currentProduct, products.length, router]);
 
     // Auto‑generate slug from name (optional, only if slug is empty or user hasn't touched)
     // const generateSlug = (name: string) => {
@@ -142,7 +151,7 @@ export default function EditProductPage() {
             });
             toast.success('محصول با موفقیت به‌روزرسانی شد');
             router.push('/admin/products');
-        } catch (error) {
+        } catch {
             toast.error('خطایی رخ داد. لطفاً دوباره تلاش کنید.');
         } finally {
             setIsSubmitting(false);
@@ -358,9 +367,11 @@ export default function EditProductPage() {
                                 <div className="flex items-center justify-center rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 p-6">
                                     {imagePreview ? (
                                         <div className="relative">
-                                            <img
+                                            <Image
                                                 src={imagePreview}
                                                 alt="Product preview"
+                                                width={200}
+                                                height={200}
                                                 className="max-h-48 w-auto rounded-lg object-contain"
                                             />
                                             <button

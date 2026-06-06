@@ -128,15 +128,22 @@ function TH({ children }: { children: ReactNode }) {
     return <th className="px-8 py-5 text-sm font-bold text-slate-700">{children}</th>;
 }
 
-function Row({ name, qty, price, total }: any) {
+function Row({
+    name,
+    qty,
+    price,
+    total,
+}: {
+    name: string;
+    qty: string;
+    price: string;
+    total: string;
+}) {
     return (
         <tr className="border-t border-slate-100">
             <td className="px-8 py-6 font-bold">{name}</td>
-
             <td className="px-8 py-6">{qty}</td>
-
             <td className="px-8 py-6">{price}</td>
-
             <td className="px-8 py-6 font-bold">{total}</td>
         </tr>
     );
@@ -146,7 +153,6 @@ function Info({ label, value }: { label: string; value: string }) {
     return (
         <div className="flex items-center justify-between rounded-2xl bg-slate-50 p-4">
             <p className="text-sm text-slate-500">{label}</p>
-
             <p className="font-bold text-slate-900">{value}</p>
         </div>
     );

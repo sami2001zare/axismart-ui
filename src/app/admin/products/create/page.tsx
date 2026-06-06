@@ -7,6 +7,7 @@ import { ArrowRight, Upload, X } from 'lucide-react';
 import { useCategoryStore } from '@/store/categoryStore';
 import { useBrandStore } from '@/store/brandStore';
 import { useProductStore } from '@/store/productStore';
+import Image from 'next/image';
 
 export default function CreateProductPage() {
     const router = useRouter();
@@ -329,10 +330,12 @@ export default function CreateProductPage() {
                                 <div className="flex items-center justify-center rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 p-6">
                                     {imagePreview ? (
                                         <div className="relative">
-                                            <img
+                                            <Image
                                                 src={imagePreview}
                                                 alt="Product preview"
                                                 className="max-h-48 w-auto rounded-lg object-contain"
+                                                width={500} // Required: specify width
+                                                height={500} // Required: specify height
                                             />
                                             <button
                                                 type="button"

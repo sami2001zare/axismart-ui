@@ -19,8 +19,8 @@ export default function HomePage() {
     const { categories } = useCategoryStore();
     const { products } = useProductStore();
 
-    const categoryList = Array.isArray(categories) ? categories : [];
-    const productList = Array.isArray(products) ? products : [];
+    const productList = useMemo(() => (Array.isArray(products) ? products : []), [products]);
+    const categoryList = useMemo(() => (Array.isArray(categories) ? categories : []), [categories]);
 
     // Group products by category
     const productsByCategory = useMemo(() => {

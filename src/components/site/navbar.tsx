@@ -2,22 +2,13 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { useCategoryStore } from '@/store/categoryStore';
 
 export default function Navbar() {
     const { categories } = useCategoryStore();
     const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
-
-    useEffect(() => {
-        // If categories not already loaded, load them
-        // if (categories.length === 0 && fetchCategories) {
-        if (categories.length === 0) {
-            // Our categoryStore has no fetchCategories because it's local; it's already populated.
-            // So we can just use categories as is.
-        }
-    }, []);
 
     const categoryList = Array.isArray(categories) ? categories : [];
 

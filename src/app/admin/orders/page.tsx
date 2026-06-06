@@ -21,7 +21,7 @@ export default function AdminOrdersPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
 
-    const orderList = Array.isArray(orders) ? orders : [];
+    const orderList = useMemo(() => (Array.isArray(orders) ? orders : []), [orders]);
 
     // Filter orders
     const filteredOrders = useMemo(() => {

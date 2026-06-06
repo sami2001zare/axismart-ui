@@ -108,18 +108,13 @@ export default function CustomerOrdersPage() {
                                 className="border-t border-slate-100 hover:bg-slate-50"
                             >
                                 <TD className="font-bold">{item.id}</TD>
-
-                                <TD>{item.date}</TD>
-
-                                <TD>{item.items}</TD>
-
+                                <TD className="">{item.date}</TD>
+                                <TD className="">{item.items}</TD>
                                 <TD className="font-bold">{item.amount}</TD>
-
-                                <TD>
+                                <TD className="">
                                     <StatusBadge status={item.status} />
                                 </TD>
-
-                                <TD>
+                                <TD className="">
                                     <button className="flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200">
                                         <Eye size={16} />
                                     </button>
@@ -143,15 +138,15 @@ function Select({ children }: { children: ReactNode }) {
     );
 }
 
-function TH({ children }: any) {
+function TH({ children }: { children: ReactNode }) {
     return <th className="px-8 py-5 text-sm font-bold text-slate-700">{children}</th>;
 }
 
-function TD({ children, className }: any) {
+function TD({ children, className }: { children: ReactNode; className: string }) {
     return <td className={`px-8 py-6 text-sm text-slate-700 ${className || ''} `}>{children}</td>;
 }
 
-function MiniStat({ title, value }: any) {
+function MiniStat({ title, value }: { title: string; value: string }) {
     return (
         <div className="rounded-[34px] border border-slate-200 bg-white p-7">
             <p className="text-sm text-slate-500">{title}</p>
@@ -161,7 +156,7 @@ function MiniStat({ title, value }: any) {
     );
 }
 
-function StatusBadge({ status }: any) {
+function StatusBadge({ status }: { status: string }) {
     const styles: {
         shipped: string;
         paid: string;

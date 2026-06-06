@@ -1,5 +1,6 @@
 // components/ProductCard.tsx
 import { Product } from '@/store/productStore';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function ProductCard({ product }: { product: Product }) {
@@ -10,10 +11,12 @@ export default function ProductCard({ product }: { product: Product }) {
             <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white transition hover:shadow-md">
                 <div className="flex aspect-square items-center justify-center bg-slate-100">
                     {product.imageUrl ? (
-                        <img
+                        <Image
                             src={product.imageUrl}
                             alt={product.name}
                             className="h-full w-full object-cover"
+                            width={500} // Required: specify width
+                            height={500} // Required: specify height
                         />
                     ) : (
                         <div className="text-slate-400">بدون تصویر</div>

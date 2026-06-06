@@ -163,11 +163,11 @@ export default function OrderDetailsPage() {
                         <h3 className="font-bold text-slate-900">خلاصه مالی</h3>
 
                         <div className="mt-8 space-y-5">
-                            <Money label="Subtotal" value="۱۴,۵۵۰,۰۰۰" />
+                            <Money label="Subtotal" value="۱۴,۵۵۰,۰۰۰" bold={true} />
 
-                            <Money label="Shipping" value="۳۰۰,۰۰۰" />
+                            <Money label="Shipping" value="۳۰۰,۰۰۰" bold />
 
-                            <Money label="Tax" value="۹۰۰,۰۰۰" />
+                            <Money label="Tax" value="۹۰۰,۰۰۰" bold />
 
                             <div className="border-t border-slate-100 pt-5">
                                 <Money label="Total" value="۱۵,۷۵۰,۰۰۰" bold />
@@ -184,19 +184,26 @@ function Card({ children }: { children: ReactNode }) {
     return <div className="rounded-[34px] border border-slate-200 bg-white p-7">{children}</div>;
 }
 
-function TH({ children }: any) {
+function TH({ children }: { children: ReactNode }) {
     return <th className="px-8 py-5 text-sm font-bold text-slate-700">{children}</th>;
 }
 
-function ItemRow({ name, qty, price, total }: any) {
+function ItemRow({
+    name,
+    qty,
+    price,
+    total,
+}: {
+    name: string;
+    qty: string;
+    price: string;
+    total: string;
+}) {
     return (
         <tr className="border-t border-slate-100">
             <td className="px-8 py-6 font-bold">{name}</td>
-
             <td className="px-8 py-6">{qty}</td>
-
             <td className="px-8 py-6">{price}</td>
-
             <td className="px-8 py-6 font-bold text-slate-900">{total}</td>
         </tr>
     );

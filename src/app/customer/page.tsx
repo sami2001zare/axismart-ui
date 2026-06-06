@@ -16,6 +16,7 @@ import { useOrderStore } from '@/store/orderStore';
 import { useProductStore } from '@/store/productStore';
 import { useCustomerStoreI } from '@/store/customerStoreI';
 import { useState } from 'react';
+import Image from 'next/image';
 
 export default function CustomerDashboard() {
     const { customer } = useCustomerStoreI();
@@ -167,10 +168,12 @@ export default function CustomerDashboard() {
                             >
                                 <div className="aspect-square overflow-hidden bg-slate-100">
                                     {product.imageUrl ? (
-                                        <img
+                                        <Image
                                             src={product.imageUrl}
                                             alt={product.name}
-                                            className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                                            className="h-full w-full object-cover"
+                                            width={500} // Required: specify width
+                                            height={500} // Required: specify height
                                         />
                                     ) : (
                                         <div className="flex h-full items-center justify-center text-slate-300">

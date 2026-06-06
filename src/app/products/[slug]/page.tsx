@@ -19,6 +19,7 @@ import { useCategoryStore } from '@/store/categoryStore';
 import { useBrandStore } from '@/store/brandStore';
 import { toast, ToastContainer } from 'react-toastify';
 import { useCartStore } from '@/store/cartStore';
+import Image from 'next/image';
 
 export default function ProductDetailPage() {
     const { slug } = useParams();
@@ -130,10 +131,12 @@ export default function ProductDetailPage() {
                         <div className="overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-xl">
                             <div className="aspect-square overflow-hidden">
                                 {product.imageUrl ? (
-                                    <img
+                                    <Image
                                         src={product.imageUrl}
                                         alt={product.name}
-                                        className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
+                                        className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
+                                        width={500} // Required: specify width
+                                        height={500} // Required: specify height
                                     />
                                 ) : (
                                     <div className="flex h-full items-center justify-center bg-slate-100">
@@ -317,10 +320,12 @@ export default function ProductDetailPage() {
                                         <div className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:shadow-xl">
                                             <div className="aspect-square overflow-hidden bg-slate-100">
                                                 {related.imageUrl ? (
-                                                    <img
+                                                    <Image
                                                         src={related.imageUrl}
                                                         alt={related.name}
                                                         className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
+                                                        width={500} // Required: specify width
+                                                        height={500} // Required: specify height
                                                     />
                                                 ) : (
                                                     <div className="flex h-full items-center justify-center text-slate-300">

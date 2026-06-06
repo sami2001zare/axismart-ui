@@ -1,32 +1,21 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { toast } from 'react-toastify';
 import { Plus, Edit2, Trash2, Eye } from 'lucide-react';
 import { useProductStore } from '@/store/productStore';
 import { useCategoryStore } from '@/store/categoryStore';
 import { useBrandStore } from '@/store/brandStore';
+import Image from 'next/image';
 
 export default function ProductsListPage() {
     const { products, deleteProduct } = useProductStore();
-    const { categories, fetchCategories } = useCategoryStore();
-    const { brands, fetchBrands } = useBrandStore();
+    const { categories } = useCategoryStore();
+    const { brands } = useBrandStore();
 
     const [searchTerm, setSearchTerm] = useState('');
     const [deletingId, setDeletingId] = useState<string | null>(null);
-
-    // Fetch categories & brands if they are empty (they might already have data from persist)
-    useEffect(() => {
-        if (categories.length === 0 && fetchCategories) {
-            fetchCategories(); // but fetchCategories might be API; we only have local store.
-            // Since we're using local stores without API, we don't need to fetch.
-            // Just to be safe, we can check if categories is array. If not, use empty.
-        }
-        if (brands.length === 0 && fetchBrands) {
-            // similarly
-        }
-    }, []);
 
     // Helper to get category name by id
     const getCategoryName = (categoryId: string) => {
@@ -142,10 +131,12 @@ export default function ProductsListPage() {
                                     >
                                         <td className="px-6 py-4">
                                             {product.imageUrl ? (
-                                                <img
+                                                <Image
                                                     src={product.imageUrl}
                                                     alt={product.name}
-                                                    className="h-12 w-12 rounded-lg object-cover"
+                                                    className="h-full w-full object-cover"
+                                                    width={500} // Required: specify width
+                                                    height={500} // Required: specify height
                                                 />
                                             ) : (
                                                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-slate-100 text-slate-400">

@@ -3,13 +3,26 @@ import { useState } from 'react';
 import { Plus, Edit2, Trash2 } from 'lucide-react';
 import { useBrandStore } from '@/store/brandStore';
 
+interface Brand {
+    id: string;
+    name: string;
+    slug: string;
+    logo?: string;
+    description?: string;
+}
+
 export default function AdminBrandsPage() {
     const { brands, addBrand, updateBrand, deleteBrand } = useBrandStore();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingBrand, setEditingBrand] = useState<any>(null);
-    const [formData, setFormData] = useState({ name: '', slug: '', logo: '', description: '' });
+    const [editingBrand, setEditingBrand] = useState<Brand | null>(null);
+    const [formData, setFormData] = useState<Omit<Brand, 'id'>>({
+        name: '',
+        slug: '',
+        logo: '',
+        description: '',
+    });
 
-    const brandList = Array.isArray(brands) ? brands : [];
+    const brandList: Brand[] = Array.isArray(brands) ? brands : [];
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -23,7 +36,7 @@ export default function AdminBrandsPage() {
         setFormData({ name: '', slug: '', logo: '', description: '' });
     };
 
-    const handleEdit = (brand: any) => {
+    const handleEdit = (brand: Brand) => {
         setEditingBrand(brand);
         setFormData({
             name: brand.name,

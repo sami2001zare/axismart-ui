@@ -6,6 +6,7 @@ import { ShoppingCart } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useCartStore } from '@/store/cartStore';
 import { Product } from '@/store/productStore';
+import Image from 'next/image';
 
 export default function ProductCard({ product }: { product: Product }) {
     const { addItem } = useCartStore();
@@ -32,10 +33,12 @@ export default function ProductCard({ product }: { product: Product }) {
             <Link href={`/products/${product.slug}`} className="block">
                 <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100">
                     {product.imageUrl ? (
-                        <img
+                        <Image
                             src={product.imageUrl}
                             alt={product.name}
                             className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
+                            width={500} // Required: specify width
+                            height={500} // Required: specify height
                         />
                     ) : (
                         <div className="flex h-full items-center justify-center text-slate-300">

@@ -4,14 +4,25 @@ import { useState } from 'react';
 import { Plus, Edit2, Trash2 } from 'lucide-react';
 import { useCategoryStore } from '@/store/categoryStore';
 
+interface Category {
+    id: string;
+    name: string;
+    slug: string;
+    description?: string;
+}
+
 export default function AdminCategoriesPage() {
     const { categories, addCategory, updateCategory, deleteCategory } = useCategoryStore();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingCategory, setEditingCategory] = useState<any>(null);
-    const [formData, setFormData] = useState({ name: '', slug: '', description: '' });
+    const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+    const [formData, setFormData] = useState<Omit<Category, 'id'>>({
+        name: '',
+        slug: '',
+        description: '',
+    });
 
     // Make sure categories is always an array (just in case)
-    const categoryList = Array.isArray(categories) ? categories : [];
+    const categoryList: Category[] = Array.isArray(categories) ? categories : [];
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -25,7 +36,7 @@ export default function AdminCategoriesPage() {
         setFormData({ name: '', slug: '', description: '' });
     };
 
-    const handleEdit = (category: any) => {
+    const handleEdit = (category: Category) => {
         setEditingCategory(category);
         setFormData({
             name: category.name,

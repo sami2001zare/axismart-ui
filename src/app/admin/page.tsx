@@ -26,10 +26,10 @@ export default function AdminDashboard() {
     const { orders } = useOrderStore();
     const { categories } = useCategoryStore();
 
-    const productList = Array.isArray(products) ? products : [];
-    const customerList = Array.isArray(customers) ? customers : [];
-    const orderList = Array.isArray(orders) ? orders : [];
-    const categoryList = Array.isArray(categories) ? categories : [];
+    const productList = useMemo(() => (Array.isArray(products) ? products : []), [products]);
+    const categoryList = useMemo(() => (Array.isArray(categories) ? categories : []), [categories]);
+    const customerList = useMemo(() => (Array.isArray(customers) ? customers : []), [customers]);
+    const orderList = useMemo(() => (Array.isArray(orders) ? orders : []), [orders]);
 
     // Calculate metrics
     const totalRevenue = orderList.reduce((sum, o) => sum + (o.total || 0), 0);

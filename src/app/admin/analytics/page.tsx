@@ -27,10 +27,13 @@ export default function AdminAnalyticsPage() {
     const { customers } = useCustomerStore();
     const { orders } = useOrderStore();
 
-    const productList = Array.isArray(products) ? products : [];
-    const categoryList = Array.isArray(categories) ? categories : [];
-    const customerList = Array.isArray(customers) ? customers : [];
-    const orderList = Array.isArray(orders) ? orders : [];
+    const productList = useMemo(() => (Array.isArray(products) ? products : []), [products]);
+
+    const categoryList = useMemo(() => (Array.isArray(categories) ? categories : []), [categories]);
+
+    const customerList = useMemo(() => (Array.isArray(customers) ? customers : []), [customers]);
+
+    const orderList = useMemo(() => (Array.isArray(orders) ? orders : []), [orders]);
 
     // Calculate key metrics
     const totalRevenue = orderList.reduce((sum, o) => sum + o.total, 0);
