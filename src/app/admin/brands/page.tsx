@@ -116,7 +116,7 @@ export default function AdminBrandsPage() {
             {/* Modal form */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                    <div className="w-[500px] rounded-2xl bg-white p-6">
+                    <div className="w-125 rounded-2xl bg-white p-6">
                         <h2 className="mb-4 text-xl font-bold">
                             {editingBrand ? 'ویرایش برند' : 'افزودن برند'}
                         </h2>

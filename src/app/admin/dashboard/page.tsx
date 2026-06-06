@@ -20,7 +20,7 @@ export default function AdminDashboardPage() {
             {/* HERO */}
 
             <div className="relative overflow-hidden rounded-[40px] border border-slate-200 bg-gradient-to-br from-blue-600 via-blue-700 to-slate-900 p-10 text-white">
-                <div className="absolute top-[-100px] left-[-100px] h-[260px] w-[260px] rounded-full bg-white/10 blur-3xl" />
+                <div className="absolute -top-25 -left-25 h-65 w-65 rounded-full bg-white/10 blur-3xl" />
 
                 <div className="relative z-10 flex flex-col gap-8 xl:flex-row xl:items-center xl:justify-between">
                     <div>
@@ -64,7 +64,13 @@ export default function AdminDashboardPage() {
                     icon={<ShoppingBag size={18} />}
                 />
 
-                <KPI title="کاربران جدید" value="48" change="-4%" icon={<Users size={18} />} />
+                <KPI
+                    title="کاربران جدید"
+                    value="48"
+                    change="-4%"
+                    icon={<Users size={18} />}
+                    positive={false}
+                />
 
                 <KPI
                     title="محصولات فعال"
@@ -94,7 +100,7 @@ export default function AdminDashboardPage() {
                             </div>
                         </div>
 
-                        <div className="mt-12 flex h-[320px] items-end gap-5">
+                        <div className="mt-12 flex h-80 items-end gap-5">
                             {[55, 82, 63, 95, 72, 88].map((h) => (
                                 <div key={h} className="flex flex-1 flex-col items-center gap-4">
                                     <div
@@ -306,7 +312,7 @@ function AlertItem({ title, color }: { title: string; color: string }) {
 
     return (
         <div className="flex items-center gap-4">
-            <div className={`h-3 w-3 rounded-full ${colors[color as keyof typeof color]} `} />
+            <div className={`h-3 w-3 rounded-full ${colors[color as keyof typeof colors]} `} />
 
             <p className="text-sm text-slate-700">{title}</p>
         </div>

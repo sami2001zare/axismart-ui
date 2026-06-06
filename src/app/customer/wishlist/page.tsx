@@ -68,7 +68,7 @@ export default function WishlistPage() {
                         key={item.id}
                         className="overflow-hidden rounded-[34px] border border-slate-200 bg-white transition hover:-translate-y-1"
                     >
-                        <div className="h-[220px] bg-gradient-to-br from-slate-100 to-slate-200" />
+                        <div className="h-55 bg-gradient-to-br from-slate-100 to-slate-200" />
 
                         <div className="p-7">
                             <div className="flex items-start justify-between gap-4">

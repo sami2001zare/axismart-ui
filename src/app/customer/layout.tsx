@@ -43,7 +43,7 @@ export default function CustomerLayout({ children }: { children: React.ReactNode
                 {/* SIDEBAR */}
                 <aside
                     className={`fixed top-0 right-0 z-50 flex h-screen flex-col border-l border-slate-200 bg-white transition-all duration-300 ${
-                        sidebarExpanded ? 'w-[320px]' : 'w-[80px]'
+                        sidebarExpanded ? 'w-[320px]' : 'w-20'
                     }`}
                 >
                     {/* Sidebar Header */}
@@ -135,7 +135,7 @@ export default function CustomerLayout({ children }: { children: React.ReactNode
                                 <Search size={18} className="text-slate-400" />
                                 <input
                                     placeholder="جستجو..."
-                                    className="w-[340px] bg-transparent text-sm outline-none"
+                                    className="w-85 bg-transparent text-sm outline-none"
                                 />
                             </div>
 

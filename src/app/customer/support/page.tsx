@@ -37,7 +37,7 @@ export default function SupportPage() {
 
                     <input
                         placeholder="جستجوی تیکت..."
-                        className="w-[340px] bg-transparent text-sm outline-none"
+                        className="w-85 bg-transparent text-sm outline-none"
                     />
                 </div>
             </div>
