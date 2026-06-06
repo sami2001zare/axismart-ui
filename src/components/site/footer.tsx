@@ -8,7 +8,7 @@ export default function Footer() {
                     <div>
                         <h2 className="text-3xl font-black text-slate-900">بلبرینگ پارسا</h2>
 
-                        <p className="mt-6 leading-[2] text-slate-600">
+                        <p className="mt-6 leading-2 text-slate-600">
                             پلتفرم تخصصی تامین قطعات صنعتی برای خرید خرده و عمده.
                         </p>
                     </div>

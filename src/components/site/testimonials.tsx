@@ -14,7 +14,7 @@ const reviews = [
 export default function Testimonials() {
     return (
         <section className="bg-slate-50 py-32">
-            <div className="mx-auto max-w-[1450px] px-8">
+            <div className="mx-auto max-w-362.5 px-8">
                 <h2 className="text-center text-5xl font-black text-slate-900">
                     اعتماد صنعت به بلبرینگ پارسا
                 </h2>
@@ -29,7 +29,9 @@ export default function Testimonials() {
                                 "
                             </div> */}
 
-                            <p className="mt-8 text-lg leading-[2] text-slate-600">{review.text}</p>
+                            <p className="mt-8 text-lg leading-loose text-slate-600">
+                                {review.text}
+                            </p>
 
                             <h4 className="mt-10 font-black text-slate-900">{review.name}</h4>
                         </div>

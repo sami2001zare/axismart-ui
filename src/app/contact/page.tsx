@@ -13,7 +13,7 @@ export default function ContactPage() {
                 <div className="mx-auto max-w-[1450px] px-8">
                     <h1 className="text-7xl font-black text-slate-900">تماس با ما</h1>
 
-                    <p className="mt-8 max-w-[800px] text-xl leading-[2] text-slate-600">
+                    <p className="mt-8 max-w-200 text-xl leading-loose text-slate-600">
                         برای خرید عمده، همکاری سازمانی، سفارش پروژه‌ای و دریافت مشاوره تخصصی با ما
                         در ارتباط باشید.
                     </p>

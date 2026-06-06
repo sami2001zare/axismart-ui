@@ -9,12 +9,10 @@ export default function WholesaleSection() {
             {/* Background */}
 
             <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-950 to-blue-950" />
+            <div className="absolute -top-50 -left-30 h-105 w-105 rounded-full bg-blue-500/20 blur-[140px]" />
+            <div className="absolute -right-20 -left-30 h-80 w-80 rounded-full bg-cyan-500/20 blur-[120px]" />
 
-            <div className="absolute top-[-200px] left-[-120px] h-[420px] w-[420px] rounded-full bg-blue-500/20 blur-[140px]" />
-
-            <div className="absolute right-[-80px] bottom-[-120px] h-[320px] w-[320px] rounded-full bg-cyan-500/20 blur-[120px]" />
-
-            <div className="relative mx-auto max-w-[1450px] px-8">
+            <div className="relative mx-auto max-w-362.5 px-8">
                 <div className="grid items-center gap-20 lg:grid-cols-2">
                     {/* LEFT */}
 
@@ -32,7 +30,7 @@ export default function WholesaleSection() {
                             راهکار حرفه‌ای برای تامین قطعات صنعتی
                         </h2>
 
-                        <p className="mt-10 max-w-[680px] text-xl leading-[2.1] text-slate-300">
+                        <p className="mt-10 max-w-170 text-xl leading-[2.1] text-slate-300">
                             خرید عمده با قیمت همکاری، حساب‌های سازمانی، ثبت سفارش سریع، مشاوره تخصصی
                             و تامین پروژه‌های صنعتی.
                         </p>

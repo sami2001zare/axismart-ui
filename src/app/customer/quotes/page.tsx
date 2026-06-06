@@ -37,7 +37,7 @@ export default function QuotesPage() {
 
                     <input
                         placeholder="جستجوی درخواست..."
-                        className="w-[340px] bg-transparent text-sm outline-none"
+                        className="w-85 bg-transparent text-sm outline-none"
                     />
                 </div>
             </div>
@@ -117,11 +117,11 @@ function QuoteCard({
                             <h3 className="font-black text-slate-900">{title}</h3>
 
                             <div
-                                className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-medium ${styles[status]} `}
+                                className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-medium ${styles[status as keyof typeof styles]} `}
                             >
-                                {icons[status]}
+                                {icons[status as keyof typeof icons]}
 
-                                {labels[status]}
+                                {labels[status as keyof typeof labels]}
                             </div>
                         </div>
 

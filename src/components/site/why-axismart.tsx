@@ -34,7 +34,7 @@ export default function WhyAxisMart() {
                         چرا اکسیس مارت
                     </span>
 
-                    <h2 className="mt-8 max-w-[850px] text-5xl leading-[1.5] font-black text-slate-900">
+                    <h2 className="mt-8 max-w-212.5 text-5xl leading-normal font-black text-slate-900">
                         زیرساخت حرفه‌ای برای تامین قطعات صنعتی
                     </h2>
                 </div>
@@ -57,7 +57,7 @@ export default function WhyAxisMart() {
                                 {item.title}
                             </h3>
 
-                            <p className="mt-5 leading-[2] text-slate-600">{item.desc}</p>
+                            <p className="mt-5 leading-loose text-slate-600">{item.desc}</p>
                         </motion.div>
                     ))}
                 </div>

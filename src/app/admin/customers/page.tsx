@@ -300,7 +300,7 @@ export default function AdminCustomersPage() {
                                         <td className="px-6 py-4 text-slate-600">
                                             {customer.phone}
                                         </td>
-                                        <td className="max-w-[200px] truncate px-6 py-4 text-slate-600">
+                                        <td className="max-w-50 truncate px-6 py-4 text-slate-600">
                                             {customer.address || '-'}
                                         </td>
                                         <td className="px-6 py-4 text-slate-600">

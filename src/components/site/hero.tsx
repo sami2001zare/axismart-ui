@@ -7,8 +7,8 @@ export default function Hero() {
         <section className="relative overflow-hidden pt-40 pb-28">
             {/* Background Accent */}
 
-            <div className="absolute top-[-200px] left-[-120px] h-[450px] w-[450px] rounded-full bg-blue-100 blur-[140px]" />
-            <div className="absolute right-[-100px] bottom-[-180px] h-[350px] w-[350px] rounded-full bg-cyan-100 blur-[120px]" />
+            <div className="absolute -top-50 -left-25 size-112.5 rounded-full bg-blue-100 blur-[140px]" />
+            <div className="absolute -right-25 -bottom-45 size-87.5 rounded-full bg-cyan-100 blur-[120px]" />
             <div className="mx-auto max-w-[1450px] px-8">
                 <div className="grid items-center gap-20 lg:grid-cols-2">
                     {/* LEFT CONTENT */}
@@ -24,7 +24,7 @@ export default function Hero() {
 
                         {/* Title */}
 
-                        <h1 className="text-6xl leading-[1.5] font-black text-slate-900">
+                        <h1 className="text-6xl leading-normal font-black text-slate-900">
                             خرید تخصصی
                             <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
                                 {' '}
@@ -34,7 +34,7 @@ export default function Hero() {
                         </h1>
 
                         {/* Description */}
-                        <p className="mt-10 max-w-[680px] text-xl leading-[2.1] text-slate-600">
+                        <p className="mt-10 max-w-170 text-xl leading-[2.1] text-slate-600">
                             فروش خرده و عمده قطعات صنعتی با تضمین اصالت کالا، قیمت همکاری، ارسال
                             سریع و مشاوره تخصصی.
                         </p>
@@ -89,28 +89,22 @@ function HeroVisual() {
                 className="absolute top-8 -left-8 z-20 border border-blue-200 bg-white px-6 py-5 shadow-xl"
             >
                 <p className="text-sm text-slate-500">فروش عمده فعال</p>
-
                 <h3 className="mt-2 text-3xl font-black text-blue-600">B2B</h3>
             </motion.div>
 
             {/* Main Panel */}
 
-            <div className="w-full max-w-[640px] border border-slate-200 bg-white p-8 shadow-[0_35px_80px_rgba(15,23,42,.08)]">
+            <div className="w-full max-w-160 border border-slate-200 bg-white p-8 shadow-[0_35px_80px_rgba(15,23,42,.08)]">
                 <div className="grid grid-cols-2 gap-5">
                     <Card title="بلبرینگ" icon="⚙️" />
-
                     <Card title="تسمه" icon="🔗" />
-
                     <Card title="پولی" icon="⭕" />
-
                     <Card title="زنجیر صنعتی" icon="⛓️" />
                 </div>
 
                 <div className="mt-8 grid grid-cols-3 gap-4">
                     <Metric number="2500+" label="محصول" />
-
                     <Metric number="120+" label="برند" />
-
                     <Metric number="24/7" label="پشتیبانی" />
                 </div>
             </div>

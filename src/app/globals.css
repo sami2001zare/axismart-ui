@@ -1,5 +1,35 @@
 @import 'tailwindcss';
 
+@theme {
+    --spacing-13: 52px;
+    --spacing-22: 88px;
+    --spacing-22.5: 90px;
+    --spacing-25: 100px;
+    --spacing-30: 120px;
+    --spacing-32.5: 130px;
+    --spacing-35: 140px;
+    --spacing-45: 180;
+    --spacing-50: 200px;
+    --spacing-55: 220px;
+    --spacing-70: 280px;
+    --spacing-72.5: 290px;
+    --spacing-87.5: 350px;
+    --spacing-105: 420px;
+    --spacing-107.5: 430px;
+    --spacing-112.5: 450px;
+    --spacing-125: 500px;
+    --spacing-160: 640px;
+    --spacing-170: 680px;
+    --spacing-175: 700px;
+    --spacing-190: 760px;
+    --spacing-200: 800px;
+    --spacing-212.5: 850px;
+    --spacing-225: 900px;
+    --spacing-312.5: 1250px;
+    --spacing-330: 1320px;
+    --spacing-362.5: 1450px;
+}
+
 :root {
     --background: #f8fafc;
     --surface: #ffffff;

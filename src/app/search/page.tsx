@@ -63,7 +63,7 @@ export default function SearchPage() {
 
                     {/* TOOLBAR */}
 
-                    <div className="mt-8 flex flex-col gap-5 rounded-[32px] border border-slate-200 bg-white p-6 xl:flex-row xl:items-center xl:justify-between">
+                    <div className="mt-8 flex flex-col gap-5 rounded-4xl border border-slate-200 bg-white p-6 xl:flex-row xl:items-center xl:justify-between">
                         <div className="flex flex-wrap gap-4">
                             <button className="flex items-center gap-3 rounded-2xl border border-slate-200 px-5 py-4 text-sm">
                                 <Filter size={16} />
@@ -78,11 +78,11 @@ export default function SearchPage() {
                         </div>
 
                         <div className="flex overflow-hidden rounded-2xl border border-slate-200">
-                            <button className="flex h-[52px] w-[52px] items-center justify-center bg-blue-50 text-blue-700">
+                            <button className="flex size-13 items-center justify-center bg-blue-50 text-blue-700">
                                 <LayoutGrid size={18} />
                             </button>
 
-                            <button className="flex h-[52px] w-[52px] items-center justify-center text-slate-500">
+                            <button className="flex size-13 items-center justify-center text-slate-500">
                                 <List size={18} />
                             </button>
                         </div>
@@ -94,9 +94,9 @@ export default function SearchPage() {
                         {results.map((item) => (
                             <article
                                 key={item.title}
-                                className="overflow-hidden rounded-[32px] border border-slate-200 bg-white transition duration-300 hover:-translate-y-1 hover:shadow-xl"
+                                className="overflow-hidden rounded-4xl border border-slate-200 bg-white transition duration-300 hover:-translate-y-1 hover:shadow-xl"
                             >
-                                <div className="relative h-[280px] bg-slate-100">
+                                <div className="relative h-70 bg-slate-100">
                                     <Image
                                         src={item.image}
                                         alt={item.title}

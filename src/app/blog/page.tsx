@@ -37,7 +37,7 @@ export default function BlogPage() {
                                 key={post.title}
                                 className="overflow-hidden border border-slate-200 bg-white shadow-[0_20px_50px_rgba(15,23,42,.05)]"
                             >
-                                <div className="h-[240px] bg-gradient-to-br from-blue-100 to-cyan-100" />
+                                <div className="h-60 bg-gradient-to-br from-blue-100 to-cyan-100" />
 
                                 <div className="p-8">
                                     <span className="text-sm text-blue-600">{post.category}</span>

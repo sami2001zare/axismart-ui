@@ -126,13 +126,13 @@ export default function CustomerRegisterPage() {
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-white p-8">
-            <div className="grid w-full max-w-[1320px] overflow-hidden rounded-[42px] border border-slate-200 bg-white shadow-[0_35px_90px_rgba(15,23,42,0.08)] xl:grid-cols-[1fr_620px]">
+            <div className="grid w-full max-w-330 overflow-hidden rounded-[42px] border border-slate-200 bg-white shadow-[0_35px_90px_rgba(15,23,42,0.08)] xl:grid-cols-[1fr_620px]">
                 <div className="hidden flex-col justify-between bg-gradient-to-br from-blue-700 via-blue-600 to-slate-900 p-14 text-white xl:flex">
                     <div>
                         <h2 className="mt-10 text-6xl leading-[1.15] font-black">
                             شروع خرید هوشمند صنعتی
                         </h2>
-                        <p className="mt-8 max-w-[430px] leading-9 text-blue-100">
+                        <p className="mt-8 max-w-107.5 leading-9 text-blue-100">
                             ثبت‌نام سریع، دسترسی به سفارشات، استعلام قیمت و پنل مشتری.
                         </p>
                     </div>

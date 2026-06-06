@@ -47,6 +47,7 @@ export default function SupportDetailsPage() {
                     />
 
                     <Message
+                        mine={false}
                         name="پشتیبانی بلبرینگ پارسا"
                         time="10:45"
                         text="در حال بررسی موضوع هستیم. لطفا تصویر خطا را ارسال کنید."

@@ -181,7 +181,7 @@ export default function ProductsPage() {
                         </div>
 
                         {/* Category */}
-                        <div className="min-w-[160px]">
+                        <div className="min-w-40">
                             <label className="mb-1 block text-sm font-medium text-slate-700">
                                 دسته‌بندی
                             </label>
@@ -203,7 +203,7 @@ export default function ProductsPage() {
                         </div>
 
                         {/* Min Price */}
-                        <div className="min-w-[140px]">
+                        <div className="min-w-35">
                             <label className="mb-1 block text-sm font-medium text-slate-700">
                                 حداقل قیمت
                             </label>
@@ -220,7 +220,7 @@ export default function ProductsPage() {
                         </div>
 
                         {/* Max Price */}
-                        <div className="min-w-[140px]">
+                        <div className="min-w-35">
                             <label className="mb-1 block text-sm font-medium text-slate-700">
                                 حداکثر قیمت
                             </label>
@@ -237,7 +237,7 @@ export default function ProductsPage() {
                         </div>
 
                         {/* Stock */}
-                        <div className="min-w-[130px]">
+                        <div className="min-w-32.5">
                             <label className="mb-1 block text-sm font-medium text-slate-700">
                                 موجودی
                             </label>
@@ -351,7 +351,7 @@ export default function ProductsPage() {
                                         key={product.id}
                                         className="flex flex-wrap gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:shadow-md"
                                     >
-                                        <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-xl bg-slate-100">
+                                        <div className="h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-slate-100">
                                             {product.imageUrl ? (
                                                 <Image
                                                     src={product.imageUrl}
@@ -421,7 +421,7 @@ export default function ProductsPage() {
                                         <button
                                             key={pageNum}
                                             onClick={() => setCurrentPage(pageNum)}
-                                            className={`min-w-[40px] rounded-xl px-3 py-2 text-sm font-medium transition ${
+                                            className={`min-w-10 rounded-xl px-3 py-2 text-sm font-medium transition ${
                                                 currentPage === pageNum
                                                     ? 'bg-blue-600 text-white shadow-md'
                                                     : 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50'

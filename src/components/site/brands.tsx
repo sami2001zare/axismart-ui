@@ -16,7 +16,7 @@ export default function BrandsSection() {
                     {brands.map((brand) => (
                         <div
                             key={brand}
-                            className="flex h-[120px] items-center justify-center border border-slate-200 bg-white text-3xl font-black text-slate-400"
+                            className="flex h-30 items-center justify-center border border-slate-200 bg-white text-3xl font-black text-slate-400"
                         >
                             {brand}
                         </div>

@@ -53,14 +53,14 @@ export default function CategoriesPage() {
                             اکسپلورر دسته‌بندی صنعتی
                         </h1>
 
-                        <p className="mt-5 max-w-[760px] text-[15px] leading-8 text-slate-600">
+                        <p className="mt-5 max-w-190 text-[15px] leading-8 text-slate-600">
                             مرور تخصصی دسته‌بندی‌های صنعتی، برندها و محصولات همکاری.
                         </p>
                     </div>
 
                     {/* SEARCH */}
 
-                    <div className="mb-10 rounded-[32px] border border-slate-200 bg-white p-6">
+                    <div className="mb-10 rounded-4xl border border-slate-200 bg-white p-6">
                         <div className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4">
                             <Search size={18} className="text-slate-400" />
 
@@ -83,7 +83,7 @@ export default function CategoriesPage() {
                                 <div className="grid lg:grid-cols-[280px_1fr]">
                                     {/* IMAGE */}
 
-                                    <div className="relative h-[320px] overflow-hidden bg-slate-100">
+                                    <div className="relative h-80 overflow-hidden bg-slate-100">
                                         <Image
                                             src={cat.image}
                                             alt={cat.title}

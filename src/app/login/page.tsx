@@ -110,7 +110,7 @@ export default function CustomerLoginPage() {
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-white p-8">
-            <div className="grid w-full max-w-[1250px] overflow-hidden rounded-[42px] border border-slate-200 bg-white shadow-[0_30px_90px_rgba(15,23,42,0.08)] xl:grid-cols-[1fr_560px]">
+            <div className="grid w-full max-w-312.5 overflow-hidden rounded-[42px] border border-slate-200 bg-white shadow-[0_30px_90px_rgba(15,23,42,0.08)] xl:grid-cols-[1fr_560px]">
                 <div className="hidden flex-col justify-between bg-gradient-to-br from-blue-700 via-blue-600 to-slate-900 p-14 text-white xl:flex">
                     <div>
                         <div className="inline-flex items-center gap-3 rounded-full bg-white/10 px-5 py-3 backdrop-blur">
@@ -122,7 +122,7 @@ export default function CustomerLoginPage() {
                             پلتفرم فروش صنعتی نسل جدید
                         </h2>
 
-                        <p className="mt-8 max-w-[420px] text-base leading-9 text-blue-100">
+                        <p className="mt-8 max-w-105 text-base leading-9 text-blue-100">
                             مدیریت خرید، سفارش، عمده فروشی و ارتباط مستقیم با صنعت.
                         </p>
                     </div>
@@ -136,7 +136,7 @@ export default function CustomerLoginPage() {
                 </div>
 
                 <div className="relative p-12 xl:p-14">
-                    <div className="absolute top-[-90px] right-[-90px] h-[220px] w-[220px] rounded-full bg-blue-100 blur-3xl" />
+                    <div className="absolute -top-22.5 -right-22.5 size-55 rounded-full bg-blue-100 blur-3xl" />
                     <div
                         className={`relative transition-all duration-300 ${shake ? 'animate-[shake_0.35s_linear]' : ''} `}
                     >
@@ -229,7 +229,7 @@ export default function CustomerLoginPage() {
                         )}
 
                         <div
-                            className={`overflow-hidden transition-all duration-500 ${otpEnabled ? 'mt-10 max-h-[420px] opacity-100' : 'max-h-0 opacity-0'} `}
+                            className={`overflow-hidden transition-all duration-500 ${otpEnabled ? 'mt-10 max-h-105 opacity-100' : 'max-h-0 opacity-0'} `}
                         >
                             <div className="rounded-[34px] border border-blue-200 bg-gradient-to-br from-blue-50 to-slate-50 p-7">
                                 <div className="flex items-center justify-between">

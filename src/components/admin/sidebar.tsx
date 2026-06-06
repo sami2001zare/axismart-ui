@@ -32,12 +32,12 @@ export default function AdminSidebar() {
     return (
         <aside
             className={`flex flex-col border-l border-slate-200 bg-white transition-all duration-300 ${
-                sidebarExpanded ? 'w-[290px]' : 'w-[80px]'
+                sidebarExpanded ? 'w-72.4' : 'w-20'
             }`}
         >
             {/* HEADER */}
             <div
-                className={`flex h-[88px] items-center justify-between border-b border-slate-200 px-5 ${
+                className={`flex h-22 items-center justify-between border-b border-slate-200 px-5 ${
                     sidebarExpanded ? 'justify-between' : 'justify-center'
                 }`}
             >

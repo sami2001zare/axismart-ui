@@ -17,11 +17,11 @@ export default function AboutPage() {
                                 درباره ما
                             </span>
 
-                            <h1 className="mt-10 max-w-[900px] text-7xl leading-[1.4] font-black text-slate-900">
+                            <h1 className="mt-10 max-w-225 text-7xl leading-[1.4] font-black text-slate-900">
                                 پلتفرم تخصصی تامین قطعات صنعتی
                             </h1>
 
-                            <p className="mt-12 max-w-[900px] text-xl leading-[2.2] text-slate-600">
+                            <p className="mt-12 max-w-225 text-xl leading-[2.2] text-slate-600">
                                 AxisMart با تمرکز بر تامین تخصصی بلبرینگ، تسمه، پولی و زنجیر صنعتی،
                                 زیرساختی حرفه‌ای برای خرید خرده، عمده و پروژه‌ای ایجاد کرده است.
                             </p>
@@ -76,7 +76,7 @@ function InfoCard({ title, text }: { title: string; text: string }) {
         <div className="border border-slate-200 bg-white p-10 shadow-[0_20px_50px_rgba(15,23,42,.05)]">
             <h2 className="text-4xl font-black text-slate-900">{title}</h2>
 
-            <p className="mt-8 text-lg leading-[2] text-slate-600">{text}</p>
+            <p className="mt-8 text-lg leading-2 text-slate-600">{text}</p>
         </div>
     );
 }

@@ -100,7 +100,7 @@ function PremiumShowcase() {
                             بلبرینگ صنعتی SKF
                         </h3>
 
-                        <p className="mt-8 text-lg leading-[2] text-slate-600">
+                        <p className="mt-8 text-lg leading-loose text-slate-600">
                             مناسب برای ماشین‌آلات، خطوط تولید، تجهیزات صنعتی و پروژه‌های تخصصی.{' '}
                         </p>
                         <div className="mt-10 flex flex-wrap gap-3">

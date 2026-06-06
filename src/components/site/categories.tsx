@@ -57,7 +57,7 @@ export default function CategoriesSection() {
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="mt-8 max-w-[900px] text-5xl leading-[1.5] font-black text-slate-900"
+                        className="mt-8 max-w-225 text-5xl leading-normal font-black text-slate-900"
                     >
                         تامین تخصصی قطعات صنعتی برای پروژه‌های حرفه‌ای
                     </motion.h2>
@@ -104,14 +104,14 @@ function CategoryCard({
             whileHover={{
                 y: -10,
             }}
-            className={`relative overflow-hidden border border-slate-200 bg-white p-10 shadow-[0_30px_60px_rgba(15,23,42,.06)] transition-all duration-500 ${layout[size]}`}
+            className={`relative overflow-hidden border border-slate-200 bg-white p-10 shadow-[0_30px_60px_rgba(15,23,42,.06)] transition-all duration-500 ${layout[size as keyof typeof layout]}`}
         >
             {/* Gradient Accent */}
             <div className={`absolute top-0 right-0 h-2 w-full bg-gradient-to-r ${color}`} />
 
             {/* Glow */}
             <div
-                className={`absolute -top-20 -left-20 h-[220px] w-[220px] rounded-full bg-gradient-to-r ${color} opacity-[0.08] blur-[70px]`}
+                className={`absolute -top-20 -left-20 h-55 rounded-full bg-gradient-to-r ${color} opacity-[0.08] blur-[70px]`}
             />
             <div className="relative z-10 flex h-full flex-col justify-between">
                 <div>
@@ -126,7 +126,7 @@ function CategoryCard({
                         <div className="text-6xl">{icon}</div>
                     </div>
 
-                    <p className="mt-8 max-w-[500px] text-lg leading-[2] text-slate-600">
+                    <p className="mt-8 max-w-125 text-lg leading-loose text-slate-600">
                         {description}
                     </p>
                 </div>
