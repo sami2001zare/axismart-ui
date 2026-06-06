@@ -43,9 +43,9 @@ export default function AdminLoginPage() {
     }
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-slate-950 p-8">
-            <div className="w-full max-w-[520px] rounded-[40px] border border-slate-800 bg-slate-900 p-10">
-                <h1 className="text-4xl font-black text-white">Admin Login</h1>
+        <div className="flex min-h-screen items-center justify-center bg-slate-200 p-8">
+            <div className="w-full max-w-[520px] rounded-xl border border-slate-800 bg-slate-900 p-10 text-white">
+                <h1 className="text-4xl font-black">ورود بلبرینگ پارسا</h1>
 
                 <div className="mt-10 space-y-6">
                     <Field
@@ -53,6 +53,7 @@ export default function AdminLoginPage() {
                         placeholder="Username"
                         value={username}
                         onChange={setUsername}
+                        type="text"
                     />
 
                     <Field
@@ -69,7 +70,7 @@ export default function AdminLoginPage() {
                     disabled={loading}
                     className="mt-8 w-full rounded-2xl bg-blue-600 py-4 font-bold text-white"
                 >
-                    Login
+                    ورود
                 </button>
             </div>
         </div>

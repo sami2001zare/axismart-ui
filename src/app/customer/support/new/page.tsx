@@ -23,7 +23,7 @@ export default function NewTicketPage() {
                     <h1 className="text-4xl font-black text-slate-900">ایجاد تیکت جدید</h1>
 
                     <p className="mt-3 text-sm text-slate-500">
-                        ارسال درخواست به تیم پشتیبانی AxisMart.
+                        ارسال درخواست به تیم پشتیبانی ببرینگ پارسا.
                     </p>
                 </div>
             </div>

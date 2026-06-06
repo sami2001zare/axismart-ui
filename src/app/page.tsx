@@ -37,14 +37,6 @@ export default function HomePage() {
         .filter((cat) => productsByCategory[cat.id]?.length > 0)
         .slice(0, 3);
 
-    if (activeCategories.length === 0) {
-        return (
-            <div className="container mx-auto px-4 py-12 text-center">
-                <p className="text-slate-500">هیچ محصولی برای نمایش وجود ندارد.</p>
-            </div>
-        );
-    }
-
     return (
         <>
             <Navbar />

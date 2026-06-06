@@ -31,7 +31,7 @@ export default function WhyAxisMart() {
             <div className="mx-auto max-w-[1450px] px-8">
                 <div className="mb-20">
                     <span className="border border-blue-200 bg-blue-50 px-5 py-2 text-sm text-blue-700">
-                        چرا اکسیس مارت
+                        چرا بلبرینگ پارسا
                     </span>
 
                     <h2 className="mt-8 max-w-212.5 text-5xl leading-normal font-black text-slate-900">

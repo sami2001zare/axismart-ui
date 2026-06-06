@@ -24,8 +24,6 @@ export default function AdminDashboardPage() {
 
                 <div className="relative z-10 flex flex-col gap-8 xl:flex-row xl:items-center xl:justify-between">
                     <div>
-                        <p className="text-sm font-medium text-blue-100">AxisMart Admin Center</p>
-
                         <h1 className="mt-5 text-5xl leading-tight font-black">داشبورد مدیریت</h1>
 
                         <p className="mt-6 max-w-2xl text-sm leading-8 text-blue-100">

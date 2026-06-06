@@ -21,7 +21,7 @@ export default function SupportPage() {
                     <h1 className="text-4xl font-black text-slate-900">پشتیبانی</h1>
 
                     <p className="mt-3 text-sm text-slate-500">
-                        تیکت‌ها، درخواست‌ها و ارتباط با تیم AxisMart.
+                        تیکت‌ها، درخواست‌ها و ارتباط با تیم بلبرینگ پارسا.
                     </p>
                 </div>
 

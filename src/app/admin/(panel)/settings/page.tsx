@@ -35,7 +35,7 @@ export default function SettingsPage() {
                     </div>
 
                     <div className="space-y-7 p-8">
-                        <Field label="نام فروشگاه" placeholder="AxisMart" />
+                        <Field label="نام فروشگاه" placeholder="بلبرینگ پارسا" />
 
                         <Field label="ایمیل پشتیبانی" placeholder="support@axismart.com" />
 
