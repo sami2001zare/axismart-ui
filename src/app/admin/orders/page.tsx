@@ -27,12 +27,13 @@ export default function AdminOrdersPage() {
     const filteredOrders = useMemo(() => {
         let filtered = orderList;
         if (statusFilter !== 'all') {
-            filtered = filtered.filter(o => o.status === statusFilter);
+            filtered = filtered.filter((o) => o.status === statusFilter);
         }
         if (searchTerm) {
-            filtered = filtered.filter(o =>
-                o.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                o.customerName?.toLowerCase().includes(searchTerm.toLowerCase())
+            filtered = filtered.filter(
+                (o) =>
+                    o.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    o.customerName?.toLowerCase().includes(searchTerm.toLowerCase())
             );
         }
         return filtered;
@@ -68,8 +69,8 @@ export default function AdminOrdersPage() {
             {/* Filters */}
             <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex flex-1 gap-3">
-                    <div className="relative flex-1 max-w-md">
-                        <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                    <div className="relative max-w-md flex-1">
+                        <Search className="absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-slate-400" />
                         <input
                             type="text"
                             placeholder="جستجو (شماره سفارش یا نام مشتری)..."
@@ -111,23 +112,42 @@ export default function AdminOrdersPage() {
                         <table className="w-full text-right">
                             <thead className="border-b border-slate-200 bg-slate-50">
                                 <tr>
-                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">شماره سفارش</th>
-                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">مشتری</th>
-                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">تاریخ</th>
-                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">مبلغ کل</th>
-                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">وضعیت</th>
-                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">عملیات</th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">
+                                        شماره سفارش
+                                    </th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">
+                                        مشتری
+                                    </th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">
+                                        تاریخ
+                                    </th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">
+                                        مبلغ کل
+                                    </th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">
+                                        وضعیت
+                                    </th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">
+                                        عملیات
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {paginatedOrders.map((order) => {
                                     return (
-                                        <tr key={order.id} className="border-b border-slate-100 hover:bg-slate-50">
+                                        <tr
+                                            key={order.id}
+                                            className="border-b border-slate-100 hover:bg-slate-50"
+                                        >
                                             <td className="px-6 py-4 font-mono text-sm font-medium text-slate-900">
                                                 {order.id}
                                             </td>
-                                            <td className="px-6 py-4 text-slate-700">{order.customerName}</td>
-                                            <td className="px-6 py-4 text-slate-500">{formatDate(order.createdAt)}</td>
+                                            <td className="px-6 py-4 text-slate-700">
+                                                {order.customerName}
+                                            </td>
+                                            <td className="px-6 py-4 text-slate-500">
+                                                {formatDate(order.createdAt)}
+                                            </td>
                                             <td className="px-6 py-4 font-medium text-slate-900">
                                                 {formatPrice(order.total)}
                                             </td>
@@ -135,13 +155,22 @@ export default function AdminOrdersPage() {
                                                 <div className="flex items-center gap-2">
                                                     <select
                                                         value={order.status}
-                                                        onChange={(e) => handleStatusChange(order.id, e.target.value as Order['status'])}
+                                                        onChange={(e) =>
+                                                            handleStatusChange(
+                                                                order.id,
+                                                                e.target.value as Order['status']
+                                                            )
+                                                        }
                                                         className={`rounded-full px-3 py-1 text-xs font-medium ${statusConfig[order.status].color} border-0 focus:ring-1 focus:ring-blue-400`}
                                                     >
                                                         <option value="pending">در انتظار</option>
-                                                        <option value="processing">در حال پردازش</option>
+                                                        <option value="processing">
+                                                            در حال پردازش
+                                                        </option>
                                                         <option value="shipped">ارسال شده</option>
-                                                        <option value="delivered">تحویل داده شده</option>
+                                                        <option value="delivered">
+                                                            تحویل داده شده
+                                                        </option>
                                                         <option value="cancelled">لغو شده</option>
                                                     </select>
                                                 </div>
@@ -167,7 +196,7 @@ export default function AdminOrdersPage() {
             {totalPages > 1 && (
                 <div className="mt-6 flex justify-center gap-2">
                     <button
-                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                        onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                         disabled={currentPage === 1}
                         className="rounded-xl border border-slate-200 px-3 py-1.5 text-sm disabled:opacity-50"
                     >
@@ -177,7 +206,7 @@ export default function AdminOrdersPage() {
                         {currentPage} از {totalPages}
                     </span>
                     <button
-                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                        onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                         disabled={currentPage === totalPages}
                         className="rounded-xl border border-slate-200 px-3 py-1.5 text-sm disabled:opacity-50"
                     >
@@ -215,7 +244,9 @@ export default function AdminOrdersPage() {
                                 </div>
                                 <div>
                                     <p className="text-sm text-slate-500">وضعیت</p>
-                                    <span className={`inline-block rounded-full px-2 py-1 text-xs ${statusConfig[selectedOrder.status].color}`}>
+                                    <span
+                                        className={`inline-block rounded-full px-2 py-1 text-xs ${statusConfig[selectedOrder.status].color}`}
+                                    >
                                         {statusConfig[selectedOrder.status].label}
                                     </span>
                                 </div>
@@ -235,10 +266,16 @@ export default function AdminOrdersPage() {
                                         <tbody>
                                             {selectedOrder.items.map((item, idx) => (
                                                 <tr key={idx} className="border-b border-slate-100">
-                                                    <td className="px-4 py-2">{item.productName}</td>
+                                                    <td className="px-4 py-2">
+                                                        {item.productName}
+                                                    </td>
                                                     <td className="px-4 py-2">{item.quantity}</td>
-                                                    <td className="px-4 py-2">{formatPrice(item.price)}</td>
-                                                    <td className="px-4 py-2">{formatPrice(item.price * item.quantity)}</td>
+                                                    <td className="px-4 py-2">
+                                                        {formatPrice(item.price)}
+                                                    </td>
+                                                    <td className="px-4 py-2">
+                                                        {formatPrice(item.price * item.quantity)}
+                                                    </td>
                                                 </tr>
                                             ))}
                                         </tbody>
@@ -247,7 +284,9 @@ export default function AdminOrdersPage() {
                             </div>
                             <div className="flex justify-between border-t border-slate-100 pt-4">
                                 <span className="font-semibold text-slate-900">جمع کل:</span>
-                                <span className="text-xl font-bold text-blue-600">{formatPrice(selectedOrder.total)}</span>
+                                <span className="text-xl font-bold text-blue-600">
+                                    {formatPrice(selectedOrder.total)}
+                                </span>
                             </div>
                         </div>
                     </div>

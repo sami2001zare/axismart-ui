@@ -6,8 +6,8 @@ export interface Product {
     id: string;
     name: string;
     slug: string;
-    categoryId: string;    // reference to category id
-    brandId: string;       // reference to brand id
+    categoryId: string; // reference to category id
+    brandId: string; // reference to brand id
     price: number;
     stock: number;
     description: string;
@@ -41,9 +41,7 @@ export const useProductStore = create<ProductState>()(
 
             updateProduct: (id, data) =>
                 set((state) => ({
-                    products: state.products.map((p) =>
-                        p.id === id ? { ...p, ...data } : p
-                    ),
+                    products: state.products.map((p) => (p.id === id ? { ...p, ...data } : p)),
                 })),
 
             deleteProduct: (id) =>

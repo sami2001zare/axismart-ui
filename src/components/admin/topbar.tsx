@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState, useRef, useEffect } from "react";
-import { Menu, User, Settings, LogOut } from "lucide-react";
+import { useState, useRef, useEffect } from 'react';
+import { Menu, User, Settings, LogOut } from 'lucide-react';
 
 export default function AdminTopbar() {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -14,8 +14,8 @@ export default function AdminTopbar() {
                 setIsProfileOpen(false);
             }
         };
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
     return (
@@ -53,34 +53,32 @@ export default function AdminTopbar() {
                             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-600 font-bold text-white">
                                 رط
                             </div>
-                            <div className="hidden lg:block text-right">
-                                <h4 className="text-sm font-bold text-slate-900">
-                                    رسول طاهری
-                                </h4>
-                                <p className="mt-1 text-xs text-slate-500">
-                                    مدیر سیستم
-                                </p>
+                            <div className="hidden text-right lg:block">
+                                <h4 className="text-sm font-bold text-slate-900">رسول طاهری</h4>
+                                <p className="mt-1 text-xs text-slate-500">مدیر سیستم</p>
                             </div>
                         </button>
 
                         {/* Dropdown Menu */}
                         {isProfileOpen && (
-                            <div className="absolute left-0 top-full mt-2 w-56 rounded-2xl border border-slate-200 bg-white shadow-lg z-10 overflow-hidden">
-                                <div className="p-3 border-b border-slate-100">
-                                    <p className="text-sm font-semibold text-slate-900">رسول طاهری</p>
+                            <div className="absolute top-full left-0 z-10 mt-2 w-56 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg">
+                                <div className="border-b border-slate-100 p-3">
+                                    <p className="text-sm font-semibold text-slate-900">
+                                        رسول طاهری
+                                    </p>
                                     <p className="text-xs text-slate-500">rasoul@axismart.com</p>
                                 </div>
                                 <div className="py-2">
-                                    <button className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition">
+                                    <button className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-slate-700 transition hover:bg-slate-50">
                                         <User size={16} />
                                         <span>پروفایل من</span>
                                     </button>
-                                    <button className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition">
+                                    <button className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-slate-700 transition hover:bg-slate-50">
                                         <Settings size={16} />
                                         <span>تنظیمات</span>
                                     </button>
                                     <hr className="my-1 border-slate-100" />
-                                    <button className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition">
+                                    <button className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-600 transition hover:bg-red-50">
                                         <LogOut size={16} />
                                         <span>خروج</span>
                                     </button>

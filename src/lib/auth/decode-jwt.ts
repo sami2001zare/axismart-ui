@@ -1,6 +1,6 @@
 // src/lib/auth/decode-jwt.ts
 
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from 'jwt-decode';
 
 export interface AdminJwtPayload {
     sub: string;
@@ -10,16 +10,10 @@ export interface AdminJwtPayload {
     iat: number;
 }
 
-export function decodeJWT(
-    accessToken: string
-) {
-
+export function decodeJWT(accessToken: string) {
     try {
-        return jwtDecode<AdminJwtPayload>(
-            accessToken
-        );
+        return jwtDecode<AdminJwtPayload>(accessToken);
     } catch {
-
         return null;
     }
 }

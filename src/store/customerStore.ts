@@ -17,7 +17,9 @@ export interface Customer {
 
 interface CustomerState {
     customers: Customer[];
-    addCustomer: (customer: Omit<Customer, 'id' | 'createdAt' | 'totalOrders' | 'totalSpent' | 'status'>) => void;
+    addCustomer: (
+        customer: Omit<Customer, 'id' | 'createdAt' | 'totalOrders' | 'totalSpent' | 'status'>
+    ) => void;
     updateCustomer: (id: string, data: Partial<Customer>) => void;
     deleteCustomer: (id: string) => void;
 }
@@ -83,9 +85,7 @@ export const useCustomerStore = create<CustomerState>()(
 
             updateCustomer: (id, data) =>
                 set((state) => ({
-                    customers: state.customers.map((c) =>
-                        c.id === id ? { ...c, ...data } : c
-                    ),
+                    customers: state.customers.map((c) => (c.id === id ? { ...c, ...data } : c)),
                 })),
 
             deleteCustomer: (id) =>

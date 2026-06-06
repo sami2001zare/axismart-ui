@@ -6,7 +6,7 @@ export interface Brand {
     id: string;
     name: string;
     slug: string;
-    logo?: string;      // optional logo URL
+    logo?: string; // optional logo URL
     description?: string;
 }
 
@@ -31,17 +31,12 @@ export const useBrandStore = create<BrandState>()(
 
             addBrand: (brand) =>
                 set((state) => ({
-                    brands: [
-                        ...state.brands,
-                        { ...brand, id: Date.now().toString() },
-                    ],
+                    brands: [...state.brands, { ...brand, id: Date.now().toString() }],
                 })),
 
             updateBrand: (id, data) =>
                 set((state) => ({
-                    brands: state.brands.map((b) =>
-                        b.id === id ? { ...b, ...data } : b
-                    ),
+                    brands: state.brands.map((b) => (b.id === id ? { ...b, ...data } : b)),
                 })),
 
             deleteBrand: (id) =>

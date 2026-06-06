@@ -1,0 +1,45 @@
+# Dependencies
+node_modules
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build outputs
+.next
+out
+dist
+build
+
+# Public assets
+public
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.ico
+*.webp
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Configuration files
+*.config.js
+*.config.ts
+package.json
+package-lock.json
+
+# Logs
+logs
+*.log
+
+# IDE
+.vscode
+.idea
+
+# Misc
+coverage
+.vercel
+.cache

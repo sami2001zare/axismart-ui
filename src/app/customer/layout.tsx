@@ -1,34 +1,40 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
-    LayoutDashboard, ShoppingBag, Heart, MapPin, User, Shield,
-    Bell, Receipt, LogOut, Search, ChevronDown, MessageSquare,
-    FileSpreadsheet, Menu
-} from "lucide-react";
-import { useCustomerUiStore } from "@/store/customerUiStore";
+    LayoutDashboard,
+    ShoppingBag,
+    Heart,
+    MapPin,
+    User,
+    Shield,
+    Bell,
+    Receipt,
+    LogOut,
+    Search,
+    ChevronDown,
+    MessageSquare,
+    FileSpreadsheet,
+    Menu,
+} from 'lucide-react';
+import { useCustomerUiStore } from '@/store/customerUiStore';
 
-export default function CustomerLayout({
-
-    children,
-}: {
-    children: React.ReactNode;
-}) {
+export default function CustomerLayout({ children }: { children: React.ReactNode }) {
     const { sidebarExpanded, toggleSidebar } = useCustomerUiStore();
     const pathname = usePathname();
 
     const navItems = [
-        { href: "/customer", icon: LayoutDashboard, label: "داشبورد" },
-        { href: "/customer/orders", icon: ShoppingBag, label: "سفارشات" },
-        { href: "/customer/wishlist", icon: Heart, label: "علاقه‌مندی‌ها" },
-        { href: "/customer/addresses", icon: MapPin, label: "آدرس‌ها" },
-        { href: "/customer/profile", icon: User, label: "پروفایل" },
-        { href: "/customer/security", icon: Shield, label: "امنیت" },
-        { href: "/customer/notifications", icon: Bell, label: "اعلان‌ها" },
-        { href: "/customer/invoices", icon: Receipt, label: "فاکتورها" },
-        { href: "/customer/support", icon: MessageSquare, label: "پشتیبانی" },
-        { href: "/customer/quotes", icon: FileSpreadsheet, label: "استعلام قیمت" },
+        { href: '/customer', icon: LayoutDashboard, label: 'داشبورد' },
+        { href: '/customer/orders', icon: ShoppingBag, label: 'سفارشات' },
+        { href: '/customer/wishlist', icon: Heart, label: 'علاقه‌مندی‌ها' },
+        { href: '/customer/addresses', icon: MapPin, label: 'آدرس‌ها' },
+        { href: '/customer/profile', icon: User, label: 'پروفایل' },
+        { href: '/customer/security', icon: Shield, label: 'امنیت' },
+        { href: '/customer/notifications', icon: Bell, label: 'اعلان‌ها' },
+        { href: '/customer/invoices', icon: Receipt, label: 'فاکتورها' },
+        { href: '/customer/support', icon: MessageSquare, label: 'پشتیبانی' },
+        { href: '/customer/quotes', icon: FileSpreadsheet, label: 'استعلام قیمت' },
     ];
 
     return (
@@ -36,25 +42,30 @@ export default function CustomerLayout({
             <div className="flex min-h-screen">
                 {/* SIDEBAR */}
                 <aside
-                    className={`fixed right-0 top-0 z-50 h-screen bg-white border-l border-slate-200 transition-all duration-300 flex flex-col ${sidebarExpanded ? "w-[320px]" : "w-[80px]"
-                        }`}
+                    className={`fixed top-0 right-0 z-50 flex h-screen flex-col border-l border-slate-200 bg-white transition-all duration-300 ${
+                        sidebarExpanded ? 'w-[320px]' : 'w-[80px]'
+                    }`}
                 >
                     {/* Sidebar Header */}
-                    <div className={`flex h-20 items-center justify-between border-b border-slate-200 px-5 ${sidebarExpanded ? "justify-between" : "justify-center"}`}>
+                    <div
+                        className={`flex h-20 items-center justify-between border-b border-slate-200 px-5 ${sidebarExpanded ? 'justify-between' : 'justify-center'}`}
+                    >
                         {sidebarExpanded && (
                             <h2 className="text-2xl font-black text-slate-900">بلبرینگ پارسا</h2>
                         )}
                         <button
                             onClick={toggleSidebar}
                             className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 transition-transform duration-300"
-                            style={{ transform: sidebarExpanded ? "rotate(0deg)" : "rotate(180deg)" }}
+                            style={{
+                                transform: sidebarExpanded ? 'rotate(0deg)' : 'rotate(180deg)',
+                            }}
                         >
                             <ChevronDown size={16} className="rotate-90" />
                         </button>
                     </div>
 
                     {/* Sidebar Navigation */}
-                    <nav className="flex-1 overflow-y-auto py-6 space-y-2 px-3">
+                    <nav className="flex-1 space-y-2 overflow-y-auto px-3 py-6">
                         {navItems.map((item) => {
                             const isActive = pathname === item.href;
                             const Icon = item.icon;
@@ -62,10 +73,11 @@ export default function CustomerLayout({
                                 <Link
                                     key={item.href}
                                     href={item.href}
-                                    className={`flex items-center gap-4 rounded-2xl px-4 py-3 text-sm font-medium transition ${isActive
-                                            ? "bg-blue-600 text-white"
-                                            : "text-slate-700 hover:bg-blue-50 hover:text-blue-700"
-                                        } ${sidebarExpanded ? "justify-start" : "justify-center"}`}
+                                    className={`flex items-center gap-4 rounded-2xl px-4 py-3 text-sm font-medium transition ${
+                                        isActive
+                                            ? 'bg-blue-600 text-white'
+                                            : 'text-slate-700 hover:bg-blue-50 hover:text-blue-700'
+                                    } ${sidebarExpanded ? 'justify-start' : 'justify-center'}`}
                                 >
                                     <Icon size={18} />
                                     {sidebarExpanded && <span>{item.label}</span>}
@@ -89,10 +101,13 @@ export default function CustomerLayout({
                     )} */}
 
                     {/* Logout Button */}
-                    <div className={`p-5 border-t border-slate-200 ${sidebarExpanded ? "" : "flex justify-center"}`}>
+                    <div
+                        className={`border-t border-slate-200 p-5 ${sidebarExpanded ? '' : 'flex justify-center'}`}
+                    >
                         <button
-                            className={`flex w-full items-center gap-4 rounded-2xl border border-slate-200 px-5 py-4 text-sm font-medium text-slate-700 hover:bg-red-50 hover:text-red-600 transition ${sidebarExpanded ? "justify-start" : "justify-center"
-                                }`}
+                            className={`flex w-full items-center gap-4 rounded-2xl border border-slate-200 px-5 py-4 text-sm font-medium text-slate-700 transition hover:bg-red-50 hover:text-red-600 ${
+                                sidebarExpanded ? 'justify-start' : 'justify-center'
+                            }`}
                         >
                             <LogOut size={16} />
                             {sidebarExpanded && <span>خروج</span>}
@@ -103,7 +118,7 @@ export default function CustomerLayout({
                 {/* MAIN CONTENT */}
                 <div
                     className="flex-1 transition-all duration-300"
-                    style={{ marginRight: sidebarExpanded ? "320px" : "80px" }}
+                    style={{ marginRight: sidebarExpanded ? '320px' : '80px' }}
                 >
                     {/* HEADER */}
                     <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur-xl">
@@ -127,7 +142,9 @@ export default function CustomerLayout({
                             <div className="flex items-center gap-5">
                                 <div className="text-left">
                                     <p className="text-sm font-bold text-slate-900">سامان زارع</p>
-                                    <p className="mt-2 text-xs text-slate-500">Wholesale Customer</p>
+                                    <p className="mt-2 text-xs text-slate-500">
+                                        Wholesale Customer
+                                    </p>
                                 </div>
                                 <button className="flex items-center gap-3 rounded-2xl border border-slate-200 px-4 py-3">
                                     <div className="h-11 w-11 rounded-xl bg-blue-600" />

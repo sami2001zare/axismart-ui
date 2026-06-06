@@ -2,16 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import ProductCard from '@/components/ProductCard';
-import {
-    Search,
-    Filter,
-    X,
-    ChevronDown,
-    ArrowUpDown,
-    Package,
-    Grid3X3,
-    List,
-} from 'lucide-react';
+import { Search, Filter, X, ChevronDown, ArrowUpDown, Package, Grid3X3, List } from 'lucide-react';
 import { useProductStore } from '@/store/productStore';
 import { useCategoryStore } from '@/store/categoryStore';
 
@@ -40,23 +31,23 @@ export default function ProductsPage() {
     const filteredProducts = useMemo(() => {
         let filtered = [...productList];
         if (searchTerm.trim()) {
-            filtered = filtered.filter(p =>
+            filtered = filtered.filter((p) =>
                 p.name.toLowerCase().includes(searchTerm.toLowerCase())
             );
         }
         if (selectedCategoryId !== 'all') {
-            filtered = filtered.filter(p => p.categoryId === selectedCategoryId);
+            filtered = filtered.filter((p) => p.categoryId === selectedCategoryId);
         }
         if (minPrice) {
-            filtered = filtered.filter(p => p.price >= Number(minPrice));
+            filtered = filtered.filter((p) => p.price >= Number(minPrice));
         }
         if (maxPrice) {
-            filtered = filtered.filter(p => p.price <= Number(maxPrice));
+            filtered = filtered.filter((p) => p.price <= Number(maxPrice));
         }
         if (stockFilter === 'in_stock') {
-            filtered = filtered.filter(p => p.stock > 0);
+            filtered = filtered.filter((p) => p.stock > 0);
         } else if (stockFilter === 'out_of_stock') {
-            filtered = filtered.filter(p => p.stock === 0);
+            filtered = filtered.filter((p) => p.stock === 0);
         }
         return filtered;
     }, [productList, searchTerm, selectedCategoryId, minPrice, maxPrice, stockFilter]);
@@ -103,21 +94,26 @@ export default function ProductsPage() {
         setCurrentPage(1);
     };
 
-    const hasActiveFilters = searchTerm || selectedCategoryId !== 'all' || minPrice || maxPrice || stockFilter !== 'all';
+    const hasActiveFilters =
+        searchTerm || selectedCategoryId !== 'all' || minPrice || maxPrice || stockFilter !== 'all';
 
     // Helper to get category name
     const getCategoryName = (id: string) => {
-        const cat = categoryList.find(c => c.id === id);
+        const cat = categoryList.find((c) => c.id === id);
         return cat?.name || id;
     };
 
     return (
-        <div className="bg-gradient-to-b from-slate-50 to-white min-h-screen py-8" dir="rtl">
+        <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-8" dir="rtl">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Hero / Title */}
                 <div className="mb-10 text-center">
-                    <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">محصولات</h1>
-                    <p className="mt-2 text-slate-500">بهترین بلبرینگ‌های صنعتی و خودرو با بالاترین کیفیت</p>
+                    <h1 className="text-4xl font-extrabold tracking-tight text-slate-900">
+                        محصولات
+                    </h1>
+                    <p className="mt-2 text-slate-500">
+                        بهترین بلبرینگ‌های صنعتی و خودرو با بالاترین کیفیت
+                    </p>
                 </div>
 
                 {/* Filter Bar (desktop always, mobile toggle) */}
@@ -128,21 +124,30 @@ export default function ProductsPage() {
                     >
                         <Filter size={16} />
                         {showFilters ? 'بستن فیلترها' : 'فیلترها'}
-                        <ChevronDown size={14} className={`transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+                        <ChevronDown
+                            size={14}
+                            className={`transition-transform ${showFilters ? 'rotate-180' : ''}`}
+                        />
                     </button>
 
                     <div className="flex gap-2">
                         <button
                             onClick={() => setViewMode('grid')}
-                            className={`rounded-xl p-2 transition ${viewMode === 'grid' ? 'bg-blue-100 text-blue-600' : 'bg-white text-slate-400 hover:text-slate-600'
-                                }`}
+                            className={`rounded-xl p-2 transition ${
+                                viewMode === 'grid'
+                                    ? 'bg-blue-100 text-blue-600'
+                                    : 'bg-white text-slate-400 hover:text-slate-600'
+                            }`}
                         >
                             <Grid3X3 size={18} />
                         </button>
                         <button
                             onClick={() => setViewMode('list')}
-                            className={`rounded-xl p-2 transition ${viewMode === 'list' ? 'bg-blue-100 text-blue-600' : 'bg-white text-slate-400 hover:text-slate-600'
-                                }`}
+                            className={`rounded-xl p-2 transition ${
+                                viewMode === 'list'
+                                    ? 'bg-blue-100 text-blue-600'
+                                    : 'bg-white text-slate-400 hover:text-slate-600'
+                            }`}
                         >
                             <List size={18} />
                         </button>
@@ -150,17 +155,24 @@ export default function ProductsPage() {
                 </div>
 
                 {/* Filters Panel */}
-                <div className={`mb-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all ${showFilters ? 'block' : 'hidden lg:block'}`}>
+                <div
+                    className={`mb-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all ${showFilters ? 'block' : 'hidden lg:block'}`}
+                >
                     <div className="flex flex-wrap items-end gap-4">
                         {/* Search */}
-                        <div className="flex-1 min-w-[180px]">
-                            <label className="mb-1 block text-sm font-medium text-slate-700">جستجو</label>
+                        <div className="min-w-[180px] flex-1">
+                            <label className="mb-1 block text-sm font-medium text-slate-700">
+                                جستجو
+                            </label>
                             <div className="relative">
-                                <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                                <Search className="absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-slate-400" />
                                 <input
                                     type="text"
                                     value={searchTerm}
-                                    onChange={(e) => { setSearchTerm(e.target.value); handleFilterChange(); }}
+                                    onChange={(e) => {
+                                        setSearchTerm(e.target.value);
+                                        handleFilterChange();
+                                    }}
                                     className="w-full rounded-xl border border-slate-200 py-2.5 pr-10 pl-3 outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-200"
                                     placeholder="نام محصول..."
                                 />
@@ -169,26 +181,38 @@ export default function ProductsPage() {
 
                         {/* Category */}
                         <div className="min-w-[160px]">
-                            <label className="mb-1 block text-sm font-medium text-slate-700">دسته‌بندی</label>
+                            <label className="mb-1 block text-sm font-medium text-slate-700">
+                                دسته‌بندی
+                            </label>
                             <select
                                 value={selectedCategoryId}
-                                onChange={(e) => { setSelectedCategoryId(e.target.value); handleFilterChange(); }}
+                                onChange={(e) => {
+                                    setSelectedCategoryId(e.target.value);
+                                    handleFilterChange();
+                                }}
                                 className="w-full rounded-xl border border-slate-200 px-3 py-2.5 outline-none focus:border-blue-400"
                             >
                                 <option value="all">همه</option>
-                                {categoryList.map(cat => (
-                                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                {categoryList.map((cat) => (
+                                    <option key={cat.id} value={cat.id}>
+                                        {cat.name}
+                                    </option>
                                 ))}
                             </select>
                         </div>
 
                         {/* Min Price */}
                         <div className="min-w-[140px]">
-                            <label className="mb-1 block text-sm font-medium text-slate-700">حداقل قیمت</label>
+                            <label className="mb-1 block text-sm font-medium text-slate-700">
+                                حداقل قیمت
+                            </label>
                             <input
                                 type="number"
                                 value={minPrice}
-                                onChange={(e) => { setMinPrice(e.target.value); handleFilterChange(); }}
+                                onChange={(e) => {
+                                    setMinPrice(e.target.value);
+                                    handleFilterChange();
+                                }}
                                 className="w-full rounded-xl border border-slate-200 px-3 py-2.5 outline-none focus:border-blue-400"
                                 placeholder="۰ تومان"
                             />
@@ -196,11 +220,16 @@ export default function ProductsPage() {
 
                         {/* Max Price */}
                         <div className="min-w-[140px]">
-                            <label className="mb-1 block text-sm font-medium text-slate-700">حداکثر قیمت</label>
+                            <label className="mb-1 block text-sm font-medium text-slate-700">
+                                حداکثر قیمت
+                            </label>
                             <input
                                 type="number"
                                 value={maxPrice}
-                                onChange={(e) => { setMaxPrice(e.target.value); handleFilterChange(); }}
+                                onChange={(e) => {
+                                    setMaxPrice(e.target.value);
+                                    handleFilterChange();
+                                }}
                                 className="w-full rounded-xl border border-slate-200 px-3 py-2.5 outline-none focus:border-blue-400"
                                 placeholder="نامحدود"
                             />
@@ -208,10 +237,15 @@ export default function ProductsPage() {
 
                         {/* Stock */}
                         <div className="min-w-[130px]">
-                            <label className="mb-1 block text-sm font-medium text-slate-700">موجودی</label>
+                            <label className="mb-1 block text-sm font-medium text-slate-700">
+                                موجودی
+                            </label>
                             <select
                                 value={stockFilter}
-                                onChange={(e) => { setStockFilter(e.target.value as StockFilter); handleFilterChange(); }}
+                                onChange={(e) => {
+                                    setStockFilter(e.target.value as StockFilter);
+                                    handleFilterChange();
+                                }}
                                 className="w-full rounded-xl border border-slate-200 px-3 py-2.5 outline-none focus:border-blue-400"
                             >
                                 <option value="all">همه</option>
@@ -222,9 +256,11 @@ export default function ProductsPage() {
 
                         {/* Sort */}
                         <div className="min-w-[170px]">
-                            <label className="mb-1 block text-sm font-medium text-slate-700">مرتب‌سازی</label>
+                            <label className="mb-1 block text-sm font-medium text-slate-700">
+                                مرتب‌سازی
+                            </label>
                             <div className="relative">
-                                <ArrowUpDown className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                                <ArrowUpDown className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-slate-400" />
                                 <select
                                     value={sortBy}
                                     onChange={(e) => setSortBy(e.target.value as SortOption)}
@@ -257,14 +293,22 @@ export default function ProductsPage() {
                         <Package size={16} />
                         <span>{totalItems} محصول</span>
                         {hasActiveFilters && (
-                            <button onClick={clearFilters} className="text-blue-600 hover:underline">(حذف فیلترها)</button>
+                            <button
+                                onClick={clearFilters}
+                                className="text-blue-600 hover:underline"
+                            >
+                                (حذف فیلترها)
+                            </button>
                         )}
                     </div>
                     <div className="flex items-center gap-3">
                         <span className="text-sm text-slate-500">نمایش:</span>
                         <select
                             value={itemsPerPage}
-                            onChange={(e) => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}
+                            onChange={(e) => {
+                                setItemsPerPage(Number(e.target.value));
+                                setCurrentPage(1);
+                            }}
                             className="rounded-xl border border-slate-200 px-3 py-1.5 text-sm outline-none focus:border-blue-400"
                         >
                             <option value={12}>۱۲</option>
@@ -283,7 +327,10 @@ export default function ProductsPage() {
                         </div>
                         <p className="text-slate-500">محصولی با این مشخصات یافت نشد.</p>
                         {hasActiveFilters && (
-                            <button onClick={clearFilters} className="mt-3 text-blue-600 hover:underline">
+                            <button
+                                onClick={clearFilters}
+                                className="mt-3 text-blue-600 hover:underline"
+                            >
                                 حذف فیلترها
                             </button>
                         )}
@@ -292,17 +339,24 @@ export default function ProductsPage() {
                     <>
                         {viewMode === 'grid' ? (
                             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                                {paginatedProducts.map(product => (
+                                {paginatedProducts.map((product) => (
                                     <ProductCard key={product.id} product={product} />
                                 ))}
                             </div>
                         ) : (
                             <div className="space-y-4">
-                                {paginatedProducts.map(product => (
-                                    <div key={product.id} className="flex flex-wrap gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:shadow-md">
-                                        <div className="w-24 h-24 flex-shrink-0 overflow-hidden rounded-xl bg-slate-100">
+                                {paginatedProducts.map((product) => (
+                                    <div
+                                        key={product.id}
+                                        className="flex flex-wrap gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:shadow-md"
+                                    >
+                                        <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-xl bg-slate-100">
                                             {product.imageUrl ? (
-                                                <img src={product.imageUrl} alt={product.name} className="h-full w-full object-cover" />
+                                                <img
+                                                    src={product.imageUrl}
+                                                    alt={product.name}
+                                                    className="h-full w-full object-cover"
+                                                />
                                             ) : (
                                                 <div className="flex h-full items-center justify-center text-slate-300">
                                                     <Package size={24} />
@@ -310,19 +364,33 @@ export default function ProductsPage() {
                                             )}
                                         </div>
                                         <div className="flex-1">
-                                            <h3 className="font-semibold text-slate-800">{product.name}</h3>
-                                            <p className="mt-1 text-sm text-slate-500 line-clamp-1">{product.description}</p>
+                                            <h3 className="font-semibold text-slate-800">
+                                                {product.name}
+                                            </h3>
+                                            <p className="mt-1 line-clamp-1 text-sm text-slate-500">
+                                                {product.description}
+                                            </p>
                                             <div className="mt-2 flex flex-wrap items-center gap-3">
-                                                <span className="text-lg font-bold text-blue-600">{product.price.toLocaleString()} تومان</span>
-                                                <span className="text-xs text-slate-400">موجودی: {product.stock}</span>
-                                                <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${product.stock > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                                <span className="text-lg font-bold text-blue-600">
+                                                    {product.price.toLocaleString()} تومان
+                                                </span>
+                                                <span className="text-xs text-slate-400">
+                                                    موجودی: {product.stock}
+                                                </span>
+                                                <span
+                                                    className={`rounded-full px-2 py-0.5 text-xs font-medium ${product.stock > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}
+                                                >
                                                     {product.stock > 0 ? 'موجود' : 'ناموجود'}
                                                 </span>
-                                                <span className="text-xs text-slate-400">دسته: {getCategoryName(product.categoryId)}</span>
+                                                <span className="text-xs text-slate-400">
+                                                    دسته: {getCategoryName(product.categoryId)}
+                                                </span>
                                             </div>
                                         </div>
                                         <div className="flex items-center">
-                                            <button className="rounded-xl bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700">افزودن به سبد</button>
+                                            <button className="rounded-xl bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700">
+                                                افزودن به سبد
+                                            </button>
                                         </div>
                                     </div>
                                 ))}
@@ -333,9 +401,9 @@ export default function ProductsPage() {
                         {totalPages > 1 && (
                             <div className="mt-10 flex flex-wrap justify-center gap-2">
                                 <button
-                                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                                     disabled={currentPage === 1}
-                                    className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium disabled:opacity-50 hover:bg-slate-50"
+                                    className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium hover:bg-slate-50 disabled:opacity-50"
                                 >
                                     قبلی
                                 </button>
@@ -343,25 +411,29 @@ export default function ProductsPage() {
                                     let pageNum;
                                     if (totalPages <= 5) pageNum = i + 1;
                                     else if (currentPage <= 3) pageNum = i + 1;
-                                    else if (currentPage >= totalPages - 2) pageNum = totalPages - 4 + i;
+                                    else if (currentPage >= totalPages - 2)
+                                        pageNum = totalPages - 4 + i;
                                     else pageNum = currentPage - 2 + i;
                                     return (
                                         <button
                                             key={pageNum}
                                             onClick={() => setCurrentPage(pageNum)}
-                                            className={`min-w-[40px] rounded-xl px-3 py-2 text-sm font-medium transition ${currentPage === pageNum
+                                            className={`min-w-[40px] rounded-xl px-3 py-2 text-sm font-medium transition ${
+                                                currentPage === pageNum
                                                     ? 'bg-blue-600 text-white shadow-md'
                                                     : 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
-                                                }`}
+                                            }`}
                                         >
                                             {pageNum}
                                         </button>
                                     );
                                 })}
                                 <button
-                                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                    onClick={() =>
+                                        setCurrentPage((p) => Math.min(totalPages, p + 1))
+                                    }
                                     disabled={currentPage === totalPages}
-                                    className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium disabled:opacity-50 hover:bg-slate-50"
+                                    className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium hover:bg-slate-50 disabled:opacity-50"
                                 >
                                     بعدی
                                 </button>

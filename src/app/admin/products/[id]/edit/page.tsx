@@ -35,7 +35,7 @@ export default function EditProductPage() {
 
     // Load product data
     useEffect(() => {
-        const product = (Array.isArray(products) ? products : []).find(p => p.id === productId);
+        const product = (Array.isArray(products) ? products : []).find((p) => p.id === productId);
         if (product) {
             setFormData({
                 name: product.name,
@@ -56,13 +56,13 @@ export default function EditProductPage() {
     }, [productId, products, router]);
 
     // Auto‑generate slug from name (optional, only if slug is empty or user hasn't touched)
-    const generateSlug = (name: string) => {
-        return name
-            .trim()
-            .toLowerCase()
-            .replace(/[^\u0600-\u06FF\u0750-\u077F\u08A0-\u08FFa-z0-9]+/g, '-')
-            .replace(/^-+|-+$/g, '');
-    };
+    // const generateSlug = (name: string) => {
+    //     return name
+    //         .trim()
+    //         .toLowerCase()
+    //         .replace(/[^\u0600-\u06FF\u0750-\u077F\u08A0-\u08FFa-z0-9]+/g, '-')
+    //         .replace(/^-+|-+$/g, '');
+    // };
 
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const name = e.target.value;
@@ -176,9 +176,11 @@ export default function EditProductPage() {
             <form onSubmit={handleSubmit} className="space-y-8">
                 <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
                     {/* Main fields - 2 columns */}
-                    <div className="lg:col-span-2 space-y-6">
+                    <div className="space-y-6 lg:col-span-2">
                         <div className="rounded-2xl border border-slate-200 bg-white p-6">
-                            <h2 className="mb-4 text-lg font-semibold text-slate-900">اطلاعات پایه</h2>
+                            <h2 className="mb-4 text-lg font-semibold text-slate-900">
+                                اطلاعات پایه
+                            </h2>
                             <div className="space-y-5">
                                 {/* Name */}
                                 <div>
@@ -190,12 +192,15 @@ export default function EditProductPage() {
                                         name="name"
                                         value={formData.name}
                                         onChange={handleNameChange}
-                                        className={`w-full rounded-xl border px-4 py-2.5 outline-none transition focus:ring-2 ${errors.name
+                                        className={`w-full rounded-xl border px-4 py-2.5 transition outline-none focus:ring-2 ${
+                                            errors.name
                                                 ? 'border-red-500 focus:ring-red-200'
                                                 : 'border-slate-200 focus:border-blue-400 focus:ring-blue-100'
-                                            }`}
+                                        }`}
                                     />
-                                    {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
+                                    {errors.name && (
+                                        <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+                                    )}
                                 </div>
 
                                 {/* Slug */}
@@ -208,13 +213,18 @@ export default function EditProductPage() {
                                         name="slug"
                                         value={formData.slug}
                                         onChange={handleChange}
-                                        className={`w-full rounded-xl border px-4 py-2.5 outline-none transition focus:ring-2 ${errors.slug
+                                        className={`w-full rounded-xl border px-4 py-2.5 transition outline-none focus:ring-2 ${
+                                            errors.slug
                                                 ? 'border-red-500 focus:ring-red-200'
                                                 : 'border-slate-200 focus:border-blue-400 focus:ring-blue-100'
-                                            }`}
+                                        }`}
                                     />
-                                    {errors.slug && <p className="mt-1 text-sm text-red-500">{errors.slug}</p>}
-                                    <p className="mt-1 text-xs text-slate-400">فقط حروف انگلیسی، اعداد و خط تیره مجاز است</p>
+                                    {errors.slug && (
+                                        <p className="mt-1 text-sm text-red-500">{errors.slug}</p>
+                                    )}
+                                    <p className="mt-1 text-xs text-slate-400">
+                                        فقط حروف انگلیسی، اعداد و خط تیره مجاز است
+                                    </p>
                                 </div>
 
                                 {/* Category & Brand row */}
@@ -227,8 +237,11 @@ export default function EditProductPage() {
                                             name="categoryId"
                                             value={formData.categoryId}
                                             onChange={handleChange}
-                                            className={`w-full rounded-xl border px-4 py-2.5 outline-none ${errors.categoryId ? 'border-red-500' : 'border-slate-200 focus:border-blue-400'
-                                                }`}
+                                            className={`w-full rounded-xl border px-4 py-2.5 outline-none ${
+                                                errors.categoryId
+                                                    ? 'border-red-500'
+                                                    : 'border-slate-200 focus:border-blue-400'
+                                            }`}
                                         >
                                             <option value="">انتخاب کنید</option>
                                             {categoryList.map((cat) => (
@@ -237,7 +250,11 @@ export default function EditProductPage() {
                                                 </option>
                                             ))}
                                         </select>
-                                        {errors.categoryId && <p className="mt-1 text-sm text-red-500">{errors.categoryId}</p>}
+                                        {errors.categoryId && (
+                                            <p className="mt-1 text-sm text-red-500">
+                                                {errors.categoryId}
+                                            </p>
+                                        )}
                                     </div>
                                     <div>
                                         <label className="mb-1 block text-sm font-medium text-slate-700">
@@ -247,8 +264,11 @@ export default function EditProductPage() {
                                             name="brandId"
                                             value={formData.brandId}
                                             onChange={handleChange}
-                                            className={`w-full rounded-xl border px-4 py-2.5 outline-none ${errors.brandId ? 'border-red-500' : 'border-slate-200 focus:border-blue-400'
-                                                }`}
+                                            className={`w-full rounded-xl border px-4 py-2.5 outline-none ${
+                                                errors.brandId
+                                                    ? 'border-red-500'
+                                                    : 'border-slate-200 focus:border-blue-400'
+                                            }`}
                                         >
                                             <option value="">انتخاب کنید</option>
                                             {brandList.map((brand) => (
@@ -257,7 +277,11 @@ export default function EditProductPage() {
                                                 </option>
                                             ))}
                                         </select>
-                                        {errors.brandId && <p className="mt-1 text-sm text-red-500">{errors.brandId}</p>}
+                                        {errors.brandId && (
+                                            <p className="mt-1 text-sm text-red-500">
+                                                {errors.brandId}
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
 
@@ -272,10 +296,17 @@ export default function EditProductPage() {
                                             name="price"
                                             value={formData.price}
                                             onChange={handleChange}
-                                            className={`w-full rounded-xl border px-4 py-2.5 outline-none ${errors.price ? 'border-red-500' : 'border-slate-200 focus:border-blue-400'
-                                                }`}
+                                            className={`w-full rounded-xl border px-4 py-2.5 outline-none ${
+                                                errors.price
+                                                    ? 'border-red-500'
+                                                    : 'border-slate-200 focus:border-blue-400'
+                                            }`}
                                         />
-                                        {errors.price && <p className="mt-1 text-sm text-red-500">{errors.price}</p>}
+                                        {errors.price && (
+                                            <p className="mt-1 text-sm text-red-500">
+                                                {errors.price}
+                                            </p>
+                                        )}
                                     </div>
                                     <div>
                                         <label className="mb-1 block text-sm font-medium text-slate-700">
@@ -286,10 +317,17 @@ export default function EditProductPage() {
                                             name="stock"
                                             value={formData.stock}
                                             onChange={handleChange}
-                                            className={`w-full rounded-xl border px-4 py-2.5 outline-none ${errors.stock ? 'border-red-500' : 'border-slate-200 focus:border-blue-400'
-                                                }`}
+                                            className={`w-full rounded-xl border px-4 py-2.5 outline-none ${
+                                                errors.stock
+                                                    ? 'border-red-500'
+                                                    : 'border-slate-200 focus:border-blue-400'
+                                            }`}
                                         />
-                                        {errors.stock && <p className="mt-1 text-sm text-red-500">{errors.stock}</p>}
+                                        {errors.stock && (
+                                            <p className="mt-1 text-sm text-red-500">
+                                                {errors.stock}
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -297,7 +335,9 @@ export default function EditProductPage() {
 
                         {/* Description Card */}
                         <div className="rounded-2xl border border-slate-200 bg-white p-6">
-                            <h2 className="mb-4 text-lg font-semibold text-slate-900">توضیحات محصول</h2>
+                            <h2 className="mb-4 text-lg font-semibold text-slate-900">
+                                توضیحات محصول
+                            </h2>
                             <textarea
                                 name="description"
                                 value={formData.description}
@@ -311,7 +351,9 @@ export default function EditProductPage() {
                     {/* Sidebar - Image upload */}
                     <div className="space-y-6">
                         <div className="rounded-2xl border border-slate-200 bg-white p-6">
-                            <h2 className="mb-4 text-lg font-semibold text-slate-900">تصویر محصول</h2>
+                            <h2 className="mb-4 text-lg font-semibold text-slate-900">
+                                تصویر محصول
+                            </h2>
                             <div className="space-y-4">
                                 <div className="flex items-center justify-center rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 p-6">
                                     {imagePreview ? (
@@ -324,10 +366,13 @@ export default function EditProductPage() {
                                             <button
                                                 type="button"
                                                 onClick={() => {
-                                                    setFormData((prev) => ({ ...prev, imageUrl: '' }));
+                                                    setFormData((prev) => ({
+                                                        ...prev,
+                                                        imageUrl: '',
+                                                    }));
                                                     setImagePreview(null);
                                                 }}
-                                                className="absolute -right-2 -top-2 rounded-full bg-red-500 p-1 text-white hover:bg-red-600"
+                                                className="absolute -top-2 -right-2 rounded-full bg-red-500 p-1 text-white hover:bg-red-600"
                                             >
                                                 <X size={14} />
                                             </button>
@@ -335,7 +380,9 @@ export default function EditProductPage() {
                                     ) : (
                                         <div className="text-center">
                                             <Upload className="mx-auto h-12 w-12 text-slate-400" />
-                                            <p className="mt-2 text-sm text-slate-500">آدرس تصویر را وارد کنید</p>
+                                            <p className="mt-2 text-sm text-slate-500">
+                                                آدرس تصویر را وارد کنید
+                                            </p>
                                         </div>
                                     )}
                                 </div>
@@ -347,7 +394,9 @@ export default function EditProductPage() {
                                     className="w-full rounded-xl border border-slate-200 px-4 py-2.5 outline-none focus:border-blue-400"
                                     placeholder="https://example.com/image.jpg"
                                 />
-                                <p className="text-xs text-slate-400">لینک مستقیم تصویر (اختیاری)</p>
+                                <p className="text-xs text-slate-400">
+                                    لینک مستقیم تصویر (اختیاری)
+                                </p>
                             </div>
                         </div>
 

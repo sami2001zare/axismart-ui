@@ -1,7 +1,7 @@
 // src/lib/axios/customer.ts
 
-import axios from "axios";
-import { token } from "../auth/token";
+import axios from 'axios';
+import { token } from '../auth/token';
 
 const customerAxios = axios.create({
     baseURL: process.env.NEXT_PUBLIC_CUSTOMER_API_URL,
@@ -25,8 +25,8 @@ customerAxios.interceptors.response.use(
         if (error.response?.status === 401) {
             token.remove();
 
-            if (typeof window !== "undefined") {
-                window.location.href = "/customer/login";
+            if (typeof window !== 'undefined') {
+                window.location.href = '/customer/login';
             }
         }
 

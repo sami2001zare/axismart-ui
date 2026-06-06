@@ -19,7 +19,9 @@ export default function ProductCarousel({ title, products }: ProductCarouselProp
     const scroll = (direction: 'left' | 'right') => {
         if (!scrollContainerRef.current) return;
         const scrollAmount = 300;
-        const newScrollLeft = scrollContainerRef.current.scrollLeft + (direction === 'left' ? -scrollAmount : scrollAmount);
+        const newScrollLeft =
+            scrollContainerRef.current.scrollLeft +
+            (direction === 'left' ? -scrollAmount : scrollAmount);
         scrollContainerRef.current.scrollTo({ left: newScrollLeft, behavior: 'smooth' });
         updateScrollButtons();
     };
@@ -35,20 +37,20 @@ export default function ProductCarousel({ title, products }: ProductCarouselProp
 
     return (
         <div className="my-8">
-            <div className="flex items-center justify-between mb-4">
+            <div className="mb-4 flex items-center justify-between">
                 <h2 className="text-xl font-bold text-slate-900">{title}</h2>
                 <div className="flex gap-2">
                     <button
                         onClick={() => scroll('left')}
                         disabled={!canScrollLeft}
-                        className="p-2 rounded-full border border-slate-200 disabled:opacity-50 hover:bg-slate-50"
+                        className="rounded-full border border-slate-200 p-2 hover:bg-slate-50 disabled:opacity-50"
                     >
                         <ChevronRight size={20} />
                     </button>
                     <button
                         onClick={() => scroll('right')}
                         disabled={!canScrollRight}
-                        className="p-2 rounded-full border border-slate-200 disabled:opacity-50 hover:bg-slate-50"
+                        className="rounded-full border border-slate-200 p-2 hover:bg-slate-50 disabled:opacity-50"
                     >
                         <ChevronLeft size={20} />
                     </button>
@@ -57,11 +59,11 @@ export default function ProductCarousel({ title, products }: ProductCarouselProp
             <div
                 ref={scrollContainerRef}
                 onScroll={updateScrollButtons}
-                className="flex overflow-x-auto gap-5 pb-4 scroll-smooth"
+                className="flex gap-5 overflow-x-auto scroll-smooth pb-4"
                 style={{ scrollbarWidth: 'thin', msOverflowStyle: 'auto' }}
             >
                 {products.map((product) => (
-                    <div key={product.id} className="min-w-[250px] w-[250px] flex-shrink-0">
+                    <div key={product.id} className="w-[250px] min-w-[250px] flex-shrink-0">
                         <ProductCard product={product} />
                     </div>
                 ))}

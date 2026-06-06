@@ -27,7 +27,12 @@ interface OrderState {
 
 // Helper to generate random items
 const generateMockItems = (): OrderItem[] => {
-    const productNames = ['بلبرینگ SKF 6204', 'بلبرینگ FAG 6305', 'بلبرینگ صنعتی NSK', 'بلبرینگ خودرو کیا'];
+    const productNames = [
+        'بلبرینگ SKF 6204',
+        'بلبرینگ FAG 6305',
+        'بلبرینگ صنعتی NSK',
+        'بلبرینگ خودرو کیا',
+    ];
     const numItems = Math.floor(Math.random() * 3) + 1;
     return Array.from({ length: numItems }).map(() => ({
         productId: Math.random().toString(),
@@ -39,7 +44,13 @@ const generateMockItems = (): OrderItem[] => {
 
 // Generate mock orders (50)
 const generateMockOrders = (): Order[] => {
-    const statuses: Order['status'][] = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
+    const statuses: Order['status'][] = [
+        'pending',
+        'processing',
+        'shipped',
+        'delivered',
+        'cancelled',
+    ];
     const customerIds = ['1', '2', '3'];
     const customerNames = ['علی محمدی', 'سارا حسینی', 'رضا کریمی'];
     const orders: Order[] = [];

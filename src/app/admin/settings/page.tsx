@@ -1,172 +1,63 @@
 // src/app/admin/settings/page.tsx
 
-"use client";
+'use client';
 
-import {
-    Save,
-    Shield,
-    Bell,
-    Globe,
-    CreditCard,
-} from "lucide-react";
+import { Save, Shield, Bell, Globe, CreditCard } from 'lucide-react';
+import { ReactNode } from 'react';
 
 export default function SettingsPage() {
-
     return (
-
         <div className="space-y-8">
-
             <div>
+                <h1 className="text-4xl font-black text-slate-900">تنظیمات</h1>
 
-                <h1 className="
-text-4xl
-font-black
-text-slate-900
-">
-                    تنظیمات
-                </h1>
-
-                <p className="
-mt-3
-text-sm
-text-slate-500
-">
-                    مدیریت تنظیمات فروشگاه و سیستم.
-                </p>
-
+                <p className="mt-3 text-sm text-slate-500">مدیریت تنظیمات فروشگاه و سیستم.</p>
             </div>
 
-            <div className="
-grid
-gap-8
-xl:grid-cols-[320px_1fr]
-">
-
+            <div className="grid gap-8 xl:grid-cols-[320px_1fr]">
                 {/* MENU */}
 
-                <div className="
-rounded-[34px]
-border border-slate-200
-bg-white
-p-5
-space-y-3
-">
+                <div className="space-y-3 rounded-[34px] border border-slate-200 bg-white p-5">
+                    <MenuItem icon={<Globe size={16} />} label="عمومی" active={true} />
 
-                    <MenuItem
-                        icon={<Globe size={16} />}
-                        label="عمومی"
-                        active
-                    />
+                    <MenuItem icon={<Bell size={16} />} label="اعلان‌ها" active={false} />
 
-                    <MenuItem
-                        icon={<Bell size={16} />}
-                        label="اعلان‌ها"
-                    />
+                    <MenuItem icon={<Shield size={16} />} label="امنیت" active={false} />
 
-                    <MenuItem
-                        icon={<Shield size={16} />}
-                        label="امنیت"
-                    />
-
-                    <MenuItem
-                        icon={<CreditCard size={16} />}
-                        label="پرداخت"
-                    />
-
+                    <MenuItem icon={<CreditCard size={16} />} label="پرداخت" active={false} />
                 </div>
 
                 {/* CONTENT */}
 
-                <div className="
-rounded-[34px]
-border border-slate-200
-bg-white
-overflow-hidden
-">
-
-                    <div className="
-border-b
-border-slate-100
-px-8 py-6
-">
-
-                        <h3 className="
-text-lg
-font-bold
-text-slate-900
-">
-                            تنظیمات عمومی
-                        </h3>
-
+                <div className="overflow-hidden rounded-[34px] border border-slate-200 bg-white">
+                    <div className="border-b border-slate-100 px-8 py-6">
+                        <h3 className="text-lg font-bold text-slate-900">تنظیمات عمومی</h3>
                     </div>
 
-                    <div className="
-p-8
-space-y-7
-">
+                    <div className="space-y-7 p-8">
+                        <Field label="نام فروشگاه" placeholder="AxisMart" />
 
-                        <Field
-                            label="نام فروشگاه"
-                            placeholder="AxisMart"
-                        />
+                        <Field label="ایمیل پشتیبانی" placeholder="support@axismart.com" />
 
-                        <Field
-                            label="ایمیل پشتیبانی"
-                            placeholder="support@axismart.com"
-                        />
-
-                        <Field
-                            label="شماره تماس"
-                            placeholder="+98..."
-                        />
+                        <Field label="شماره تماس" placeholder="+98..." />
 
                         <div>
-
-                            <label className="
-mb-4
-block
-text-sm
-font-bold
-text-slate-700
-">
+                            <label className="mb-4 block text-sm font-bold text-slate-700">
                                 توضیحات
                             </label>
 
-                            <textarea
-                                rows={6}
-                                className={textarea}
-                            />
-
+                            <textarea rows={6} className={textarea} />
                         </div>
 
-                        <button className="
-inline-flex
-items-center
-gap-3
-rounded-2xl
-bg-blue-600
-px-6 py-4
-text-sm
-font-medium
-text-white
-">
-
+                        <button className="inline-flex items-center gap-3 rounded-2xl bg-blue-600 px-6 py-4 text-sm font-medium text-white">
                             <Save size={16} />
-
                             ذخیره تنظیمات
-
                         </button>
-
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
     );
-
 }
 
 const input = `
@@ -192,68 +83,23 @@ outline-none
 resize-none
 `;
 
-function MenuItem({
-    icon,
-    label,
-    active,
-}: any) {
-
+function MenuItem({ icon, label, active }: { icon: ReactNode; label: string; active: boolean }) {
     return (
-
-        <button className={`
-flex
-w-full
-items-center
-gap-4
-rounded-2xl
-px-5 py-4
-text-sm
-font-medium
-transition
-${active
-                ?
-                "bg-blue-600 text-white"
-                :
-                "text-slate-700 hover:bg-slate-100"
-            }
-`}>
-
+        <button
+            className={`flex w-full items-center gap-4 rounded-2xl px-5 py-4 text-sm font-medium transition ${active ? 'bg-blue-600 text-white' : 'text-slate-700 hover:bg-slate-100'}`}
+        >
             {icon}
-
             {label}
-
         </button>
-
     );
-
 }
 
-function Field({
-    label,
-    placeholder,
-}: any) {
-
+function Field({ label, placeholder }: { label: string; placeholder: string }) {
     return (
-
         <div>
+            <label className="mb-4 block text-sm font-bold text-slate-700">{label}</label>
 
-            <label className="
-mb-4
-block
-text-sm
-font-bold
-text-slate-700
-">
-                {label}
-            </label>
-
-            <input
-                placeholder={placeholder}
-                className={input}
-            />
-
+            <input placeholder={placeholder} className={input} />
         </div>
-
     );
-
 }

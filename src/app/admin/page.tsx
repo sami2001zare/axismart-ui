@@ -37,8 +37,8 @@ export default function AdminDashboard() {
     const averageOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
 
     // Low stock products (stock < 10)
-    const lowStockProducts = productList.filter(p => p.stock < 10 && p.stock > 0);
-    const outOfStockProducts = productList.filter(p => p.stock === 0);
+    const lowStockProducts = productList.filter((p) => p.stock < 10 && p.stock > 0);
+    const outOfStockProducts = productList.filter((p) => p.stock === 0);
 
     // Recent orders (last 5)
     const recentOrders = [...orderList]
@@ -54,7 +54,7 @@ export default function AdminDashboard() {
             const key = `${d.getFullYear()}-${d.getMonth() + 1}`;
             months[key] = 0;
         }
-        orderList.forEach(order => {
+        orderList.forEach((order) => {
             const date = new Date(order.createdAt);
             const key = `${date.getFullYear()}-${date.getMonth() + 1}`;
             if (months[key] !== undefined) months[key] += order.total;
@@ -74,7 +74,7 @@ export default function AdminDashboard() {
             delivered: 0,
             cancelled: 0,
         };
-        orderList.forEach(o => {
+        orderList.forEach((o) => {
             statuses[o.status] = (statuses[o.status] || 0) + 1;
         });
         const labels: Record<string, string> = {
@@ -95,12 +95,12 @@ export default function AdminDashboard() {
     // Top categories by product count
     const topCategories = useMemo(() => {
         const catCount: Record<string, number> = {};
-        productList.forEach(p => {
+        productList.forEach((p) => {
             catCount[p.categoryId] = (catCount[p.categoryId] || 0) + 1;
         });
         return Object.entries(catCount)
             .map(([catId, count]) => {
-                const cat = categoryList.find(c => c.id === catId);
+                const cat = categoryList.find((c) => c.id === catId);
                 return { name: cat?.name || 'سایر', count };
             })
             .sort((a, b) => b.count - a.count)
@@ -171,11 +171,16 @@ export default function AdminDashboard() {
                 <div className="rounded-2xl border border-slate-200 bg-white p-5">
                     <p className="text-sm text-slate-500">محصولات با موجودی کم</p>
                     <div className="mt-2 flex items-baseline gap-2">
-                        <span className="text-2xl font-bold text-amber-600">{lowStockProducts.length}</span>
+                        <span className="text-2xl font-bold text-amber-600">
+                            {lowStockProducts.length}
+                        </span>
                         <span className="text-sm text-slate-400">محصول</span>
                     </div>
                     {lowStockProducts.length > 0 && (
-                        <Link href="/admin/products?filter=lowstock" className="mt-2 inline-block text-xs text-blue-600 hover:underline">
+                        <Link
+                            href="/admin/products?filter=lowstock"
+                            className="mt-2 inline-block text-xs text-blue-600 hover:underline"
+                        >
                             مشاهده و مدیریت
                         </Link>
                     )}
@@ -183,11 +188,16 @@ export default function AdminDashboard() {
                 <div className="rounded-2xl border border-slate-200 bg-white p-5">
                     <p className="text-sm text-slate-500">محصولات ناموجود</p>
                     <div className="mt-2 flex items-baseline gap-2">
-                        <span className="text-2xl font-bold text-red-600">{outOfStockProducts.length}</span>
+                        <span className="text-2xl font-bold text-red-600">
+                            {outOfStockProducts.length}
+                        </span>
                         <span className="text-sm text-slate-400">محصول</span>
                     </div>
                     {outOfStockProducts.length > 0 && (
-                        <Link href="/admin/products?filter=outofstock" className="mt-2 inline-block text-xs text-blue-600 hover:underline">
+                        <Link
+                            href="/admin/products?filter=outofstock"
+                            className="mt-2 inline-block text-xs text-blue-600 hover:underline"
+                        >
                             مشاهده و مدیریت
                         </Link>
                     )}
@@ -198,14 +208,24 @@ export default function AdminDashboard() {
             <div className="mb-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
                 {/* Sales Trend */}
                 <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                    <h2 className="mb-4 text-lg font-semibold text-slate-900">روند فروش (میلیون تومان)</h2>
+                    <h2 className="mb-4 text-lg font-semibold text-slate-900">
+                        روند فروش (میلیون تومان)
+                    </h2>
                     <ResponsiveContainer width="100%" height={300}>
                         <LineChart data={salesTrend}>
                             <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                             <XAxis dataKey="month" tick={{ fontSize: 12 }} />
                             <YAxis tick={{ fontSize: 12 }} />
-                            <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #e2e8f0' }} />
-                            <Line type="monotone" dataKey="revenue" stroke="#3b82f6" strokeWidth={2} dot={{ r: 4 }} />
+                            <Tooltip
+                                contentStyle={{ borderRadius: '12px', border: '1px solid #e2e8f0' }}
+                            />
+                            <Line
+                                type="monotone"
+                                dataKey="revenue"
+                                stroke="#3b82f6"
+                                strokeWidth={2}
+                                dot={{ r: 4 }}
+                            />
                         </LineChart>
                     </ResponsiveContainer>
                 </div>
@@ -220,7 +240,9 @@ export default function AdminDashboard() {
                                 cx="50%"
                                 cy="50%"
                                 labelLine={false}
-                                label={({ name, percent }) => `${name} (${(percent! * 100).toFixed(0)}%)`}
+                                label={({ name, percent }) =>
+                                    `${name} (${(percent! * 100).toFixed(0)}%)`
+                                }
                                 outerRadius={100}
                                 dataKey="value"
                             >
@@ -240,7 +262,10 @@ export default function AdminDashboard() {
                 <div className="rounded-2xl border border-slate-200 bg-white p-5">
                     <div className="mb-4 flex items-center justify-between">
                         <h2 className="text-lg font-semibold text-slate-900">آخرین سفارشات</h2>
-                        <Link href="/admin/orders" className="text-sm text-blue-600 hover:underline">
+                        <Link
+                            href="/admin/orders"
+                            className="text-sm text-blue-600 hover:underline"
+                        >
                             مشاهده همه
                         </Link>
                     </div>
@@ -248,15 +273,26 @@ export default function AdminDashboard() {
                         <p className="text-center text-slate-400">سفارشی وجود ندارد</p>
                     ) : (
                         <div className="space-y-3">
-                            {recentOrders.map(order => (
-                                <div key={order.id} className="flex items-center justify-between border-b border-slate-100 pb-3">
+                            {recentOrders.map((order) => (
+                                <div
+                                    key={order.id}
+                                    className="flex items-center justify-between border-b border-slate-100 pb-3"
+                                >
                                     <div>
-                                        <p className="font-mono text-sm font-medium text-slate-900">{order.id}</p>
-                                        <p className="text-xs text-slate-500">{order.customerName}</p>
+                                        <p className="font-mono text-sm font-medium text-slate-900">
+                                            {order.id}
+                                        </p>
+                                        <p className="text-xs text-slate-500">
+                                            {order.customerName}
+                                        </p>
                                     </div>
                                     <div className="text-left">
-                                        <p className="text-sm font-medium text-slate-900">{formatPrice(order.total)}</p>
-                                        <span className={`inline-block rounded-full px-2 py-0.5 text-xs ${statusConfig[order.status]?.color || 'bg-slate-100'}`}>
+                                        <p className="text-sm font-medium text-slate-900">
+                                            {formatPrice(order.total)}
+                                        </p>
+                                        <span
+                                            className={`inline-block rounded-full px-2 py-0.5 text-xs ${statusConfig[order.status]?.color || 'bg-slate-100'}`}
+                                        >
                                             {statusConfig[order.status]?.label || order.status}
                                         </span>
                                     </div>
@@ -268,7 +304,9 @@ export default function AdminDashboard() {
 
                 {/* Top Categories */}
                 <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                    <h2 className="mb-4 text-lg font-semibold text-slate-900">دسته‌بندی‌های برتر</h2>
+                    <h2 className="mb-4 text-lg font-semibold text-slate-900">
+                        دسته‌بندی‌های برتر
+                    </h2>
                     {topCategories.length === 0 ? (
                         <p className="text-center text-slate-400">دسته‌بندی وجود ندارد</p>
                     ) : (
@@ -277,14 +315,19 @@ export default function AdminDashboard() {
                                 <div key={idx} className="flex items-center justify-between">
                                     <span className="text-slate-700">{cat.name}</span>
                                     <div className="flex items-center gap-2">
-                                        <span className="text-sm font-medium text-slate-900">{cat.count}</span>
+                                        <span className="text-sm font-medium text-slate-900">
+                                            {cat.count}
+                                        </span>
                                         <span className="text-xs text-slate-400">محصول</span>
                                     </div>
                                 </div>
                             ))}
                         </div>
                     )}
-                    <Link href="/admin/categories" className="mt-4 inline-block text-sm text-blue-600 hover:underline">
+                    <Link
+                        href="/admin/categories"
+                        className="mt-4 inline-block text-sm text-blue-600 hover:underline"
+                    >
                         مدیریت دسته‌بندی‌ها
                     </Link>
                 </div>

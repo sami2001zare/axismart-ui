@@ -2,7 +2,23 @@
 
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { Plus, Edit2, Trash2, Search, Users, ShoppingBag, DollarSign, UserCheck, Grid, List, X, Mail, Phone, MapPin, Calendar } from 'lucide-react';
+import {
+    Plus,
+    Edit2,
+    Trash2,
+    Search,
+    Users,
+    ShoppingBag,
+    DollarSign,
+    UserCheck,
+    Grid,
+    List,
+    X,
+    Mail,
+    Phone,
+    MapPin,
+    Calendar,
+} from 'lucide-react';
 import { Customer, useCustomerStore } from '@/store/customerStore';
 
 export default function AdminCustomersPage() {
@@ -26,16 +42,17 @@ export default function AdminCustomersPage() {
 
     // Stats
     const totalCustomers = customerList.length;
-    const activeCustomers = customerList.filter(c => c.status === 'active').length;
+    const activeCustomers = customerList.filter((c) => c.status === 'active').length;
     const totalSpent = customerList.reduce((sum, c) => sum + (c.totalSpent || 0), 0);
 
     // Filtering
     const filteredCustomers = customerList
-        .filter(c => statusFilter === 'all' || c.status === statusFilter)
-        .filter(c =>
-            c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            c.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            c.phone.includes(searchTerm)
+        .filter((c) => statusFilter === 'all' || c.status === statusFilter)
+        .filter(
+            (c) =>
+                c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                c.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                c.phone.includes(searchTerm)
         );
 
     // Pagination
@@ -155,8 +172,8 @@ export default function AdminCustomersPage() {
             {/* Filters & Actions */}
             <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex flex-1 gap-3">
-                    <div className="relative flex-1 max-w-md">
-                        <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                    <div className="relative max-w-md flex-1">
+                        <Search className="absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-slate-400" />
                         <input
                             type="text"
                             placeholder="جستجو (نام، ایمیل، تلفن)..."
@@ -184,19 +201,21 @@ export default function AdminCustomersPage() {
                 <div className="flex gap-2">
                     <button
                         onClick={() => setViewMode('table')}
-                        className={`rounded-xl border p-2.5 transition ${viewMode === 'table'
-                            ? 'border-blue-600 bg-blue-50 text-blue-600'
-                            : 'border-slate-200 text-slate-500 hover:bg-slate-50'
-                            }`}
+                        className={`rounded-xl border p-2.5 transition ${
+                            viewMode === 'table'
+                                ? 'border-blue-600 bg-blue-50 text-blue-600'
+                                : 'border-slate-200 text-slate-500 hover:bg-slate-50'
+                        }`}
                     >
                         <List size={18} />
                     </button>
                     <button
                         onClick={() => setViewMode('grid')}
-                        className={`rounded-xl border p-2.5 transition ${viewMode === 'grid'
-                            ? 'border-blue-600 bg-blue-50 text-blue-600'
-                            : 'border-slate-200 text-slate-500 hover:bg-slate-50'
-                            }`}
+                        className={`rounded-xl border p-2.5 transition ${
+                            viewMode === 'grid'
+                                ? 'border-blue-600 bg-blue-50 text-blue-600'
+                                : 'border-slate-200 text-slate-500 hover:bg-slate-50'
+                        }`}
                     >
                         <Grid size={18} />
                     </button>
@@ -231,43 +250,75 @@ export default function AdminCustomersPage() {
                         <table className="w-full text-right">
                             <thead className="border-b border-slate-200 bg-slate-50">
                                 <tr>
-                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">مشتری</th>
-                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">تماس</th>
-                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">آدرس</th>
-                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">سفارشات</th>
-                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">کل خرید</th>
-                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">آخرین خرید</th>
-                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">وضعیت</th>
-                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">عملیات</th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">
+                                        مشتری
+                                    </th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">
+                                        تماس
+                                    </th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">
+                                        آدرس
+                                    </th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">
+                                        سفارشات
+                                    </th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">
+                                        کل خرید
+                                    </th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">
+                                        آخرین خرید
+                                    </th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">
+                                        وضعیت
+                                    </th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">
+                                        عملیات
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {paginatedCustomers.map((customer) => (
-                                    <tr key={customer.id} className="border-b border-slate-100 transition hover:bg-slate-50">
+                                    <tr
+                                        key={customer.id}
+                                        className="border-b border-slate-100 transition hover:bg-slate-50"
+                                    >
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">
                                                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 font-medium text-blue-700">
                                                     {getInitials(customer.name)}
                                                 </div>
                                                 <div>
-                                                    <p className="font-medium text-slate-900">{customer.name}</p>
-                                                    <p className="text-xs text-slate-500">{customer.email}</p>
+                                                    <p className="font-medium text-slate-900">
+                                                        {customer.name}
+                                                    </p>
+                                                    <p className="text-xs text-slate-500">
+                                                        {customer.email}
+                                                    </p>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 text-slate-600">{customer.phone}</td>
-                                        <td className="px-6 py-4 text-slate-600 max-w-[200px] truncate">{customer.address || '-'}</td>
-                                        <td className="px-6 py-4 text-slate-600">{customer.totalOrders || 0}</td>
+                                        <td className="px-6 py-4 text-slate-600">
+                                            {customer.phone}
+                                        </td>
+                                        <td className="max-w-[200px] truncate px-6 py-4 text-slate-600">
+                                            {customer.address || '-'}
+                                        </td>
+                                        <td className="px-6 py-4 text-slate-600">
+                                            {customer.totalOrders || 0}
+                                        </td>
                                         <td className="px-6 py-4 font-mono text-slate-600">
                                             {(customer.totalSpent || 0).toLocaleString()} تومان
                                         </td>
-                                        <td className="px-6 py-4 text-slate-600">{formatDate(customer.lastOrderDate)}</td>
+                                        <td className="px-6 py-4 text-slate-600">
+                                            {formatDate(customer.lastOrderDate)}
+                                        </td>
                                         <td className="px-6 py-4">
                                             <span
-                                                className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${customer.status === 'active'
-                                                    ? 'bg-green-100 text-green-700'
-                                                    : 'bg-slate-100 text-slate-500'
-                                                    }`}
+                                                className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
+                                                    customer.status === 'active'
+                                                        ? 'bg-green-100 text-green-700'
+                                                        : 'bg-slate-100 text-slate-500'
+                                                }`}
                                             >
                                                 {customer.status === 'active' ? 'فعال' : 'غیرفعال'}
                                             </span>
@@ -308,12 +359,15 @@ export default function AdminCustomersPage() {
                                         {getInitials(customer.name)}
                                     </div>
                                     <div>
-                                        <h3 className="font-semibold text-slate-900">{customer.name}</h3>
+                                        <h3 className="font-semibold text-slate-900">
+                                            {customer.name}
+                                        </h3>
                                         <span
-                                            className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${customer.status === 'active'
-                                                ? 'bg-green-100 text-green-700'
-                                                : 'bg-slate-100 text-slate-500'
-                                                }`}
+                                            className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
+                                                customer.status === 'active'
+                                                    ? 'bg-green-100 text-green-700'
+                                                    : 'bg-slate-100 text-slate-500'
+                                            }`}
                                         >
                                             {customer.status === 'active' ? 'فعال' : 'غیرفعال'}
                                         </span>
@@ -354,13 +408,16 @@ export default function AdminCustomersPage() {
                                         <ShoppingBag size={12} /> {customer.totalOrders || 0} سفارش
                                     </span>
                                     <span className="flex items-center gap-1">
-                                        <DollarSign size={12} /> {(customer.totalSpent || 0).toLocaleString()} تومان
+                                        <DollarSign size={12} />{' '}
+                                        {(customer.totalSpent || 0).toLocaleString()} تومان
                                     </span>
                                 </div>
                                 {customer.lastOrderDate && (
                                     <div className="flex items-center gap-2 text-xs text-slate-400">
                                         <Calendar size={12} />
-                                        <span>آخرین خرید: {formatDate(customer.lastOrderDate)}</span>
+                                        <span>
+                                            آخرین خرید: {formatDate(customer.lastOrderDate)}
+                                        </span>
                                     </div>
                                 )}
                             </div>
@@ -400,7 +457,10 @@ export default function AdminCustomersPage() {
                             <h2 className="text-xl font-bold text-slate-900">
                                 {editingCustomer ? 'ویرایش مشتری' : 'افزودن مشتری جدید'}
                             </h2>
-                            <button onClick={handleCloseModal} className="rounded-lg p-1 hover:bg-slate-100">
+                            <button
+                                onClick={handleCloseModal}
+                                className="rounded-lg p-1 hover:bg-slate-100"
+                            >
                                 <X size={20} />
                             </button>
                         </div>
@@ -412,7 +472,9 @@ export default function AdminCustomersPage() {
                                 <input
                                     type="text"
                                     value={formData.name}
-                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, name: e.target.value })
+                                    }
                                     className="w-full rounded-xl border border-slate-200 px-4 py-2 outline-none focus:border-blue-400"
                                     required
                                 />
@@ -424,7 +486,9 @@ export default function AdminCustomersPage() {
                                 <input
                                     type="email"
                                     value={formData.email}
-                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, email: e.target.value })
+                                    }
                                     className="w-full rounded-xl border border-slate-200 px-4 py-2 outline-none focus:border-blue-400"
                                     required
                                 />
@@ -436,16 +500,22 @@ export default function AdminCustomersPage() {
                                 <input
                                     type="tel"
                                     value={formData.phone}
-                                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, phone: e.target.value })
+                                    }
                                     className="w-full rounded-xl border border-slate-200 px-4 py-2 outline-none focus:border-blue-400"
                                     required
                                 />
                             </div>
                             <div>
-                                <label className="mb-1 block text-sm font-medium text-slate-700">آدرس</label>
+                                <label className="mb-1 block text-sm font-medium text-slate-700">
+                                    آدرس
+                                </label>
                                 <textarea
                                     value={formData.address}
-                                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, address: e.target.value })
+                                    }
                                     rows={2}
                                     className="w-full rounded-xl border border-slate-200 px-4 py-2 outline-none focus:border-blue-400"
                                 />

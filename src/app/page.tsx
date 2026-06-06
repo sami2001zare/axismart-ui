@@ -1,22 +1,21 @@
-'use client'
+'use client';
 
-import Navbar from "@/components/site/navbar";
-import Hero from "@/components/site/hero";
-import CategoriesSection from "@/components/site/categories";
-import FeaturedProducts from "@/components/site/featured-products";
-import WholesaleSection from "@/components/site/wholesale";
-import WhyAxisMart from "@/components/site/why-axismart";
-import BrandsSection from "@/components/site/brands";
-import Testimonials from "@/components/site/testimonials";
-import CtaBanner from "@/components/site/cta-banner";
-import Footer from "@/components/site/footer";
-import { useCategoryStore } from "@/store/categoryStore";
-import { useProductStore } from "@/store/productStore";
-import { useMemo } from "react";
-import ProductCarousel from "@/components/ProductCarousel";
+import Navbar from '@/components/site/navbar';
+import Hero from '@/components/site/hero';
+import CategoriesSection from '@/components/site/categories';
+import FeaturedProducts from '@/components/site/featured-products';
+import WholesaleSection from '@/components/site/wholesale';
+import WhyAxisMart from '@/components/site/why-axismart';
+import BrandsSection from '@/components/site/brands';
+import Testimonials from '@/components/site/testimonials';
+import CtaBanner from '@/components/site/cta-banner';
+import Footer from '@/components/site/footer';
+import { useCategoryStore } from '@/store/categoryStore';
+import { useProductStore } from '@/store/productStore';
+import { useMemo } from 'react';
+import ProductCarousel from '@/components/ProductCarousel';
 
 export default function HomePage() {
-
     const { categories } = useCategoryStore();
     const { products } = useProductStore();
 
@@ -26,7 +25,7 @@ export default function HomePage() {
     // Group products by category
     const productsByCategory = useMemo(() => {
         const map: Record<string, typeof productList> = {};
-        productList.forEach(product => {
+        productList.forEach((product) => {
             if (!map[product.categoryId]) map[product.categoryId] = [];
             map[product.categoryId].push(product);
         });
@@ -35,7 +34,7 @@ export default function HomePage() {
 
     // Get first 3 categories that have at least one product
     const activeCategories = categoryList
-        .filter(cat => productsByCategory[cat.id]?.length > 0)
+        .filter((cat) => productsByCategory[cat.id]?.length > 0)
         .slice(0, 3);
 
     if (activeCategories.length === 0) {
@@ -53,10 +52,8 @@ export default function HomePage() {
             <CategoriesSection />
             {/* Carousels for each category */}
             <section className="relative">
-
                 <div className="mx-auto max-w-[1450px] px-8">
-
-                    {activeCategories.map(category => {
+                    {activeCategories.map((category) => {
                         const categoryProducts = productsByCategory[category.id] || [];
                         return (
                             <ProductCarousel

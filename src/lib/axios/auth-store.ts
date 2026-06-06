@@ -1,11 +1,10 @@
 // src/lib/auth/auth-store.ts
 
-"use client";
+'use client';
 
-import { create } from "zustand";
+import { create } from 'zustand';
 
 interface AuthStore {
-
     user: any;
 
     authenticated: boolean;
@@ -13,11 +12,9 @@ interface AuthStore {
     setUser: (user: any) => void;
 
     logout: () => void;
-
 }
 
 export const useAuthStore = create<AuthStore>((set) => ({
-
     user: null,
 
     authenticated: false,
@@ -33,5 +30,4 @@ export const useAuthStore = create<AuthStore>((set) => ({
             user: null,
             authenticated: false,
         }),
-
 }));

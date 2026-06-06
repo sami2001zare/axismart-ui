@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { Plus, Edit2, Trash2, Eye } from 'lucide-react';
 import { useProductStore } from '@/store/productStore';
@@ -10,7 +9,6 @@ import { useCategoryStore } from '@/store/categoryStore';
 import { useBrandStore } from '@/store/brandStore';
 
 export default function ProductsListPage() {
-    const router = useRouter();
     const { products, deleteProduct } = useProductStore();
     const { categories, fetchCategories } = useCategoryStore();
     const { brands, fetchBrands } = useBrandStore();
@@ -32,13 +30,13 @@ export default function ProductsListPage() {
 
     // Helper to get category name by id
     const getCategoryName = (categoryId: string) => {
-        const cat = (Array.isArray(categories) ? categories : []).find(c => c.id === categoryId);
+        const cat = (Array.isArray(categories) ? categories : []).find((c) => c.id === categoryId);
         return cat?.name || 'دسته‌بندی نشده';
     };
 
     // Helper to get brand name by id
     const getBrandName = (brandId: string) => {
-        const br = (Array.isArray(brands) ? brands : []).find(b => b.id === brandId);
+        const br = (Array.isArray(brands) ? brands : []).find((b) => b.id === brandId);
         return br?.name || 'برند نامشخص';
     };
 
@@ -48,7 +46,8 @@ export default function ProductsListPage() {
             try {
                 deleteProduct(id);
                 toast.success('محصول با موفقیت حذف شد');
-            } catch () {
+            } catch (error) {
+                console.log(error);
                 toast.error('خطا در حذف محصول');
             } finally {
                 setDeletingId(null);
@@ -57,9 +56,10 @@ export default function ProductsListPage() {
     };
 
     // Filter products based on search (name or slug)
-    const filteredProducts = (Array.isArray(products) ? products : []).filter(product =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.slug.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredProducts = (Array.isArray(products) ? products : []).filter(
+        (product) =>
+            product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            product.slug.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     // Format price with commas
@@ -111,18 +111,35 @@ export default function ProductsListPage() {
                         <table className="w-full text-right">
                             <thead className="border-b border-slate-200 bg-slate-50">
                                 <tr>
-                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">تصویر</th>
-                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">نام محصول</th>
-                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">دسته‌بندی</th>
-                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">برند</th>
-                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">قیمت (تومان)</th>
-                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">موجودی</th>
-                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">عملیات</th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">
+                                        تصویر
+                                    </th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">
+                                        نام محصول
+                                    </th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">
+                                        دسته‌بندی
+                                    </th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">
+                                        برند
+                                    </th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">
+                                        قیمت (تومان)
+                                    </th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">
+                                        موجودی
+                                    </th>
+                                    <th className="px-6 py-3 text-sm font-medium text-slate-600">
+                                        عملیات
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {filteredProducts.map((product) => (
-                                    <tr key={product.id} className="border-b border-slate-100 transition hover:bg-slate-50">
+                                    <tr
+                                        key={product.id}
+                                        className="border-b border-slate-100 transition hover:bg-slate-50"
+                                    >
                                         <td className="px-6 py-4">
                                             {product.imageUrl ? (
                                                 <img
@@ -136,18 +153,29 @@ export default function ProductsListPage() {
                                                 </div>
                                             )}
                                         </td>
-                                        <td className="px-6 py-4 font-medium text-slate-900">{product.name}</td>
-                                        <td className="px-6 py-4 text-slate-600">{getCategoryName(product.categoryId)}</td>
-                                        <td className="px-6 py-4 text-slate-600">{getBrandName(product.brandId)}</td>
-                                        <td className="px-6 py-4 font-mono text-slate-900">{formatPrice(product.price)}</td>
+                                        <td className="px-6 py-4 font-medium text-slate-900">
+                                            {product.name}
+                                        </td>
+                                        <td className="px-6 py-4 text-slate-600">
+                                            {getCategoryName(product.categoryId)}
+                                        </td>
+                                        <td className="px-6 py-4 text-slate-600">
+                                            {getBrandName(product.brandId)}
+                                        </td>
+                                        <td className="px-6 py-4 font-mono text-slate-900">
+                                            {formatPrice(product.price)}
+                                        </td>
                                         <td className="px-6 py-4">
                                             <span
-                                                className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${product.stock > 0
+                                                className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
+                                                    product.stock > 0
                                                         ? 'bg-green-100 text-green-700'
                                                         : 'bg-red-100 text-red-700'
-                                                    }`}
+                                                }`}
                                             >
-                                                {product.stock > 0 ? `${product.stock} عدد` : 'ناموجود'}
+                                                {product.stock > 0
+                                                    ? `${product.stock} عدد`
+                                                    : 'ناموجود'}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4">
@@ -177,7 +205,8 @@ export default function ProductsListPage() {
 
             {/* Optional: summary */}
             <div className="mt-4 text-sm text-slate-500">
-                نمایش {filteredProducts.length} از {(Array.isArray(products) ? products : []).length} محصول
+                نمایش {filteredProducts.length} از{' '}
+                {(Array.isArray(products) ? products : []).length} محصول
             </div>
         </div>
     );

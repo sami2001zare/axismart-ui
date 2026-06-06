@@ -20,14 +20,26 @@ interface CategoryState {
 
 // Initial mock data (you can change or remove)
 const initialCategories: Category[] = [
-    { id: '1', name: 'بلبرینگ‌های صنعتی', slug: 'industrial-bearings', description: 'بلبرینگ‌های سنگین برای ماشین‌آلات', count: 42 },
-    { id: '2', name: 'بلبرینگ‌های خودرو', slug: 'auto-bearings', description: 'مناسب برای انواع خودرو', count: 128 },
+    {
+        id: '1',
+        name: 'بلبرینگ‌های صنعتی',
+        slug: 'industrial-bearings',
+        description: 'بلبرینگ‌های سنگین برای ماشین‌آلات',
+        count: 42,
+    },
+    {
+        id: '2',
+        name: 'بلبرینگ‌های خودرو',
+        slug: 'auto-bearings',
+        description: 'مناسب برای انواع خودرو',
+        count: 128,
+    },
 ];
 
 export const useCategoryStore = create<CategoryState>()(
     persist(
         (set) => ({
-            categories: initialCategories,     // always an array
+            categories: initialCategories, // always an array
 
             addCategory: (category) =>
                 set((state) => ({
@@ -52,7 +64,7 @@ export const useCategoryStore = create<CategoryState>()(
             setCategories: (categories) => set({ categories }),
         }),
         {
-            name: 'category-storage',      // saves to localStorage, so data survives refresh
+            name: 'category-storage', // saves to localStorage, so data survives refresh
         }
     )
 );

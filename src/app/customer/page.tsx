@@ -53,7 +53,7 @@ export default function CustomerDashboard() {
                     <h1 className="text-2xl font-bold">خوش آمدید، {customer.name}!</h1>
                     <p className="mt-1 text-blue-100">امروز چه کمکی می‌توانیم بکنیم؟</p>
                 </div>
-                <div className="absolute left-0 top-0 opacity-10">
+                <div className="absolute top-0 left-0 opacity-10">
                     <TrendingUp size={120} />
                 </div>
             </div>
@@ -101,10 +101,18 @@ export default function CustomerDashboard() {
                         <table className="w-full text-right">
                             <thead className="border-b border-slate-200">
                                 <tr>
-                                    <th className="px-4 py-3 text-sm font-medium text-slate-600">شماره سفارش</th>
-                                    <th className="px-4 py-3 text-sm font-medium text-slate-600">تاریخ</th>
-                                    <th className="px-4 py-3 text-sm font-medium text-slate-600">مبلغ</th>
-                                    <th className="px-4 py-3 text-sm font-medium text-slate-600">وضعیت</th>
+                                    <th className="px-4 py-3 text-sm font-medium text-slate-600">
+                                        شماره سفارش
+                                    </th>
+                                    <th className="px-4 py-3 text-sm font-medium text-slate-600">
+                                        تاریخ
+                                    </th>
+                                    <th className="px-4 py-3 text-sm font-medium text-slate-600">
+                                        مبلغ
+                                    </th>
+                                    <th className="px-4 py-3 text-sm font-medium text-slate-600">
+                                        وضعیت
+                                    </th>
                                     <th className="px-4 py-3 text-sm font-medium text-slate-600"></th>
                                 </tr>
                             </thead>
@@ -112,15 +120,24 @@ export default function CustomerDashboard() {
                                 {recentOrders.map((order) => (
                                     <tr key={order.id} className="border-b border-slate-100">
                                         <td className="px-4 py-3 font-mono text-sm">{order.id}</td>
-                                        <td className="px-4 py-3 text-sm">{formatDate(order.createdAt)}</td>
-                                        <td className="px-4 py-3 text-sm font-medium">{formatPrice(order.total)}</td>
+                                        <td className="px-4 py-3 text-sm">
+                                            {formatDate(order.createdAt)}
+                                        </td>
+                                        <td className="px-4 py-3 text-sm font-medium">
+                                            {formatPrice(order.total)}
+                                        </td>
                                         <td className="px-4 py-3">
-                                            <span className={`inline-block rounded-full px-2 py-1 text-xs font-medium ${statusConfig[order.status]?.color || 'bg-slate-100'}`}>
+                                            <span
+                                                className={`inline-block rounded-full px-2 py-1 text-xs font-medium ${statusConfig[order.status]?.color || 'bg-slate-100'}`}
+                                            >
                                                 {statusConfig[order.status]?.label || order.status}
                                             </span>
                                         </td>
                                         <td className="px-4 py-3">
-                                            <Link href={`/customer/orders/${order.id}`} className="text-blue-600 hover:underline text-sm">
+                                            <Link
+                                                href={`/customer/orders/${order.id}`}
+                                                className="text-sm text-blue-600 hover:underline"
+                                            >
                                                 جزئیات
                                             </Link>
                                         </td>
@@ -162,7 +179,9 @@ export default function CustomerDashboard() {
                                     )}
                                 </div>
                                 <div className="p-3 text-center">
-                                    <h3 className="line-clamp-1 font-semibold text-slate-800">{product.name}</h3>
+                                    <h3 className="line-clamp-1 font-semibold text-slate-800">
+                                        {product.name}
+                                    </h3>
                                     <p className="mt-1 text-sm font-bold text-blue-600">
                                         {formatPrice(product.price)}
                                     </p>
@@ -177,11 +196,31 @@ export default function CustomerDashboard() {
             <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                 <h2 className="mb-4 text-lg font-bold text-slate-900">دسترسی سریع</h2>
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-                    <QuickAction href="/customer/profile" icon={<User size={20} />} label="پروفایل" />
-                    <QuickAction href="/customer/addresses" icon={<MapPin size={20} />} label="آدرس‌ها" />
-                    <QuickAction href="/customer/orders" icon={<ShoppingBag size={20} />} label="سفارشات" />
-                    <QuickAction href="/customer/wishlist" icon={<Heart size={20} />} label="علاقه‌مندی‌ها" />
-                    <QuickAction href="/customer/security" icon={<Shield size={20} />} label="امنیت" />
+                    <QuickAction
+                        href="/customer/profile"
+                        icon={<User size={20} />}
+                        label="پروفایل"
+                    />
+                    <QuickAction
+                        href="/customer/addresses"
+                        icon={<MapPin size={20} />}
+                        label="آدرس‌ها"
+                    />
+                    <QuickAction
+                        href="/customer/orders"
+                        icon={<ShoppingBag size={20} />}
+                        label="سفارشات"
+                    />
+                    <QuickAction
+                        href="/customer/wishlist"
+                        icon={<Heart size={20} />}
+                        label="علاقه‌مندی‌ها"
+                    />
+                    <QuickAction
+                        href="/customer/security"
+                        icon={<Shield size={20} />}
+                        label="امنیت"
+                    />
                 </div>
             </div>
         </div>
@@ -189,7 +228,17 @@ export default function CustomerDashboard() {
 }
 
 // Helper Components
-function StatCard({ title, value, icon, color }: { title: string; value: string | number; icon: React.ReactNode; color: 'blue' | 'green' | 'pink' | 'amber' }) {
+function StatCard({
+    title,
+    value,
+    icon,
+    color,
+}: {
+    title: string;
+    value: string | number;
+    icon: React.ReactNode;
+    color: 'blue' | 'green' | 'pink' | 'amber';
+}) {
     const colorClasses = {
         blue: 'bg-blue-100 text-blue-600',
         green: 'bg-green-100 text-green-600',
@@ -209,7 +258,15 @@ function StatCard({ title, value, icon, color }: { title: string; value: string 
     );
 }
 
-function QuickAction({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) {
+function QuickAction({
+    href,
+    icon,
+    label,
+}: {
+    href: string;
+    icon: React.ReactNode;
+    label: string;
+}) {
     return (
         <Link
             href={href}
